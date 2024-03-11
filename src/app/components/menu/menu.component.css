@@ -86,4 +86,8 @@ a:hover {
   .menu-open .menu-list {
     display: block; /* ou qualquer outra propriedade de exibição que você desejar */
   }
+
+  ul {
+    max-height: 85vh;
+  }
 }
