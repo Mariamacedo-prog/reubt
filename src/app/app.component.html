@@ -176,13 +176,10 @@
   }
 </style>
 
-<mat-slide-toggle>Toggle me!</mat-slide-toggle>
-
+<main class="main" >
   <app-menu (menuToggled)="onMenuToggled($event)"></app-menu>
-<main class="main" [ngClass]="{'menu-open-margin': isMenuOpen, 'menu-closed-margin': !isMenuOpen}">
 
-
-  <div class="content">
+  <div class="content" [ngClass]="{'menu-open-margin': isMenuOpen, 'menu-closed-margin': !isMenuOpen}">
 
     <div class="left-side">
       <svg

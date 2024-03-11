@@ -1,13 +1,16 @@
 
-
 <nav class ="menu" [ngClass]="{'menu-open': isMenuOpen, 'menu-closed': !isMenuOpen}">
-  <button (click)="toggleMenu()">Toggle Menu</button>
-    <ul [ngClass]="{'menu-open': isMenuOpen, 'menu-closed': !isMenuOpen}" >
+       
+    <div class="logoIconMenu"> <mat-icon (click)="toggleMenu()">menu</mat-icon> 
+      <p *ngIf="isMenuOpen">REUBR</p> 
+    </div>
+    <ul class="menu-list" [ngClass]="{'menu-open': isMenuOpen, 'menu-closed': !isMenuOpen}" >
       <li *ngFor="let menuItem of menuItens">
         <a [routerLink]="menuItem.route" routerLinkActive="active">
-          <div>i</div> 
+          <mat-icon >{{menuItem.icon}}</mat-icon> 
           <div *ngIf="isMenuOpen">{{ menuItem.label }}</div> 
         </a>
       </li>
     </ul>
-</nav>
+</nav> 
+

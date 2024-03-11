@@ -10,6 +10,9 @@ ul {
   list-style-type: none;
   padding: 0;
   transition: width 0.3s ease;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 90vh;
 }
 
 li {
@@ -23,6 +26,7 @@ a {
   display: flex;
   transition: background-color 0.3s ease;
   border-radius: 5px;
+  user-select: none;
 }
 
 a:hover {
@@ -47,12 +51,39 @@ a:hover {
   background-color: #3f51b5;
   color: #fff;
   transition: width 0.3s ease;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
+.logoIconMenu{
+  display: flex;
+  p{
+    margin-top: 2px;
+    margin-left: 15px;
+    font-weight: bold;
+  }
+}
 
 .menu-open {
   width: 250px; 
 }
 .menu-closed {
   width: 50px;
+}
+
+
+@media screen and (max-width: 800px) {
+  .menu-open {
+    width: 100%; 
+  }
+
+  .menu-closed {
+    width: 100%; 
+    height: 30px;
+  }
+
+
+  .menu-open .menu-list {
+    display: block; /* ou qualquer outra propriedade de exibição que você desejar */
+  }
 }

@@ -1,4 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+  scrollbar-color: #8893d4 #3f51b5; 
+}
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
@@ -18,10 +21,52 @@ router-outlet {
   flex: 1;
 }
 
+/* Estilos para a barra de rolagem */
+/* Largura e cor do thumb */
+::-webkit-scrollbar-thumb {
+  background-color: #8893d4; /* Para Chrome, Safari, e Opera */
+}
+::-moz-scrollbar-thumb {
+  background-color: #8893d4; /* Para Firefox */
+}
+
+/* Cor do track */
+::-webkit-scrollbar-track {
+  background-color: #3f51b5; /* Para Chrome, Safari, e Opera */
+}
+::-moz-scrollbar-track {
+  background-color: #3f51b5; /* Para Firefox */
+}
+
+/* Largura da scrollbar */
+::-webkit-scrollbar {
+  width: 6px; /* Para Chrome, Safari, e Opera */
+}
+::-moz-scrollbar {
+  width: 6px; /* Para Firefox */
+}
+
+
+
+::-ms-scrollbar {
+  color: #8893d4; 
+  background-color: #3f51b5;
+}
+
 
 .menu-open-margin {
   margin-left: 250px; 
 }
 .menu-closed-margin {
   margin-left: 50px; 
+}
+
+
+@media screen and (max-width: 800px) {
+  .menu-open-margin {
+    display:none;
+  }
+  .menu-closed-margin {
+    margin-top: 50px;  
+  }
 }
