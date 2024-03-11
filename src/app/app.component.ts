@@ -7,4 +7,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'reurb2';
+  isMenuOpen: boolean = false;
+
+  onMenuToggled(isMenuOpen: boolean) {
+    this.isMenuOpen = isMenuOpen;
+    console.log("oi oi")
+  }
 }
