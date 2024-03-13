@@ -25,3 +25,19 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+
+
+
+
+
+
+
+
+node: v20.11.1 
+Angular CLI: 17.2.3 
+npm: 10.5.0 
+yarn: 1.22.19
+
+npm install --save-dev @angular-devkit/build-angular 
+npm install
