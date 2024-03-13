@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -6,11 +7,17 @@ import { Component } from '@angular/core';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'reurb2';
+  constructor(private authService: AuthService) {}
+
+  isLoggedIn: boolean = true;
+  title = 'reurb';
   isMenuOpen: boolean = false;
+
+  ngOnInit() {
+    this.isLoggedIn = this.authService.isLoggedIn;
+  }
 
   onMenuToggled(isMenuOpen: boolean) {
     this.isMenuOpen = isMenuOpen;
-    console.log("oi oi")
   }
 }

@@ -1,8 +1,8 @@
 
-<nav class ="menu" [ngClass]="{'menu-open': isMenuOpen, 'menu-closed': !isMenuOpen}">
+<nav *ngIf="isAuthenticated()" class ="menu" [ngClass]="{'menu-open': isMenuOpen, 'menu-closed': !isMenuOpen}">
        
     <div class="logoIconMenu"> <mat-icon (click)="toggleMenu()">menu</mat-icon> 
-      <p *ngIf="isMenuOpen">REUBR</p> 
+      <p *ngIf="isMenuOpen">REURB</p> 
     </div>
     <ul class="menu-list" [ngClass]="{'menu-open': isMenuOpen, 'menu-closed': !isMenuOpen}" >
       <li *ngFor="let menuItem of menuItens">

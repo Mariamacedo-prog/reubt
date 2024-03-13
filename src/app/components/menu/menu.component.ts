@@ -1,5 +1,10 @@
 import {Component, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
+interface MenuItem {
+  icon: string;
+  label: string;
+  route: string;
+}
 
 @Component({
   selector: 'app-menu',
@@ -30,19 +35,28 @@ export class MenuComponent {
     { icon: "print", label: 'Importação', route: '/importacao'},
     { icon: "picture_as_pdf", label: 'Relatórios', route: '/relatorios'}
   ];
-  isMenuOpen = true;
+  isMenuOpen = false;
   mobileQuery: MediaQueryList;
 
   private _mobileQueryListener: () => void;
 
   constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher) {
-    this.mobileQuery = media.matchMedia('(max-width: 1100px)');
+    this.mobileQuery = media.matchMedia('(max-width: 1200px)');
     this._mobileQueryListener = () => {
       this.isMenuOpen = !this.mobileQuery.matches;
       this.changeDetectorRef.detectChanges();
     };
     this.mobileQuery.addEventListener('change', this._mobileQueryListener);
   }
+
+  isAuthenticated(): boolean | null{
+    if(localStorage.getItem('isLoggedIn') == 'true'){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
 
   ngOnDestroy(): void {
     this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
@@ -52,10 +66,4 @@ export class MenuComponent {
     this.isMenuOpen = !this.isMenuOpen;
     this.menuToggled.emit(this.isMenuOpen);
   }
-}
-
-interface MenuItem {
-  icon: string;
-  label: string;
-  route: string;
 }
