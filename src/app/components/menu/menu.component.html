@@ -6,8 +6,8 @@
     </div>
     <ul class="menu-list" [ngClass]="{'menu-open': isMenuOpen, 'menu-closed': !isMenuOpen}" >
       <li *ngFor="let menuItem of menuItens">
-        <a [routerLink]="menuItem.route" routerLinkActive="active">
-          <mat-icon >{{menuItem.icon}}</mat-icon> 
+        <a (click)="isMenuOpen = false" [routerLink]="menuItem.route" routerLinkActive="active">
+          <mat-icon style="  padding-right: 5px;">{{menuItem.icon}}</mat-icon> 
           <div *ngIf="isMenuOpen">{{ menuItem.label }}</div> 
         </a>
       </li>

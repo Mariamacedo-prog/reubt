@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   usuario = {
-    email: '',
+    cpf: '',
     senha: ''
   }
 
@@ -19,11 +19,11 @@ export class LoginComponent {
   }
 
   login(): void {
-    this.authService.login(this.usuario.email, this.usuario.senha).subscribe(() => {
+    this.authService.login(this.usuario.cpf, this.usuario.senha).subscribe(() => {
       if (this.authService.isLoggedIn) {
         const redirectUrl = this.authService.redirectUrl
           ? this.authService.redirectUrl
-          : '/usuarios';
+          : '/lista/usuarios';
         this.router.navigate([redirectUrl]);
       }
     });

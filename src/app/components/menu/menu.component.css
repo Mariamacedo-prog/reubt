@@ -53,10 +53,12 @@ a:hover {
   transition: width 0.3s ease;
   overflow-x: hidden;
   overflow-y: hidden;
+  z-index: 100;
 }
 
 .logoIconMenu{
   display: flex;
+  padding-right: 5px;
   p{
     margin-top: 2px;
     margin-left: 15px;

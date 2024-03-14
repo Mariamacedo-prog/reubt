@@ -78,3 +78,10 @@ button {
   margin: 0 10px;
   color: #555;
 }
+
+
+@media screen and (max-width: 800px) {
+  .login-container {
+    margin-left: -50px;
+  }
+}

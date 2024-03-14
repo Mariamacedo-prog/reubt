@@ -1,13 +1,15 @@
 {
   "usuarios":[
     {
+      "id": 1,
       "email":"teste@gmail.com",
-      "senha":"12345",
+      "senha":"1111",
       "nome": "Maria Macedo",
       "telefone": "(11) 983475047",
-      "cpf":"07701823050"
+      "cpf":"1111"
     },
     {
+      "id": 2,
       "email":"teste111@gmail.com",
       "senha":"12345",
       "nome": "Maria 2121 Macedo",
@@ -17,12 +19,14 @@
   ],
   "acessos":[
     {
+      "id": 1,
       "usuarios":[],
       "grupos":[],
       "telas": [],
       "permissoes": []
     },
     {
+      "id": 2,
       "usuarios":[],
       "grupos":[],
       "telas": [],
@@ -31,6 +35,7 @@
   ],
   "funcionarios":[
     {
+      "id": 1,
       "nome":"Maria 2121 Macedo",
       "cpf":"00549227040",
       "endereco": "eaas sasasas a ",
@@ -44,6 +49,7 @@
       "telefone": "(11) 983475047"
     },
     {
+      "id": 2,
       "nome":"Marcela teste",
       "cpf":"12887760041",
       "endereco": "eaas sasasas a ",
@@ -60,6 +66,7 @@
 
   "contratante":[
     {
+      "id": 1,
       "nome":"Celebadar",
       "nacionalidade":"brasileiro",
       "estado_civil": "solteiro(a)",
@@ -70,6 +77,7 @@
       "email": "123@gmail.com"
     },
     {
+      "id": 2,
       "nome":"Ce aasa asds asdsdsad",
       "nacionalidade":"brasileiro",
       "estado_civil": "solteiro(a)",
@@ -81,7 +89,7 @@
     }
   ],
   "menu":[
-    {"icon": "group", "label": "Usuários", "route": "/login"},
+    {"icon": "group", "label": "Usuários", "route": "/lista/usuarios"},
     {"icon": "how_to_reg", "label": "Acessos", "route": "/acessos"},
     {"icon": "account_box", "label": "Funcionários", "route": "/funcionarios"},
     {"icon": "tag_faces", "label": "Contratante", "route": "/contratantes"},
