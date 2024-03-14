@@ -35,20 +35,6 @@
   ],
   "funcionarios":[
     {
-      "id": 1,
-      "nome":"Maria 2121 Macedo",
-      "cpf":"00549227040",
-      "endereco": "eaas sasasas a ",
-      "rua": "essaaesas ",
-      "numero": "12",
-      "bairro": "vila sao paulo",
-      "complemento": "",
-      "cidade_uf": "são paulo/SP",
-      "usuario": "mariaMacedo",
-      "email": "teste111@gmail.com",
-      "telefone": "(11) 983475047"
-    },
-    {
       "id": 2,
       "nome":"Marcela teste",
       "cpf":"12887760041",
@@ -60,6 +46,19 @@
       "cidade_uf": "são paulo/SP",
       "usuario": "mariaMacedo",
       "email": "test@gmail.com",
+      "telefone": "(11) 983475047"
+    }, {
+      "id": 1,
+      "nome":"Maria 2121 Macedo",
+      "cpf":"00549227040",
+      "endereco": "eaas sasasas a ",
+      "rua": "essaaesas ",
+      "numero": "12",
+      "bairro": "vila sao paulo",
+      "complemento": "",
+      "cidade_uf": "são paulo/SP",
+      "usuario": "mariaMacedo",
+      "email": "teste111@gmail.com",
       "telefone": "(11) 983475047"
     }
   ],
