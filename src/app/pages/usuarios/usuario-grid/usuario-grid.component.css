@@ -2,7 +2,9 @@
   width: calc(100vw - 400px);
   height: 80vh;
   display: block;
+  padding: 10px;
 }
+
 .search-field{
   width: 80%;
 }
@@ -12,7 +14,6 @@
   width: 100%;
   justify-content: space-between;
 }
-
 
 @media screen and (max-width: 1200px) {
   .table-area{
@@ -25,6 +26,7 @@
 @media screen and (max-width: 800px) {
   .page-container{
     width: 95%;
+    padding: 5px;
   }
   .header{
    flex-direction: column;
@@ -36,22 +38,15 @@
 }
 
 @media screen and (max-width: 700px) {
-  .mat-table, .mat-header-cell, .mat-cell {
-    display: block;
-    width: 100%;
+  .table-area{
+    width: 100vw;
+    margin-left: 0px;
   }
 }
 
 
 @media screen and (max-width: 600px) {
-  .mat-table {
-    overflow-x: auto;
-  }
- 
-  .mat-row {
-    border-bottom: 1px solid #ccc;
-  }
-  .mat-header-cell, .mat-cell {
-    text-align: center;
-  }
+  .header{
+    width: calc(100vw - 50px);
+   }
 }

@@ -59,6 +59,9 @@ export class AuthService {
     return this.http.get<any>('../../assets/DB.json');
   }
 
+  isUserLoggedIn(): boolean{
+    return this.isLoggedIn;
+  }
 
   login(cpf: string, senha: string): Observable<boolean> {
     this.saveDb()

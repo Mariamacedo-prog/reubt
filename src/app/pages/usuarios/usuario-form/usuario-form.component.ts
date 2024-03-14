@@ -4,12 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 
 @Component({
-  selector: 'app-usuarios',
-  templateUrl: './usuarios.component.html',
-  styleUrls: ['./usuarios.component.css']
+  selector: 'app-usuario-form',
+  templateUrl: './usuario-form.component.html',
+  styleUrls: ['./usuario-form.component.css']
 })
-export class UsuariosComponent {
+export class UsuarioFormComponent {
   userId = 0;
+  isLoggedIn: boolean = false;
   confirmSenha: string = '';
   databaseInfo: any = {};
 
@@ -28,7 +29,8 @@ export class UsuariosComponent {
        this.userId = params['id'];
     });
 
-    console.log(this.userId)
+    this.isAuthenticated();
+
     if(this.userId){
       const storedDb = localStorage.getItem('appDb');
       if (storedDb) {
@@ -77,8 +79,6 @@ export class UsuariosComponent {
           "cpf":this.loginCpfFormControl.value
         }
       )
-      console.log(this.databaseInfo);
-
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
 
       this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
@@ -145,12 +145,13 @@ export class UsuariosComponent {
     return null;
   }
 
-  isNotAuthenticated(): boolean | null{
-    if(localStorage.getItem('isLoggedIn') == 'false'){
-      return true;
+  isAuthenticated(){
+    if(localStorage.getItem('isLoggedIn') == 'true'){
+      this.isLoggedIn = true;
     }else{
-      return false;
+      this.isLoggedIn = false;
     }
+
   }
 
   atualizarUsuatio(){

@@ -63,15 +63,16 @@
           </mat-error>
         </mat-form-field>
       </div>
-  
-        <div class="area-botao" *ngIf="this.userId === 0 || this.userId === undefined || this.userId === null">
-          <button mat-raised-button color="primary" (click)="cadastrarUsuario()" [disabled]="!formularioValido()"> Cadastrar</button>
-          <button *ngIf="isNotAuthenticated()" mat-raised-button color="link" routerLink="/login">Voltar</button>
+
+        <div class="area-botao" *ngIf="this.userId === 0 || this.userId === undefined">
+          <button mat-raised-button color="primary" (click)="cadastrarUsuario()" [disabled]="!formularioValido()">Cadastrar</button>
+          <button *ngIf="isLoggedIn == false" mat-raised-button color="link" routerLink="/login">Voltar</button>
+          <button *ngIf="isLoggedIn" mat-raised-button color="link" routerLink="/lista/usuarios">Voltar</button>
         </div>
 
-        <div class="area-botao" *ngIf="this.userId !== 0 && this.userId !== undefined && this.userId !== null">
+        <div class="area-botao" *ngIf="isLoggedIn && this.userId !== 0 && this.userId !== undefined">
           <button mat-raised-button color="primary" (click)="atualizarUsuatio()" [disabled]="!formularioValido()"> Atualizar</button>
-          <button *ngIf="!isNotAuthenticated()" mat-raised-button color="link" routerLink="/lista/usuarios">Voltar</button>
+          <button mat-raised-button color="link" routerLink="/lista/usuarios">Voltar</button>
         </div>
     </mat-card-content>
   </mat-card>

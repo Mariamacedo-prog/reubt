@@ -5,14 +5,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { UsuarioGridComponent } from './usuario-grid/usuario-grid.component';
-import { UsuariosComponent } from './usuario-form/usuarios.component';
+import { UsuarioFormComponent } from './usuario-form/usuario-form.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { AppRoutingModule } from '../../app-routing.module';
 
 
 @NgModule({
-  declarations: [UsuarioGridComponent,UsuariosComponent ],
+  declarations: [UsuarioGridComponent,UsuarioFormComponent ],
   imports: [
     AppRoutingModule,
     CommonModule,

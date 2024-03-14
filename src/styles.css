@@ -68,6 +68,18 @@ router-outlet {
   margin-left: 50px; 
 }
 
+.icon-green:hover{
+  color: rgb(19, 110, 19);
+  transition: color 0.5s ease-in-out;
+}
+
+.icon-red:hover{
+  color: rgb(148, 39, 39);
+  transition: color 0.5s ease-in-out;
+}
+
+
+
 
 @media screen and (max-width: 800px) {
   .menu-open-margin {
@@ -75,5 +87,11 @@ router-outlet {
   }
   .menu-closed-margin {
     margin-top: 50px;  
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .menu-closed-margin {
+    margin: 15px; 
   }
 }
