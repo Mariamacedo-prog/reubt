@@ -17,12 +17,15 @@ import {MatButtonModule} from '@angular/material/button';
 import { AuthService } from './auth/auth.service';
 import { ToolboxComponent } from './components/toolbox/toolbox.component';
 import { UsuariosModule } from './pages/usuarios/usuarios.module';
+import { FuncionarioGridComponent } from './pages/funcionarios/funcionario-grid/funcionario-grid.component';
+import { FuncionarioFormComponent } from './pages/funcionarios/funcionario-form/funcionario-form.component';
+import { FuncionariosModule } from './pages/funcionarios/funcionarios.module';
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
     LoginComponent,
-    ToolboxComponent,
+    ToolboxComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +38,8 @@ import { UsuariosModule } from './pages/usuarios/usuarios.module';
     FormsModule,
     HttpClientModule,
     MatButtonModule,
-    UsuariosModule 
+    UsuariosModule,
+    FuncionariosModule
   ],
   providers: [
     provideAnimationsAsync('noop'),
