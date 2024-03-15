@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { Observable, of } from 'rxjs';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of, Observable } from 'rxjs';
 import { CepService } from '../../../services/cep.service';
 
 @Component({
-  selector: 'app-funcionario-form',
-  templateUrl: './funcionario-form.component.html',
-  styleUrl: './funcionario-form.component.css'
+  selector: 'app-vendedor-form',
+  templateUrl: './vendedor-form.component.html',
+  styleUrl: './vendedor-form.component.css'
 })
-export class FuncionarioFormComponent {
-  funcionarioId = 0;
+export class VendedorFormComponent {
+  vendedorId = 0;
   isLoggedIn: boolean = false;
   databaseInfo: any = {};
   options: string[] = [];
@@ -25,7 +25,7 @@ export class FuncionarioFormComponent {
   bairroFormControl = new FormControl('', [Validators.required]);
   complementoFormControl = new FormControl('');
   cidadeUfFormControl = new FormControl('', [Validators.required]);
-  usuarioFormControl = new FormControl('', [Validators.required]);
+  rgFormControl = new FormControl('');
   cepFormControl = new FormControl('', [Validators.required]);
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   telefoneFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]);
@@ -35,7 +35,7 @@ export class FuncionarioFormComponent {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-       this.funcionarioId = params['id'];
+       this.vendedorId = params['id'];
 
        if(params['tela'] == 'visualizar'){
         this.visualizar = true;
@@ -44,44 +44,25 @@ export class FuncionarioFormComponent {
 
     this.isAuthenticated();
 
-    if(this.funcionarioId){
+    if(this.vendedorId){
       const storedDb = localStorage.getItem('appDb');
       if (storedDb) {
         this.databaseInfo = JSON.parse(storedDb);
-        if(this.databaseInfo.funcionarios ){
-          const funcionarioPeloCpf = this.databaseInfo.funcionarios.find((funcionario: any) => funcionario.id == this.funcionarioId);
-          if(funcionarioPeloCpf){
-            this.nomeFormControl.setValue(funcionarioPeloCpf.nome);
-            this.cpfFormControl.setValue(funcionarioPeloCpf.cpf);
-            this.emailFormControl.setValue(funcionarioPeloCpf.email);
-            this.telefoneFormControl.setValue(funcionarioPeloCpf.telefone);
-            this.usuarioFormControl.setValue(funcionarioPeloCpf.usuario);
-            this.ruaFormControl.setValue(funcionarioPeloCpf.rua);
-            this.numeroFormControl.setValue(funcionarioPeloCpf.numero);
-            this.bairroFormControl.setValue(funcionarioPeloCpf.bairro);
-            this.complementoFormControl.setValue(funcionarioPeloCpf.complemento);
-            this.cidadeUfFormControl.setValue(funcionarioPeloCpf.cidade_uf);
-            this.cepFormControl.setValue(funcionarioPeloCpf.cep);
+        if(this.databaseInfo.vendedores ){
+          const vendedorPeloCpf = this.databaseInfo.vendedores.find((vendedor: any) => vendedor.id == this.vendedorId);
+          if(vendedorPeloCpf){
+            this.nomeFormControl.setValue(vendedorPeloCpf.nome);
+            this.cpfFormControl.setValue(vendedorPeloCpf.cpf);
+            this.emailFormControl.setValue(vendedorPeloCpf.email);
+            this.telefoneFormControl.setValue(vendedorPeloCpf.telefone);
+            this.rgFormControl.setValue(vendedorPeloCpf.rg);
+            this.ruaFormControl.setValue(vendedorPeloCpf.rua);
+            this.numeroFormControl.setValue(vendedorPeloCpf.numero);
+            this.bairroFormControl.setValue(vendedorPeloCpf.bairro);
+            this.complementoFormControl.setValue(vendedorPeloCpf.complemento);
+            this.cidadeUfFormControl.setValue(vendedorPeloCpf.cidade_uf);
+            this.cepFormControl.setValue(vendedorPeloCpf.cep);
           }
-        }
-      }
-    }
-  }
-
-  buscarUsuario() {
-    if (this.usuarioFormControl.value) {
-      const filterValue = this.usuarioFormControl.value.toString().toLowerCase();
-
-      const storedDb = localStorage.getItem('appDb');
-      if (storedDb) {
-        this.databaseInfo = JSON.parse(storedDb);
-        if (this.databaseInfo.usuarios) {
-          this.filteredOptions = of(this.databaseInfo.usuarios
-            .filter((option: any) =>
-              option.nome.toLowerCase().includes(filterValue)
-            )
-            .map((option: any) => option.nome)
-          );
         }
       }
     }
@@ -92,20 +73,20 @@ export class FuncionarioFormComponent {
     if (storedDb) {
       this.databaseInfo = JSON.parse(storedDb);
     }
-    if(this.databaseInfo.funcionarios){
-      const funcionarioPeloCpf = this.databaseInfo.funcionarios.find((funcionario: any) => funcionario.cpf == this.cpfFormControl.value);
-      if(funcionarioPeloCpf){
-        this.toolboxService.showTooltip('error', 'Funcionario com CPF já existe na base de dados!', 'ERRO CPF!');
+    if(this.databaseInfo.vendedores){
+      const vendedorPeloCpf = this.databaseInfo.vendedores.find((vendedor: any) => vendedor.cpf == this.cpfFormControl.value);
+      if(vendedorPeloCpf){
+        this.toolboxService.showTooltip('error', 'Vendedor(a) com CPF já existe na base de dados!', 'ERRO CPF!');
         return;
       }
 
-      const funcionarioPeloEmail = this.databaseInfo.funcionarios.find((funcionario: any) => funcionario.email == this.emailFormControl.value);
-      if(funcionarioPeloEmail){
-        this.toolboxService.showTooltip('error', 'Funcionario com E-mail já existe na base de dados!', 'ERRO CPF!');
+      const vendedorPeloEmail = this.databaseInfo.vendedores.find((vendedor: any) => vendedor.email == this.emailFormControl.value);
+      if(vendedorPeloEmail){
+        this.toolboxService.showTooltip('error', 'Vendedor(a) com E-mail já existe na base de dados!', 'ERRO CPF!');
         return;
       }
 
-      this.databaseInfo.funcionarios.push(
+      this.databaseInfo.vendedores.push(
         {
           "id": Math.floor(Math.random() * 100000),
           "nome":this.nomeFormControl.value,
@@ -115,7 +96,7 @@ export class FuncionarioFormComponent {
           "bairro": this.bairroFormControl.value,
           "complemento": this.complementoFormControl.value,
           "cidade_uf": this.cidadeUfFormControl.value,
-          "usuario":this.usuarioFormControl.value,
+          "rg":this.rgFormControl.value,
           "email": this.emailFormControl.value,
           "telefone":this.telefoneFormControl.value,
           "cep": this.cepFormControl.value
@@ -124,43 +105,44 @@ export class FuncionarioFormComponent {
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
 
       this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/lista/funcionarios']);
+
+      this.router.navigate(['/lista/vendedores']);
     }
   }
 
-  atualizarFuncionario(){
+  atualizarVendedor(){
     const storedDb = localStorage.getItem('appDb');
     if (storedDb) {
       this.databaseInfo = JSON.parse(storedDb);
     }
     
-    if(this.databaseInfo.funcionarios){
-      const funcionarioPeloCpf = this.databaseInfo.funcionarios.find((funcionario: any) => funcionario.cpf == this.cpfFormControl.value && funcionario.id != this.funcionarioId);
-      if(funcionarioPeloCpf){
+    if(this.databaseInfo.vendedores){
+      const vendedorPeloCpf = this.databaseInfo.vendedores.find((vendedor: any) => vendedor.cpf == this.cpfFormControl.value && vendedor.id != this.vendedorId);
+      if(vendedorPeloCpf){
         this.toolboxService.showTooltip('error', 'Funcionario com CPF já existe na base de dados!', 'ERRO CPF!');
         return;
       }
 
-      const funcionarioPeloEmail = this.databaseInfo.funcionarios.find((funcionario: any) => funcionario.email == this.emailFormControl.value && funcionario.id != this.funcionarioId);
-      if(funcionarioPeloEmail){
+      const vendedorPeloEmail = this.databaseInfo.funcionarios.find((vendedor: any) => vendedor.email == this.emailFormControl.value && vendedor.id != this.vendedorId);
+      if(vendedorPeloEmail){
         this.toolboxService.showTooltip('error', 'Funcionario com E-mail já existe na base de dados!', 'ERRO CPF!');
         return;
       }
 
-      const index = this.databaseInfo.funcionarios.findIndex((item: any) => item.id == this.funcionarioId);
+      const index = this.databaseInfo.vendedores.findIndex((item: any) => item.id == this.vendedorId);
       if (index !== -1) {
-        this.databaseInfo.funcionarios[index] = {
-          "id": this.funcionarioId,
+        this.databaseInfo.vendedores[index] = {
+          "id": this.vendedorId,
           "nome":this.nomeFormControl.value,
           "cpf":this.cpfFormControl.value,
+          "email": this.emailFormControl.value,
+          "telefone":this.telefoneFormControl.value,
+          "rg":this.rgFormControl.value,
           "rua": this.ruaFormControl.value,
           "numero": this.numeroFormControl.value,
           "bairro": this.bairroFormControl.value,
           "complemento": this.complementoFormControl.value,
           "cidade_uf": this.cidadeUfFormControl.value,
-          "usuario":this.usuarioFormControl.value,
-          "email": this.emailFormControl.value,
-          "telefone":this.telefoneFormControl.value,
           "cep": this.cepFormControl.value
         };
       }
@@ -168,7 +150,7 @@ export class FuncionarioFormComponent {
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
 
       this.toolboxService.showTooltip('success', 'Cadastro atualizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/lista/funcionarios']);
+      this.router.navigate(['/lista/vendedores']);
     }
   }
 
@@ -182,7 +164,6 @@ export class FuncionarioFormComponent {
         this.numeroFormControl.valid &&
         this.bairroFormControl.valid &&
         this.cidadeUfFormControl.valid &&
-        this.usuarioFormControl.valid &&
         this.emailFormControl.valid &&
         this.telefoneFormControl.valid
     );

@@ -1,0 +1,128 @@
+<div class="registration-container">
+  <mat-card class="vendedor-card" >
+    <mat-card-header>
+      <mat-card-title>Cadastro de Vendedor</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content >
+      <mat-tab-group >
+        <mat-tab  label="Dados Pessoais"> 
+          <mat-form-field>
+            <mat-label>Nome</mat-label>
+            <input [readonly]="visualizar"  matInput [formControl]="nomeFormControl" />
+            <mat-error *ngIf="nomeFormControl.hasError('required')">
+              Este campo é <strong>obrigatório</strong>
+            </mat-error>
+          </mat-form-field>
+    
+          <div>
+            <mat-form-field>
+              <mat-label>Email</mat-label>
+              <input [readonly]="visualizar"  type="email" matInput [formControl]="emailFormControl" placeholder="Ex.pat@example.com" />
+              <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                Please enter a valid email address
+              </mat-error>
+              <mat-error *ngIf="emailFormControl.hasError('required')" >
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field>
+      
+            <mat-form-field>
+              <mat-label>Telefone</mat-label>
+              <input [readonly]="visualizar"  matInput [formControl]="telefoneFormControl" (input)="formatarTelefone()" />
+              <mat-error *ngIf="telefoneFormControl.hasError('pattern')">
+                Por favor digite um telefone válido.
+              </mat-error>
+              <mat-error *ngIf="telefoneFormControl.hasError('required')">
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field>  
+          </div>
+    
+          <div>
+            <mat-form-field>
+              <mat-label>CPF</mat-label>
+              <input [readonly]="visualizar"  matInput [formControl]="cpfFormControl" />
+              <mat-error *ngIf="cpfFormControl.hasError('cpfInvalido')">CPF inválido</mat-error>
+            </mat-form-field>
+      
+            <mat-form-field>
+              <mat-label>RG</mat-label>
+              <input [readonly]="visualizar"  matInput [formControl]="rgFormControl" />
+            </mat-form-field>
+          </div>
+
+
+          
+        </mat-tab>
+        <mat-tab label="Endereço"> 
+          <mat-form-field>
+            <mat-label>CEP</mat-label>
+            <input [readonly]="visualizar" (keyup)="buscarEndereco()" maxlength="8" type="text" matInput [formControl]="cepFormControl" />
+            <mat-error *ngIf="cepFormControl.hasError('required')" >
+              Este campo é <strong>obrigatório</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <div>
+            <mat-form-field>
+              <mat-label>Rua</mat-label>
+              <input [readonly]="visualizar"  type="text" matInput [formControl]="ruaFormControl" />
+              <mat-error *ngIf="ruaFormControl.hasError('required')" >
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field>
+            <div>
+              <mat-form-field>
+                <mat-label>Número</mat-label>
+                <input [readonly]="visualizar"  type="text" matInput [formControl]="numeroFormControl" />
+                <mat-error *ngIf="numeroFormControl.hasError('required')" >
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Complemento</mat-label>
+                <input [readonly]="visualizar"  type="text" matInput [formControl]="complementoFormControl" />
+                <mat-error *ngIf="complementoFormControl.hasError('required')" >
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+
+        
+
+          <mat-form-field>
+            <mat-label>Bairro</mat-label>
+            <input [readonly]="visualizar"  type="text" matInput [formControl]="bairroFormControl" />
+            <mat-error *ngIf="bairroFormControl.hasError('required')" >
+              Este campo é <strong>obrigatório</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Cidade/UF</mat-label>
+            <input [readonly]="visualizar"  type="text" matInput [formControl]="cidadeUfFormControl" />
+            <mat-error *ngIf="cidadeUfFormControl.hasError('required')" >
+              Este campo é <strong>obrigatório</strong>
+            </mat-error>
+          </mat-form-field>
+
+        </mat-tab>
+      </mat-tab-group>
+
+
+
+        <div class="area-botao" *ngIf="isLoggedIn && this.vendedorId === 0 || this.vendedorId === undefined">
+          <button mat-raised-button color="primary" (click)="cadastrarFuncionario()" [disabled]="!formularioValido()">Cadastrar</button>
+          <button  mat-raised-button color="link" routerLink="/lista/vendedores">Voltar</button>
+        </div>
+
+        <div class="area-botao" *ngIf="isLoggedIn && this.vendedorId !== 0 && this.vendedorId !== undefined">
+          <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizarVendedor()" [disabled]="!formularioValido()"> Atualizar</button>
+          <button mat-raised-button color="link" routerLink="/lista/vendedores">Voltar</button>
+        </div>
+    </mat-card-content>
+  </mat-card>
+</div>

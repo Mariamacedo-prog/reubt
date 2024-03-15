@@ -36,7 +36,7 @@ export class ToolboxComponent implements OnInit, OnDestroy {
         this.tooltip.closeTooltip = false;
         setTimeout(() => {
           this.tooltip.closeTooltip  = true;
-        }, 10000);
+        }, 5000);
       }
     );
   }
@@ -44,4 +44,6 @@ export class ToolboxComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
+
+
 }

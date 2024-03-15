@@ -17,13 +17,10 @@ import {MatButtonModule} from '@angular/material/button';
 import { AuthService } from './auth/auth.service';
 import { ToolboxComponent } from './components/toolbox/toolbox.component';
 import { UsuariosModule } from './pages/usuarios/usuarios.module';
-import { FuncionarioGridComponent } from './pages/funcionarios/funcionario-grid/funcionario-grid.component';
-import { FuncionarioFormComponent } from './pages/funcionarios/funcionario-form/funcionario-form.component';
 import { FuncionariosModule } from './pages/funcionarios/funcionarios.module';
-import { ContratanteGridComponent } from './pages/contratantes/contratante-grid/contratante-grid.component';
-import { ContratanteFormComponent } from './pages/contratantes/contratante-form/contratante-form.component';
 import { ContratantesModule } from './pages/contratantes/contratantes.module';
-import { InputfileComponent } from './components/inputfile/inputfile.component';
+import { VendedoresModule } from './pages/vendedores/vendedores.module';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,7 +41,8 @@ import { InputfileComponent } from './components/inputfile/inputfile.component';
     MatButtonModule,
     UsuariosModule,
     FuncionariosModule,
-    ContratantesModule
+    ContratantesModule,
+    VendedoresModule
   ],
   providers: [
     provideAnimationsAsync('noop'),

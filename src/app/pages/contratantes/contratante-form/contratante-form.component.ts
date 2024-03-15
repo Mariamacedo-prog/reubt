@@ -112,7 +112,7 @@ export class ContratanteFormComponent {
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
 
       this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/listar/contratantes']);
+      this.router.navigate(['/lista/contratantes']);
     }
   }
 

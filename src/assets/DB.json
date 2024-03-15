@@ -62,7 +62,35 @@
       "cep": "08410000"
     }
   ],
-
+  "vendedores":[
+    {
+      "id": 2,
+      "nome":"Vendedor 1",
+      "cpf":"12887760041",
+      "rg":"402377886",
+      "rua": "Rua Salvador Gianetti",
+      "numero": "12",
+      "bairro": "Guaianazes",
+      "complemento": "",
+      "cidade_uf": "São Paulo / SP",
+      "email": "Vendedor1@gmail.com",
+      "telefone": "(11) 983475047",
+      "cep": "08410000"
+    }, {
+      "id": 1,
+      "nome":"Vendedor 2",
+      "cpf":"00549227040",
+      "rg":"289557288",
+      "rua": "Rua Quatro, s/n",
+      "numero": "231",
+      "bairro": "Distrito Ajapi",
+      "complemento": "",
+      "cidade_uf": "Ajapi / SP",
+      "email": "Vendedor1@gmail.com",
+      "telefone": "(11) 983475047",
+      "cep": "13508971"
+    }
+  ],
   "contratantes":[
     {
       "id": 1,
