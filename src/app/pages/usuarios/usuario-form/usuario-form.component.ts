@@ -10,6 +10,7 @@ import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 })
 export class UsuarioFormComponent {
   userId = 0;
+  visualizar: boolean = false;
   isLoggedIn: boolean = false;
   confirmSenha: string = '';
   databaseInfo: any = {};
@@ -18,7 +19,7 @@ export class UsuarioFormComponent {
   nomeFormControl = new FormControl('', Validators.required);
   telefoneFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]);
   loginCpfFormControl = new FormControl('', [Validators.required, this.validateCPF]);
-  senhaFormControl = new FormControl('', Validators.required);
+  senhaFormControl = new FormControl('', [Validators.required,   Validators.minLength(8), Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)]);
   confirmSenhaFormControl = new FormControl('', [Validators.required, this.compararSenhas.bind(this)]);
 
 
@@ -27,6 +28,10 @@ export class UsuarioFormComponent {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
        this.userId = params['id'];
+       
+       if(params['tela'] == 'visualizar'){
+        this.visualizar = true;
+       }
     });
 
     this.isAuthenticated();
@@ -42,6 +47,8 @@ export class UsuarioFormComponent {
             this.nomeFormControl.setValue(usuarioPeloCpf.nome);
             this.telefoneFormControl.setValue(usuarioPeloCpf.telefone);
             this.loginCpfFormControl.setValue(usuarioPeloCpf.cpf);
+            this.senhaFormControl.setValue(usuarioPeloCpf.senha);
+            this.confirmSenhaFormControl.setValue(usuarioPeloCpf.senha);
           }
         }
       }

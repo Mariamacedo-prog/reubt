@@ -1,20 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FuncionarioGridComponent } from './funcionario-grid/funcionario-grid.component';
-import { FuncionarioFormComponent } from './funcionario-form/funcionario-form.component';
+import { ContratanteGridComponent } from './contratante-grid/contratante-grid.component';
+import { ContratanteFormComponent } from './contratante-form/contratante-form.component';
 import { AppRoutingModule } from '../../app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
-import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatCardModule } from '@angular/material/card';
+import {MatSelectModule} from '@angular/material/select';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 @NgModule({
-  declarations: [FuncionarioGridComponent, FuncionarioFormComponent ],
+  declarations: [ ContratanteGridComponent, ContratanteFormComponent ],
   imports: [
     AppRoutingModule,
     CommonModule,
@@ -26,7 +28,9 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatIconModule,
     MatTabsModule,
     MatCardModule,
-    MatAutocompleteModule
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ]
 })
-export class FuncionariosModule { }
+export class ContratantesModule { }

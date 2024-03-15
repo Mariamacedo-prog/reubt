@@ -20,6 +20,9 @@ import { UsuariosModule } from './pages/usuarios/usuarios.module';
 import { FuncionarioGridComponent } from './pages/funcionarios/funcionario-grid/funcionario-grid.component';
 import { FuncionarioFormComponent } from './pages/funcionarios/funcionario-form/funcionario-form.component';
 import { FuncionariosModule } from './pages/funcionarios/funcionarios.module';
+import { ContratanteGridComponent } from './pages/contratantes/contratante-grid/contratante-grid.component';
+import { ContratanteFormComponent } from './pages/contratantes/contratante-form/contratante-form.component';
+import { ContratantesModule } from './pages/contratantes/contratantes.module';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +42,8 @@ import { FuncionariosModule } from './pages/funcionarios/funcionarios.module';
     HttpClientModule,
     MatButtonModule,
     UsuariosModule,
-    FuncionariosModule
+    FuncionariosModule,
+    ContratantesModule
   ],
   providers: [
     provideAnimationsAsync('noop'),

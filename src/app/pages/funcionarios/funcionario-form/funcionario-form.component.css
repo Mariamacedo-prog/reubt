@@ -32,6 +32,10 @@ div{
   }
 }
 
+mat-tab-group{
+  overflow: hidden;
+}
+
 
 @media screen and (max-width: 1200px) {
   .funcionario-card {

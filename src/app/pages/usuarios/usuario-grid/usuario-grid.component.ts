@@ -46,7 +46,10 @@ export class UsuarioGridComponent {
   }
 
   visualizarItem(element: any){
-    console.log(element)
+    this.router.navigate(["/usuario/" + element.id + "/visualizar"]);
+  }
+
+  editarItem(element: any){
     this.router.navigate(["/usuario/" + element.id]);
   }
 

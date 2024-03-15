@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
+import { ToolboxService } from '../../components/toolbox/toolbox.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ export class LoginComponent {
     senha: ''
   }
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private toolboxService: ToolboxService) {}
   ngOnInit(): void {
 
   }
@@ -25,6 +26,8 @@ export class LoginComponent {
           ? this.authService.redirectUrl
           : '/lista/usuarios';
         this.router.navigate([redirectUrl]);
+      }else{
+        this.toolboxService.showTooltip('error', 'Usuário ou senha incorreta!', 'ERRO!');
       }
     });
   }

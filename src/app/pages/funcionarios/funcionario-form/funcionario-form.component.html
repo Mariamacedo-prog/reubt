@@ -1,17 +1,17 @@
 <div class="registration-container">
 
 
-  <mat-card class="funcionario-card">
+  <mat-card class="funcionario-card" >
     <mat-card-header>
       <mat-card-title>Cadastro de Funcionário</mat-card-title>
     </mat-card-header>
 
-    <mat-card-content>
-      <mat-tab-group>
-        <mat-tab label="Dados Pessoais"> 
+    <mat-card-content >
+      <mat-tab-group >
+        <mat-tab  label="Dados Pessoais"> 
           <mat-form-field>
             <mat-label>Nome</mat-label>
-            <input matInput [formControl]="nomeFormControl" />
+            <input [readonly]="visualizar"  matInput [formControl]="nomeFormControl" />
             <mat-error *ngIf="nomeFormControl.hasError('required')">
               Este campo é <strong>obrigatório</strong>
             </mat-error>
@@ -20,7 +20,7 @@
           <div>
             <mat-form-field>
               <mat-label>Email</mat-label>
-              <input type="email" matInput [formControl]="emailFormControl" placeholder="Ex.pat@example.com" />
+              <input [readonly]="visualizar"  type="email" matInput [formControl]="emailFormControl" placeholder="Ex.pat@example.com" />
               <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
                 Please enter a valid email address
               </mat-error>
@@ -31,7 +31,7 @@
       
             <mat-form-field>
               <mat-label>Telefone</mat-label>
-              <input matInput [formControl]="telefoneFormControl" (input)="formatarTelefone()" />
+              <input [readonly]="visualizar"  matInput [formControl]="telefoneFormControl" (input)="formatarTelefone()" />
               <mat-error *ngIf="telefoneFormControl.hasError('pattern')">
                 Por favor digite um telefone válido.
               </mat-error>
@@ -43,48 +43,73 @@
     
           <mat-form-field>
             <mat-label>CPF</mat-label>
-            <input matInput [formControl]="cpfFormControl" />
+            <input [readonly]="visualizar"  matInput [formControl]="cpfFormControl" />
             <mat-error *ngIf="cpfFormControl.hasError('cpfInvalido')">CPF inválido</mat-error>
           </mat-form-field>
     
           <mat-form-field>
             <mat-label>Usuário</mat-label>
-            <input type="text" matInput [formControl]="usuarioFormControl" />
+            <input type="text"
+                  [readonly]="visualizar"
+                   placeholder="Escolha um"
+                   aria-label="Usuário"
+                   matInput
+                   (keyup)="buscarUsuario()"
+                   [formControl]="usuarioFormControl"
+                   [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+              @for (option of filteredOptions | async; track option) {
+                <mat-option [value]="option">{{option}}</mat-option>
+              }
+            </mat-autocomplete>
             <mat-error *ngIf="usuarioFormControl.hasError('required')" >
               Este campo é <strong>obrigatório</strong>
             </mat-error>
           </mat-form-field>
+
+          
         </mat-tab>
-        
         <mat-tab label="Endereço"> 
           <mat-form-field>
-            <mat-label>Rua</mat-label>
-            <input type="text" matInput [formControl]="ruaFormControl" />
-            <mat-error *ngIf="ruaFormControl.hasError('required')" >
+            <mat-label>CEP</mat-label>
+            <input [readonly]="visualizar" (keyup)="buscarEndereco()" maxlength="8" type="text" matInput [formControl]="cepFormControl" />
+            <mat-error *ngIf="cepFormControl.hasError('required')" >
               Este campo é <strong>obrigatório</strong>
             </mat-error>
           </mat-form-field>
 
           <div>
             <mat-form-field>
-              <mat-label>Número</mat-label>
-              <input type="text" matInput [formControl]="numeroFormControl" />
-              <mat-error *ngIf="numeroFormControl.hasError('required')" >
+              <mat-label>Rua</mat-label>
+              <input [readonly]="visualizar"  type="text" matInput [formControl]="ruaFormControl" />
+              <mat-error *ngIf="ruaFormControl.hasError('required')" >
                 Este campo é <strong>obrigatório</strong>
               </mat-error>
             </mat-form-field>
-            <mat-form-field>
-              <mat-label>Complemento</mat-label>
-              <input type="text" matInput [formControl]="complementoFormControl" />
-              <mat-error *ngIf="complementoFormControl.hasError('required')" >
-                Este campo é <strong>obrigatório</strong>
-              </mat-error>
-            </mat-form-field>
+            <div>
+              <mat-form-field>
+                <mat-label>Número</mat-label>
+                <input [readonly]="visualizar"  type="text" matInput [formControl]="numeroFormControl" />
+                <mat-error *ngIf="numeroFormControl.hasError('required')" >
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Complemento</mat-label>
+                <input [readonly]="visualizar"  type="text" matInput [formControl]="complementoFormControl" />
+                <mat-error *ngIf="complementoFormControl.hasError('required')" >
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
           </div>
+
+
+        
 
           <mat-form-field>
             <mat-label>Bairro</mat-label>
-            <input type="text" matInput [formControl]="bairroFormControl" />
+            <input [readonly]="visualizar"  type="text" matInput [formControl]="bairroFormControl" />
             <mat-error *ngIf="bairroFormControl.hasError('required')" >
               Este campo é <strong>obrigatório</strong>
             </mat-error>
@@ -92,22 +117,14 @@
 
           <mat-form-field>
             <mat-label>Cidade/UF</mat-label>
-            <input type="text" matInput [formControl]="cidadeUfFormControl" />
+            <input [readonly]="visualizar"  type="text" matInput [formControl]="cidadeUfFormControl" />
             <mat-error *ngIf="cidadeUfFormControl.hasError('required')" >
               Este campo é <strong>obrigatório</strong>
             </mat-error>
           </mat-form-field>
 
         </mat-tab>
-  
       </mat-tab-group>
-
-
-      
-
-   
-
-
 
 
 
@@ -117,7 +134,7 @@
         </div>
 
         <div class="area-botao" *ngIf="isLoggedIn && this.funcionarioId !== 0 && this.funcionarioId !== undefined">
-          <button mat-raised-button color="primary" (click)="atualizarFuncionario()" [disabled]="!formularioValido()"> Atualizar</button>
+          <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizarFuncionario()" [disabled]="!formularioValido()"> Atualizar</button>
           <button mat-raised-button color="link" routerLink="/lista/funcionarios">Voltar</button>
         </div>
     </mat-card-content>

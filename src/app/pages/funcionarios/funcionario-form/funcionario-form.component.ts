@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { of, Observable } from 'rxjs';
+import { CepService } from '../../../services/cep.service';
 
 @Component({
   selector: 'app-funcionario-form',
@@ -12,6 +14,9 @@ export class FuncionarioFormComponent {
   funcionarioId = 0;
   isLoggedIn: boolean = false;
   databaseInfo: any = {};
+  options: string[] = [];
+  filteredOptions: Observable<string[]> = of([]);
+  visualizar: boolean = false;
 
   nomeFormControl = new FormControl('', Validators.required);
   cpfFormControl = new FormControl('', [Validators.required, this.validateCPF]);
@@ -21,14 +26,20 @@ export class FuncionarioFormComponent {
   complementoFormControl = new FormControl('');
   cidadeUfFormControl = new FormControl('', [Validators.required]);
   usuarioFormControl = new FormControl('', [Validators.required]);
+  cepFormControl = new FormControl('', [Validators.required]);
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   telefoneFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]);
 
-  constructor(private toolboxService: ToolboxService, private router: Router, private route: ActivatedRoute) {}
+  constructor(private toolboxService: ToolboxService, private router: Router, 
+    private route: ActivatedRoute, private cepService: CepService) {}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
        this.funcionarioId = params['id'];
+
+       if(params['tela'] == 'visualizar'){
+        this.visualizar = true;
+       }
     });
 
     this.isAuthenticated();
@@ -42,15 +53,35 @@ export class FuncionarioFormComponent {
           if(funcionarioPeloCpf){
             this.nomeFormControl.setValue(funcionarioPeloCpf.nome);
             this.cpfFormControl.setValue(funcionarioPeloCpf.cpf);
+            this.emailFormControl.setValue(funcionarioPeloCpf.email);
+            this.telefoneFormControl.setValue(funcionarioPeloCpf.telefone);
+            this.usuarioFormControl.setValue(funcionarioPeloCpf.usuario);
             this.ruaFormControl.setValue(funcionarioPeloCpf.rua);
             this.numeroFormControl.setValue(funcionarioPeloCpf.numero);
             this.bairroFormControl.setValue(funcionarioPeloCpf.bairro);
             this.complementoFormControl.setValue(funcionarioPeloCpf.complemento);
             this.cidadeUfFormControl.setValue(funcionarioPeloCpf.cidade_uf);
-            this.usuarioFormControl.setValue(funcionarioPeloCpf.usuario);
-            this.emailFormControl.setValue(funcionarioPeloCpf.email);
-            this.telefoneFormControl.setValue(funcionarioPeloCpf.telefone);
+            this.cepFormControl.setValue(funcionarioPeloCpf.cep);
           }
+        }
+      }
+    }
+  }
+
+  buscarUsuario() {
+    if (this.usuarioFormControl.value) {
+      const filterValue = this.usuarioFormControl.value.toString().toLowerCase();
+
+      const storedDb = localStorage.getItem('appDb');
+      if (storedDb) {
+        this.databaseInfo = JSON.parse(storedDb);
+        if (this.databaseInfo.usuarios) {
+          this.filteredOptions = of(this.databaseInfo.usuarios
+            .filter((option: any) =>
+              option.nome.toLowerCase().includes(filterValue)
+            )
+            .map((option: any) => option.nome)
+          );
         }
       }
     }
@@ -86,7 +117,8 @@ export class FuncionarioFormComponent {
           "cidade_uf": this.cidadeUfFormControl.value,
           "usuario":this.usuarioFormControl.value,
           "email": this.emailFormControl.value,
-          "telefone":this.telefoneFormControl.value
+          "telefone":this.telefoneFormControl.value,
+          "cep": this.cepFormControl.value
         }
       )
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
@@ -94,6 +126,75 @@ export class FuncionarioFormComponent {
       this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
       this.router.navigate(['/listar/funcionarios']);
     }
+  }
+
+  atualizarFuncionario(){
+    const storedDb = localStorage.getItem('appDb');
+    if (storedDb) {
+      this.databaseInfo = JSON.parse(storedDb);
+    }
+    
+    if(this.databaseInfo.funcionarios){
+      const funcionarioPeloCpf = this.databaseInfo.funcionarios.find((funcionario: any) => funcionario.cpf == this.cpfFormControl.value && funcionario.id != this.funcionarioId);
+      if(funcionarioPeloCpf){
+        this.toolboxService.showTooltip('error', 'Funcionario com CPF já existe na base de dados!', 'ERRO CPF!');
+        return;
+      }
+
+      const funcionarioPeloEmail = this.databaseInfo.funcionarios.find((funcionario: any) => funcionario.email == this.emailFormControl.value && funcionario.id != this.funcionarioId);
+      if(funcionarioPeloEmail){
+        this.toolboxService.showTooltip('error', 'Funcionario com E-mail já existe na base de dados!', 'ERRO CPF!');
+        return;
+      }
+
+      const index = this.databaseInfo.funcionarios.findIndex((item: any) => item.id == this.funcionarioId);
+      if (index !== -1) {
+        this.databaseInfo.funcionarios[index] = {
+          "id": this.funcionarioId,
+          "nome":this.nomeFormControl.value,
+          "cpf":this.cpfFormControl.value,
+          "rua": this.ruaFormControl.value,
+          "numero": this.numeroFormControl.value,
+          "bairro": this.bairroFormControl.value,
+          "complemento": this.complementoFormControl.value,
+          "cidade_uf": this.cidadeUfFormControl.value,
+          "usuario":this.usuarioFormControl.value,
+          "email": this.emailFormControl.value,
+          "telefone":this.telefoneFormControl.value,
+          "cep": this.cepFormControl.value
+        };
+      }
+
+      localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
+
+      this.toolboxService.showTooltip('success', 'Cadastro atualizado com sucesso!', 'Sucesso!');
+      this.router.navigate(['/lista/funcionarios']);
+    }
+  }
+
+
+
+  formularioValido(): boolean {
+    return (
+        this.nomeFormControl.valid &&
+        this.cpfFormControl.valid &&
+        this.ruaFormControl.valid &&
+        this.numeroFormControl.valid &&
+        this.bairroFormControl.valid &&
+        this.cidadeUfFormControl.valid &&
+        this.usuarioFormControl.valid &&
+        this.emailFormControl.valid &&
+        this.telefoneFormControl.valid
+    );
+  }
+
+  isAuthenticated(){
+    if(localStorage.getItem('isLoggedIn') == 'true'){
+      this.isLoggedIn = true;
+    }else{
+      this.isLoggedIn = false;
+    }
+
   }
 
   validateCPF(control: FormControl): { [key: string]: any } | null {
@@ -144,69 +245,22 @@ export class FuncionarioFormComponent {
     }
   }
 
-  isAuthenticated(){
-    if(localStorage.getItem('isLoggedIn') == 'true'){
-      this.isLoggedIn = true;
-    }else{
-      this.isLoggedIn = false;
-    }
-
-  }
-
-  atualizarFuncionario(){
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      this.databaseInfo = JSON.parse(storedDb);
+  buscarEndereco() {
+    if(this.cepFormControl.value){
+      if (this.cepFormControl.value.toString().length === 8) {
+        this.cepService.getAddressByCep(this.cepFormControl.value)
+          .subscribe(
+            data => {
+              this.ruaFormControl.setValue(data.logradouro);
+              this.bairroFormControl.setValue(data.bairro);
+              this.cidadeUfFormControl.setValue(data.localidade + " / " + data.uf)
+            },
+            error => {
+              console.error(error);
+            }
+          );
+      }
     }
     
-    if(this.databaseInfo.funcionarios){
-      const funcionarioPeloCpf = this.databaseInfo.funcionarios.find((funcionario: any) => funcionario.cpf == this.cpfFormControl.value && funcionario.id != this.funcionarioId);
-      if(funcionarioPeloCpf){
-        this.toolboxService.showTooltip('error', 'Funcionario com CPF já existe na base de dados!', 'ERRO CPF!');
-        return;
-      }
-
-      const funcionarioPeloEmail = this.databaseInfo.funcionarios.find((funcionario: any) => funcionario.email == this.emailFormControl.value && funcionario.id != this.funcionarioId);
-      if(funcionarioPeloEmail){
-        this.toolboxService.showTooltip('error', 'Funcionario com E-mail já existe na base de dados!', 'ERRO CPF!');
-        return;
-      }
-
-      const index = this.databaseInfo.funcionarios.findIndex((item: any) => item.id == this.funcionarioId);
-      if (index !== -1) {
-        this.databaseInfo.funcionarios[index] = {
-          "id": this.funcionarioId,
-          "nome":this.nomeFormControl.value,
-          "cpf":this.cpfFormControl.value,
-          "rua": this.ruaFormControl.value,
-          "numero": this.numeroFormControl.value,
-          "bairro": this.bairroFormControl.value,
-          "complemento": this.complementoFormControl.value,
-          "cidade_uf": this.cidadeUfFormControl.value,
-          "usuario":this.usuarioFormControl.value,
-          "email": this.emailFormControl.value,
-          "telefone":this.telefoneFormControl.value
-        };
-      }
-
-      localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
-
-      this.toolboxService.showTooltip('success', 'Cadastro atualizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/lista/funcionarios']);
-    }
-  }
-
-  formularioValido(): boolean {
-    return (
-        this.nomeFormControl.valid &&
-        this.cpfFormControl.valid &&
-        this.ruaFormControl.valid &&
-        this.numeroFormControl.valid &&
-        this.bairroFormControl.valid &&
-        this.cidadeUfFormControl.valid &&
-        this.usuarioFormControl.valid &&
-        this.emailFormControl.valid &&
-        this.telefoneFormControl.valid
-    );
   }
 }

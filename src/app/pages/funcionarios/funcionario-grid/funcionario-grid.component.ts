@@ -16,12 +16,6 @@ export class FuncionarioGridComponent {
   adicionarNovoFuncionario() {
     this.router.navigate(["/novo/funcionario"]);
   }
-
-  limparPesquisa() {
-    this.searchTerm = '';
-  }
-
-
  
   ngOnInit(): void {
     setTimeout(() => {
@@ -45,6 +39,10 @@ export class FuncionarioGridComponent {
   }
 
   visualizarItem(element: any){
+    this.router.navigate(["/funcionario/" + element.id + "/visualizar"]);
+  }
+
+  editarItem(element: any){
     this.router.navigate(["/funcionario/" + element.id]);
   }
 

@@ -38,32 +38,32 @@
       "id": 2,
       "nome":"Marcela teste",
       "cpf":"12887760041",
-      "endereco": "eaas sasasas a ",
-      "rua": "essaaesas ",
+      "rua": "Rua Salvador Gianetti",
       "numero": "12",
-      "bairro": "vila sao paulo",
+      "bairro": "Guaianazes",
       "complemento": "",
-      "cidade_uf": "são paulo/SP",
-      "usuario": "mariaMacedo",
+      "cidade_uf": "São Paulo / SP",
+      "usuario": 1,
       "email": "test@gmail.com",
-      "telefone": "(11) 983475047"
+      "telefone": "(11) 983475047",
+      "cep": "08410000"
     }, {
       "id": 1,
       "nome":"Maria 2121 Macedo",
       "cpf":"00549227040",
-      "endereco": "eaas sasasas a ",
-      "rua": "essaaesas ",
-      "numero": "12",
-      "bairro": "vila sao paulo",
+      "rua": "Rua Mercado de Ferro",
+      "numero": "231",
+      "bairro": "Vila Aurea",
       "complemento": "",
-      "cidade_uf": "são paulo/SP",
-      "usuario": "mariaMacedo",
+      "cidade_uf": "São Paulo / SP",
+      "usuario": 2,
       "email": "teste111@gmail.com",
-      "telefone": "(11) 983475047"
+      "telefone": "(11) 983475047",
+      "cep": "08410000"
     }
   ],
 
-  "contratante":[
+  "contratantes":[
     {
       "id": 1,
       "nome":"Celebadar",
@@ -73,7 +73,15 @@
       "cpf": "1258494010085",
       "rg": "172631919",
       "telefone": "(11) 983475047",
-      "email": "123@gmail.com"
+      "email": "123@gmail.com",
+      "cidade": "São Paulo",
+      "estado": "SP",
+      "situacaoPagamento": "ok",
+      "cidade": "São Paulo",
+      "cartorio": "São Paulo",
+      "data": "14/10/2021",
+      "valoresReceber": 12259.98,
+      "valoresRecebidos": 229.11
     },
     {
       "id": 2,
@@ -84,11 +92,19 @@
       "cpf": "28022009091",
       "rg": "243856726",
       "telefone": "(11) 983475047",
-      "email": "12345@gmail.com"
+      "email": "12345@gmail.com",
+      "cidade": "São Paulo",
+      "estado": "SP",
+      "situacaoPagamento": "ok",
+      "cidade": "São Paulo",
+      "cartorio": "São Paulo",
+      "data": "14/10/2021",
+      "valoresReceber": 12259.98,
+      "valoresRecebidos": 229.11
     }
   ],
   "menu":[
-    {"icon": "group", "label": "Usuários", "route": "/lista/usuarios"},
+    {"icon": "group", "label": "Usuários", "route": "/lista/usuarios"}, 
     {"icon": "how_to_reg", "label": "Acessos", "route": "/lista/acessos"},
     {"icon": "account_box", "label": "Funcionários", "route": "/lista/funcionarios"},
     {"icon": "tag_faces", "label": "Contratante", "route": "/lista/contratantes"},
@@ -96,17 +112,27 @@
     {"icon": "nature_people", "label": "Vendedores", "route": "/lista/vendedores"},
     {"icon": "flag", "label": "Prefeitura", "route": "/lista/prefeitura"},
     {"icon": "gavel", "label": "Cartório", "route": "/lista/cartorio"},
-    {"icon": "touch_app", "label": "Serviços/contratos", "route": "/lista/serviçosContratos"},
+    {"icon": "local_atm", "label": "Vendas/pagamentos", "route": "/lista/vendasPagamentos"}, 
+    {"icon": "border_color", "label": "Contratos", "route": "/lista/contratos"}
+  ],
+  "menu2":[
+    {"icon": "group", "label": "Usuários", "route": "/lista/usuarios"}, 
+    {"icon": "how_to_reg", "label": "Acessos", "route": "/lista/acessos"},
+    {"icon": "account_box", "label": "Funcionários", "route": "/lista/funcionarios"},
+    {"icon": "tag_faces", "label": "Contratante", "route": "/lista/contratantes"},
+    {"icon": "location_city", "label": "Imóvel", "route": "/lista/imovel"},
+    {"icon": "nature_people", "label": "Vendedores", "route": "/lista/vendedores"},
+    {"icon": "flag", "label": "Prefeitura", "route": "/lista/prefeitura"},
+    {"icon": "gavel", "label": "Cartório", "route": "/lista/cartorio"},
+    {"icon": "local_atm", "label": "Vendas/pagamentos", "route": "/lista/vendasPagamentos"}, 
+    {"icon": "border_color", "label": "Contratos", "route": "/lista/contratos"}, 
+    {"icon": "touch_app", "label": "Gerar Serviços/Contratos", "route": "/lista/serviçosContratos"},
     {"icon": "attach_money", "label": "Valores", "route": "/lista/valores"},
     {"icon": "credit_card", "label": "Pagamentos", "route": "/lista/pagamentos"},
     {"icon": "timeline", "label": "Juros/parcelamentos", "route": "/lista/jurosParcelamentos"},
     {"icon": "file_copy", "label": "Arquivos", "route": "/lista/arquivos"},
-    {"icon": "local_atm", "label": "Vendas/pagamentos", "route": "/lista/vendasPagamentos"},
-    {"icon": "insert_link", "label": "Anexos/arquivos/links", "route": "/lista/anexosArquivosLinks"},
-    {"icon": "border_color", "label": "Contratos", "route": "/lista/contratos"},
-    {"icon": "mail", "label": "Emissão ao cartório", "route": "/lista/emissaoAoCartorio"},
-    {"icon": "print", "label": "Importação", "route": "/lista/importacao"},
-    {"icon": "picture_as_pdf", "label": "Relatórios", "route": "/lista/relatorios"}
+    {"icon": "mail", "label": "Emissão ao cartório", "route": "/lista/emissaoAoCartorio"}, 
+    {"icon": "print", "label": "Importação", "route": "/lista/importacao"}
   ]
 
 }

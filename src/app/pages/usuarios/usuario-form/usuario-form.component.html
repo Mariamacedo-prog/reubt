@@ -7,7 +7,7 @@
     <mat-card-content>
       <mat-form-field>
         <mat-label>Nome</mat-label>
-        <input matInput [formControl]="nomeFormControl" />
+        <input [readonly]="visualizar" matInput [formControl]="nomeFormControl" />
         <mat-error *ngIf="nomeFormControl.hasError('required')">
           Este campo é <strong>obrigatório</strong>
         </mat-error>
@@ -16,7 +16,7 @@
       <div>
         <mat-form-field>
           <mat-label>Email</mat-label>
-          <input type="email" matInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com" />
+          <input [readonly]="visualizar" type="email" matInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com" />
           <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
             Please enter a valid email address
           </mat-error>
@@ -27,7 +27,7 @@
   
         <mat-form-field>
           <mat-label>Telefone</mat-label>
-          <input matInput [formControl]="telefoneFormControl" (input)="formatarTelefone()" />
+          <input [readonly]="visualizar" matInput [formControl]="telefoneFormControl" (input)="formatarTelefone()" />
           <mat-error *ngIf="telefoneFormControl.hasError('pattern')">
             Por favor digite um telefone válido.
           </mat-error>
@@ -39,22 +39,29 @@
 
       <mat-form-field>
         <mat-label>CPF</mat-label>
-        <input matInput [formControl]="loginCpfFormControl" />
+        <input [readonly]="visualizar" matInput [formControl]="loginCpfFormControl" />
         <mat-error *ngIf="loginCpfFormControl.hasError('cpfInvalido')">CPF inválido</mat-error>
       </mat-form-field>
 
       <div>
         <mat-form-field>
           <mat-label>Senha</mat-label>
-          <input matInput type="password" [formControl]="senhaFormControl" />
+          <input [readonly]="visualizar" matInput type="password" [formControl]="senhaFormControl" />
+          
           <mat-error *ngIf="senhaFormControl.hasError('required')">
-            Este campo é <strong>obrigatório</strong>
+            Este campo é <strong>obrigatório</strong>.
+          </mat-error>
+          <mat-error *ngIf="senhaFormControl.hasError('minlength')">
+            Deve ter no mínimo 8 dígitos.
+          </mat-error>
+          <mat-error *ngIf="senhaFormControl.hasError('pattern')">
+            Deve ter letras e números.
           </mat-error>
         </mat-form-field>
   
         <mat-form-field>
           <mat-label>Confirmar Senha</mat-label>
-          <input matInput type="password"  [formControl]="confirmSenhaFormControl"/>
+          <input [readonly]="visualizar" matInput type="password"  [formControl]="confirmSenhaFormControl"/>
           <mat-error *ngIf="confirmSenhaFormControl.hasError('required')">
             Este campo é <strong>obrigatório</strong>
           </mat-error>
@@ -71,7 +78,7 @@
         </div>
 
         <div class="area-botao" *ngIf="isLoggedIn && this.userId !== 0 && this.userId !== undefined">
-          <button mat-raised-button color="primary" (click)="atualizarUsuatio()" [disabled]="!formularioValido()"> Atualizar</button>
+          <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizarUsuatio()" [disabled]="!formularioValido()"> Atualizar</button>
           <button mat-raised-button color="link" routerLink="/lista/usuarios">Voltar</button>
         </div>
     </mat-card-content>

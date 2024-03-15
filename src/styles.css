@@ -78,6 +78,11 @@ router-outlet {
   transition: color 0.5s ease-in-out;
 }
 
+.icon-blue:hover{
+  color: rgb(39, 123, 148);
+  transition: color 0.5s ease-in-out;
+}
+
 
 
 
