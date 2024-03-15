@@ -2,6 +2,9 @@
 * {
   scrollbar-color: #8893d4 #3f51b5;
   scrollbar-width: 6px; 
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
 }
 
 html, body { height: 100%; }

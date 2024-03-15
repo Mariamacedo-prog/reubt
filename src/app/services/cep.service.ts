@@ -20,4 +20,21 @@ export class CepService {
         });
     });
   }
+
+  
+  getCitiesByState(city: string): Observable<any> {
+    return new Observable<any>((observer) => {
+      axios.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${city}/municipios`)
+        .then(response => {
+          console.log(response)
+          observer.next(response.data);
+          observer.complete();
+        })
+        .catch(error => {
+          observer.error(error);
+        });
+    });
+  }
+
+
 }

@@ -133,6 +133,44 @@
     {"icon": "file_copy", "label": "Arquivos", "route": "/lista/arquivos"},
     {"icon": "mail", "label": "Emissão ao cartório", "route": "/lista/emissaoAoCartorio"}, 
     {"icon": "print", "label": "Importação", "route": "/lista/importacao"}
+  ],
+  "estadosBrasil": [
+    { "label": "Acre", "id": 1 },
+    { "label": "Alagoas", "id": 2 },
+    { "label": "Amapá", "id": 3 },
+    { "label": "Amazonas", "id": 4 },
+    { "label": "Bahia", "id": 5 },
+    { "label": "Ceará", "id": 6 },
+    { "label": "Distrito Federal", "id": 7 },
+    { "label": "Espírito Santo", "id": 8 },
+    { "label": "Goiás", "id": 9 },
+    { "label": "Maranhão", "id": 10 },
+    { "label": "Mato Grosso", "id": 11 },
+    { "label": "Mato Grosso do Sul", "id": 12 },
+    { "label": "Minas Gerais", "id": 13 },
+    { "label": "Pará", "id": 14 },
+    { "label": "Paraíba", "id": 15 },
+    { "label": "Paraná", "id": 16 },
+    { "label": "Pernambuco", "id": 17 },
+    { "label": "Piauí", "id": 18 },
+    { "label": "Rio de Janeiro", "id": 19 },
+    { "label": "Rio Grande do Norte", "id": 20 },
+    { "label": "Rio Grande do Sul", "id": 21 },
+    { "label": "Rondônia", "id": 22 },
+    { "label": "Roraima", "id": 23 },
+    { "label": "Santa Catarina", "id": 24 },
+    { "label": "São Paulo", "id": 25 },
+    { "label": "Sergipe", "id": 26 },
+    { "label": "Tocantins", "id": 27 }
+  ],
+  "estadoCivil": [
+      { "label": "Solteiro", "id": 1 },
+      { "label": "Casado", "id": 2 },
+      { "label": "Divorciado", "id": 3 },
+      { "label": "Viúvo", "id": 4 },
+      { "label": "União Estável", "id": 5 },
+      { "label": "Separado Judicialmente", "id": 6 }
   ]
+
 
 }

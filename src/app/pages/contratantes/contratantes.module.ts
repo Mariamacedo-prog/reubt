@@ -13,6 +13,8 @@ import { MatCardModule } from '@angular/material/card';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { InputfileModule } from '../../components/inputfile/inputfile.module';
 
 
 @NgModule({
@@ -30,7 +32,9 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatCardModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatAutocompleteModule,
+    InputfileModule 
   ]
 })
 export class ContratantesModule { }

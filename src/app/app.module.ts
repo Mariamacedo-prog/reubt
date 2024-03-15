@@ -23,6 +23,7 @@ import { FuncionariosModule } from './pages/funcionarios/funcionarios.module';
 import { ContratanteGridComponent } from './pages/contratantes/contratante-grid/contratante-grid.component';
 import { ContratanteFormComponent } from './pages/contratantes/contratante-form/contratante-form.component';
 import { ContratantesModule } from './pages/contratantes/contratantes.module';
+import { InputfileComponent } from './components/inputfile/inputfile.component';
 @NgModule({
   declarations: [
     AppComponent,

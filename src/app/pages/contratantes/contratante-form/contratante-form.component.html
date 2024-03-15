@@ -1,1 +1,150 @@
-<p>contratante-form works!</p>
+<div class="registration-container">
+
+
+  <mat-card class="funcionario-card" >
+    <mat-card-header>
+      <mat-card-title>Cadastro de Contratante</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content >
+      <mat-tab-group >
+ 
+        <mat-tab  label="Informações" class="tab-1"> 
+          <div>
+            <mat-form-field>
+              <mat-label>Nome</mat-label>
+              <input [readonly]="visualizar"  matInput [formControl]="nomeFormControl" />
+              <mat-error *ngIf="nomeFormControl.hasError('required')">
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>CPF</mat-label>
+              <input [readonly]="visualizar"  matInput [formControl]="cpfFormControl" />
+              <mat-error *ngIf="cpfFormControl.hasError('cpfInvalido')">CPF inválido</mat-error>
+            </mat-form-field>
+      
+
+          </div>
+    
+          <div>
+  
+            <mat-form-field>
+              <mat-label>RG</mat-label>
+              <input [readonly]="visualizar"  matInput [formControl]="rgFormControl"  />
+              <mat-error *ngIf="rgFormControl.hasError('required')">
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field> 
+  
+            <mat-form-field>
+              <mat-label>Email</mat-label>
+              <input [readonly]="visualizar"  type="email" matInput [formControl]="emailFormControl" placeholder="Ex.pat@example.com" />
+              <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                Please enter a valid email address
+              </mat-error>
+              <mat-error *ngIf="emailFormControl.hasError('required')" >
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field>
+      
+            <mat-form-field>
+              <mat-label>Telefone</mat-label>
+              <input [readonly]="visualizar"  matInput [formControl]="telefoneFormControl" (input)="formatarTelefone()" />
+              <mat-error *ngIf="telefoneFormControl.hasError('pattern')">
+                Por favor digite um telefone válido.
+              </mat-error>
+              <mat-error *ngIf="telefoneFormControl.hasError('required')">
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field>  
+          </div>
+ 
+          <div>
+            <mat-form-field>
+              <mat-label>Profissão</mat-label>
+              <input [readonly]="visualizar"  matInput [formControl]="profissaoFormControl" (input)="formatarTelefone()" />
+              <mat-error *ngIf="profissaoFormControl.hasError('required')">
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field>  
+  
+            <mat-form-field>
+              <mat-label>Nacionalidade</mat-label>
+              <input [readonly]="visualizar"  matInput [formControl]="nacionalidadeFormControl" (input)="formatarTelefone()" />
+              <mat-error *ngIf="nacionalidadeFormControl.hasError('required')">
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field> 
+          </div>
+
+          <div>
+            <mat-form-field class="search-field">
+              <mat-label>Estado Civil</mat-label>
+              <mat-select [formControl]="estadoCivilFormControl" (selectionChange)="selectEstadoCivil()">
+                <mat-option *ngFor="let estado of estadoCivil" [value]="estado.label">{{estado.label}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="estadoCivilFormControl.hasError('required')">Este campo é <strong>obrigatório</strong></mat-error>
+            </mat-form-field>
+          </div>
+     
+          <div *ngIf="isMarried">  
+            <mat-form-field>
+              <mat-label>Nome Cônjuge</mat-label>
+              <input [readonly]="visualizar"  matInput [formControl]="nomeConjugueFormControl" />
+              <mat-error *ngIf="nomeConjugueFormControl.hasError('required')">
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field>
+  
+            <mat-form-field >
+              <mat-label>Nacionalidade Cônjuge</mat-label>
+              <input [readonly]="visualizar"  matInput [formControl]="nacionalidadeConjugueFormControl" (input)="formatarTelefone()" />
+              <mat-error *ngIf="nacionalidadeConjugueFormControl.hasError('required')">
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Anexar Documentos" class="tab-2"> 
+         <div class="input-file-row">
+          <app-file-input [nome]="'RG*'" (fileSelected)="onFileSelected($event)"></app-file-input>
+          <app-file-input [nome]="'CPF*'" (fileSelected)="onFileSelected($event)"></app-file-input>
+         </div>
+      
+
+         <div class="input-file-row">
+          <app-file-input [nome]="'Comprovante de Aquisição do  imóvel*'" (fileSelected)="onFileSelected($event)"></app-file-input>
+       
+          <app-file-input [nome]="'Comprovante de Endereço*'" (fileSelected)="onFileSelected($event)"></app-file-input>
+          </div>
+
+         <div class="input-file-row" *ngIf="isMarried">
+          <app-file-input [nome]="'Certidão de Casamento*'" (fileSelected)="onFileSelected($event)"></app-file-input>
+          <app-file-input [nome]="'RG do Cônjuge*'" (fileSelected)="onFileSelected($event)"></app-file-input>
+          <app-file-input [nome]="'CPF do Cônjuge*'" (fileSelected)="onFileSelected($event)"></app-file-input>
+         </div>
+
+        </mat-tab>
+
+        <mat-tab label="Campo Anexo Produtos" [disabled]="true" class="tab-1"> 
+          
+
+        </mat-tab>
+      </mat-tab-group>
+
+
+
+        <div class="area-botao" *ngIf="isLoggedIn && this.contratanteId === 0 || this.contratanteId === undefined">
+          <button mat-raised-button color="primary" (click)="cadastrarContratante()" [disabled]="!formularioValido()">Cadastrar</button>
+          <button  mat-raised-button color="link" routerLink="/lista/contratantes">Voltar</button>
+        </div>
+
+        <div class="area-botao" *ngIf="isLoggedIn && this.contratanteId !== 0 && this.contratanteId !== undefined">
+          <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizarContratante()" [disabled]="!formularioValido()"> Atualizar</button>
+          <button mat-raised-button color="link" routerLink="/lista/contratantes">Voltar</button>
+        </div>
+    </mat-card-content>
+  </mat-card>
+</div>

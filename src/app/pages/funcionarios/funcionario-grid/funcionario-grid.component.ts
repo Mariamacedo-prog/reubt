@@ -29,8 +29,8 @@ export class FuncionarioGridComponent {
         }
       }
     }, 1000)
- 
   }
+  
   procurarNomeOuCpf() {
     this.dataSourceFilter = this.dataSource.filter((funcionario: any) => funcionario.nome.includes(this.searchTerm) || funcionario.cpf.includes(this.searchTerm));
     if(this.searchTerm.length == 0){
