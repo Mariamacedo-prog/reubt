@@ -5,7 +5,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   templateUrl: './inputfile.component.html',
   styleUrl: './inputfile.component.css'
 })
-export class InputfileComponent {
+export class InputfileComponent  {
   @Output() fileSelected: EventEmitter<File> = new EventEmitter<File>();
   @Input() nome: string = '';
   nomeBotao: string = 'Selecionar Arquivo';

@@ -23,6 +23,10 @@ import { VendedoresModule } from './pages/vendedores/vendedores.module';
 import { PrefeituraModule } from './pages/prefeitura/prefeitura.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { AcessosModule } from './pages/acessos/acessos.module';
+import { ContratosModule } from './pages/contratos/contratos.module';
+import { CartorioModule } from './pages/cartorio/cartorio.module';
+import { VendaPagamentoModule } from './pages/vendas-pagamentos/vendas-pagamentos.module';
+import { ImovelModule } from './pages/imoveis/imovel.module';
 
 @NgModule({
   declarations: [
@@ -48,7 +52,11 @@ import { AcessosModule } from './pages/acessos/acessos.module';
     ContratantesModule,
     VendedoresModule,
     PrefeituraModule,
-    AcessosModule
+    AcessosModule,
+    CartorioModule,
+    ContratosModule,
+    VendaPagamentoModule,
+    ImovelModule
   ],
   providers: [
     AuthService

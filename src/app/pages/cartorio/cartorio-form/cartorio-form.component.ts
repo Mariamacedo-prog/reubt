@@ -7,12 +7,12 @@ import { CepService } from '../../../services/cep.service';
 import { ValidateService } from '../../../services/validate.service';
 
 @Component({
-  selector: 'app-prefeitura-form',
-  templateUrl: './prefeitura-form.component.html',
-  styleUrl: './prefeitura-form.component.css'
+  selector: 'app-cartorio-form',
+  templateUrl: './cartorio-form.component.html',
+  styleUrl: './cartorio-form.component.css'
 })
-export class PrefeituraFormComponent {
-  prefeituraId = 0;
+export class CartorioFormComponent {
+  cartorioId = 0;
   isLoggedIn: boolean = false;
   databaseInfo: any = {};
   options: string[] = [];
@@ -26,16 +26,11 @@ export class PrefeituraFormComponent {
     private validateService: ValidateService, 
     ) {}
 
-  prefeituraFormControls = this.formBuilder.group({
+  cartorioFormControls = this.formBuilder.group({
     nome: ['', Validators.required],
     cnpj: ['', [Validators.required, this.validateService.validateCNPJ]],
     telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
     email: ['', [Validators.required, Validators.email]]
-  });
-
-  representanteFormControls = this.formBuilder.group({
-    nome: ['', Validators.required],
-    cargo: ['', Validators.required]
   });
 
   enderecoFormControls = this.formBuilder.group({
@@ -47,12 +42,13 @@ export class PrefeituraFormComponent {
     cep: ['', Validators.required]
   });
 
-responsavelFormControls = this.formBuilder.group({
+  representanteFormControls = this.formBuilder.group({
     nome: ['', Validators.required],
     estadoCivil: ['', Validators.required],
     nacionalidade: ['', Validators.required],
     cpf: ['', [Validators.required, this.validateService.validateCPF]],
     rg: ['', [Validators.required, this.validateService.validateRG]],
+    cargo:['', [Validators.required]],
   });
 
 
@@ -60,14 +56,13 @@ responsavelFormControls = this.formBuilder.group({
   ngOnInit(): void {
     this.formControls = this.formBuilder.group({
       id: [0, Validators.required],
-      responsavel: this.responsavelFormControls,
-      prefeitura: this.prefeituraFormControls,
+      cartorio: this.cartorioFormControls,
       representante: this.representanteFormControls,
       endereco: this.enderecoFormControls,
     });
 
     this.route.params.subscribe(params => {
-       this.prefeituraId = params['id'];
+       this.cartorioId = params['id'];
 
        if(params['tela'] == 'visualizar'){
         this.visualizar = true;
@@ -82,24 +77,23 @@ responsavelFormControls = this.formBuilder.group({
         this.estadoCivil = this.databaseInfo.estadoCivil;
       }
 
-    if(this.prefeituraId){
-      if(this.databaseInfo.prefeituras){
-        const item = this.databaseInfo.prefeituras.find((prefeitura: any) => prefeitura.id == this.prefeituraId);
+    if(this.cartorioId){
+      if(this.databaseInfo.cartorios){
+        const item = this.databaseInfo.cartorios.find((info: any) => info.id == this.cartorioId);
         console.log(item);
         if(item){
           console.log("encontrou o item: ", item)
-          this.formControls.get('prefeitura')?.get('nome')?.setValue(item.prefeitura.nome);
-          this.formControls.get('prefeitura')?.get('cnpj')?.setValue(item.prefeitura.cnpj);
-          this.formControls.get('prefeitura')?.get('telefone')?.setValue(item.prefeitura.telefone);
-          this.formControls.get('prefeitura')?.get('email')?.setValue(item.prefeitura.email);
-
-          this.formControls.get('responsavel')?.get('nome')?.setValue(item.responsavel.nome);
-          this.formControls.get('responsavel')?.get('estadoCivil')?.setValue(item.responsavel.estadoCivil);
-          this.formControls.get('responsavel')?.get('nacionalidade')?.setValue(item.responsavel.nacionalidade);
-          this.formControls.get('responsavel')?.get('cpf')?.setValue(item.responsavel.cpf);
-          this.formControls.get('responsavel')?.get('rg')?.setValue(item.responsavel.rg);
+          this.formControls.get('cartorio')?.get('nome')?.setValue(item.cartorio.nome);
+          this.formControls.get('cartorio')?.get('cnpj')?.setValue(item.cartorio.cnpj);
+          this.formControls.get('cartorio')?.get('telefone')?.setValue(item.cartorio.telefone);
+          this.formControls.get('cartorio')?.get('email')?.setValue(item.cartorio.email);
 
           this.formControls.get('representante')?.get('nome')?.setValue(item.representante.nome);
+          this.formControls.get('representante')?.get('estadoCivil')?.setValue(item.representante.estadoCivil);
+          this.formControls.get('representante')?.get('nacionalidade')?.setValue(item.representante.nacionalidade);
+          this.formControls.get('representante')?.get('cpf')?.setValue(item.representante.cpf);
+          this.formControls.get('representante')?.get('rg')?.setValue(item.representante.rg);
+
           this.formControls.get('representante')?.get('cargo')?.setValue(item.representante.cargo);
 
           this.formControls.get('endereco')?.get('rua')?.setValue(item.endereco.rua);
@@ -118,16 +112,16 @@ responsavelFormControls = this.formBuilder.group({
     if (storedDb) {
       this.databaseInfo = JSON.parse(storedDb);
     }
-    if(this.databaseInfo.prefeituras){
-      const prefeituraPeloCnpj = this.databaseInfo.prefeituras.find((item: any) => item.prefeitura.cnpj == this.formControls.get('prefeitura')?.get('cnpj')?.value);
-      if(prefeituraPeloCnpj){
-        this.toolboxService.showTooltip('error', 'Prefeitura com CNPJ já existe na base de dados!', 'ERRO CPF!');
+    if(this.databaseInfo.cartorios){
+      const cartorioPeloCnpj = this.databaseInfo.cartorios.find((item: any) => item.cartorio.cnpj == this.formControls.get('cartorio')?.get('cnpj')?.value);
+      if(cartorioPeloCnpj){
+        this.toolboxService.showTooltip('error', 'Cartorio com CNPJ já existe na base de dados!', 'ERRO CPF!');
         return;
       }
 
-      const prefeituraPeloEmail = this.databaseInfo.prefeituras.find((item: any) => item.prefeitura.email == this.formControls.get('prefeitura')?.get('email')?.value);
-      if(prefeituraPeloEmail){
-        this.toolboxService.showTooltip('error', 'Prefeitura com E-mail já existe na base de dados!', 'ERRO CPF!');
+      const cartorioPeloEmail = this.databaseInfo.cartorios.find((item: any) => item.cartorio.email == this.formControls.get('cartorio')?.get('email')?.value);
+      if(cartorioPeloEmail){
+        this.toolboxService.showTooltip('error', 'Cartorio com E-mail já existe na base de dados!', 'ERRO CPF!');
         return;
       }
 
@@ -135,13 +129,13 @@ responsavelFormControls = this.formBuilder.group({
 
       this.formControls.get('id')?.setValue(Math.floor(Math.random() * 100000));
 
-      this.databaseInfo.prefeituras.push(
+      this.databaseInfo.cartorios.push(
         this.formControls.getRawValue()
       )
 
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
       this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/lista/prefeituras']);
+      this.router.navigate(['/lista/cartorios']);
     }
   }
 
@@ -151,30 +145,30 @@ responsavelFormControls = this.formBuilder.group({
       this.databaseInfo = JSON.parse(storedDb);
     }
     
-    console.log("prefeituraas",this.databaseInfo.prefeituras);
-    if(this.databaseInfo.prefeituras){
-      const prefeituraPeloCnpj = this.databaseInfo.prefeituras.find((item: any) => item.prefeitura.cnpj == this.formControls.get('prefeitura')?.get('cnpj')?.value && item.id != this.prefeituraId);
-      if(prefeituraPeloCnpj){
-        this.toolboxService.showTooltip('error', 'Prefeitura com CNPJ já existe na base de dados!', 'ERRO CPF!');
+    console.log("cartorioos",this.databaseInfo.cartorios);
+    if(this.databaseInfo.cartorios){
+      const cartorioPeloCnpj = this.databaseInfo.cartorios.find((item: any) => item.cartorio.cnpj == this.formControls.get('cartorio')?.get('cnpj')?.value && item.id != this.cartorioId);
+      if(cartorioPeloCnpj){
+        this.toolboxService.showTooltip('error', 'cartorio com CNPJ já existe na base de dados!', 'ERRO CPF!');
         return;
       }
 
-      const prefeituraPeloEmail = this.databaseInfo.prefeituras.find((item: any) => item.prefeitura.email == this.formControls.get('prefeitura')?.get('email')?.value && item.id != this.prefeituraId);
-      if(prefeituraPeloEmail){
-        this.toolboxService.showTooltip('error', 'Prefeitura com E-mail já existe na base de dados!', 'ERRO CPF!');
+      const cartorioPeloEmail = this.databaseInfo.cartorios.find((item: any) => item.cartorio.email == this.formControls.get('cartorio')?.get('email')?.value && item.id != this.cartorioId);
+      if(cartorioPeloEmail){
+        this.toolboxService.showTooltip('error', 'cartorio com E-mail já existe na base de dados!', 'ERRO CPF!');
         return;
       }
 
-      const index = this.databaseInfo.prefeituras.findIndex((item: any) => item.id == this.prefeituraId);
+      const index = this.databaseInfo.cartorios.findIndex((item: any) => item.id == this.cartorioId);
 
       if (index !== -1) {
-        this.formControls.get('id')?.setValue(this.prefeituraId);
-        this.databaseInfo.prefeituras[index] = this.formControls.getRawValue();
+        this.formControls.get('id')?.setValue(this.cartorioId);
+        this.databaseInfo.cartorios[index] = this.formControls.getRawValue();
       }
 
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
       this.toolboxService.showTooltip('success', 'Cadastro atualizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/lista/prefeituras']);
+      this.router.navigate(['/lista/cartorios']);
     }
   }
 
@@ -187,13 +181,13 @@ responsavelFormControls = this.formBuilder.group({
   }
 
   formatarTelefone() {
-    if(this.formControls.get('prefeitura')?.get('telefone')?.value){
-      let telefone = this.formControls.get('prefeitura')?.get('telefone')?.value.replace(/\D/g, '');
+    if(this.formControls.get('cartorio')?.get('telefone')?.value){
+      let telefone = this.formControls.get('cartorio')?.get('telefone')?.value.replace(/\D/g, '');
 
       if (telefone.length === 11) {
-        this.formControls.get('prefeitura')?.get('telefone')?.setValue(`(${telefone.substring(0, 2)}) ${telefone.substring(2, 7)}-${telefone.substring(7)}`);
+        this.formControls.get('cartorio')?.get('telefone')?.setValue(`(${telefone.substring(0, 2)}) ${telefone.substring(2, 7)}-${telefone.substring(7)}`);
       } else if (telefone.length === 10) {
-        this.formControls.get('prefeitura')?.get('telefone')?.setValue(`(${telefone.substring(0, 2)}) ${telefone.substring(2, 6)}-${telefone.substring(6)}`);
+        this.formControls.get('cartorio')?.get('telefone')?.setValue(`(${telefone.substring(0, 2)}) ${telefone.substring(2, 6)}-${telefone.substring(6)}`);
       }
     }
   }
@@ -234,5 +228,16 @@ responsavelFormControls = this.formBuilder.group({
     return this.formControls.valid;
   }
   
-
+  validarGrupo(formGroup: FormGroup): boolean {
+    let isValid = true;
+  
+    Object.keys(formGroup.controls).forEach(controlName => {
+      const control = formGroup.get(controlName);
+      if (control && !control.valid) {
+        isValid = false;
+      }
+    });
+  
+    return isValid;
+  }
 }

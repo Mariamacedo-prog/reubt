@@ -1,0 +1,209 @@
+<div class="container-form ">
+  <mat-card class="card-form " >
+    <mat-card-header>
+      <mat-card-title>Cadastro do Endereço do Imóvel</mat-card-title>
+    </mat-card-header>
+
+    <form [formGroup]="formControls">
+      <mat-card-content >
+        <mat-tab-group animationDuration="700ms" >
+          <mat-tab  formGroupName="enderecoPorta" >
+            <ng-template mat-tab-label>
+              <span [ngClass]="formControls.get('enderecoPorta')?.invalid ?'tab-invalid' : ''">Endereço de Porta</span>
+            </ng-template>
+            <mat-form-field>
+              <mat-label>CEP</mat-label>
+              <input [readonly]="visualizar" (keyup)="buscarEnderecoPorta()" maxlength="8" type="text" matInput formControlName="cep"/>
+              <mat-error *ngIf="formControls.get('enderecoPorta.cep')?.hasError('required')" >
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field>
+    
+            <div class="inputs-row-form">
+              <mat-form-field>
+                <mat-label>Rua</mat-label>
+                <input [readonly]="visualizar"  type="text" matInput formControlName="rua" />
+                <mat-error *ngIf="formControls.get('enderecoPorta.rua')?.hasError('required')">
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Número</mat-label>
+                <input [readonly]="visualizar"  type="text" matInput formControlName="numero" />
+                <mat-error *ngIf="formControls.get('enderecoPorta.numero')?.hasError('required')" >
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Complemento</mat-label>
+                <input [readonly]="visualizar" type="text" matInput formControlName="complemento" />
+              </mat-form-field>
+            </div>
+            
+            <div class="inputs-row-form">
+              <mat-form-field>
+                <mat-label>Bairro</mat-label>
+                <input [readonly]="visualizar"  type="text" matInput  formControlName="bairro" />
+                <mat-error *ngIf="formControls.get('enderecoPorta.bairro')?.hasError('required')" >
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Cidade/UF</mat-label>
+                <input [readonly]="visualizar"  type="text" matInput formControlName="cidadeUf"  />
+                <mat-error *ngIf="formControls.get('enderecoPorta.cidadeUf')?.hasError('required')" >
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="inputs-row-form">
+              <mat-form-field>
+                <mat-label>IPTU</mat-label>
+                <input [readonly]="visualizar"  type="text" matInput  formControlName="iptu" />
+                <mat-error *ngIf="formControls.get('enderecoPorta.iptu')?.hasError('required')" >
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="inputs-row-form">
+              <app-file-input [nome]="'Fotos'" (fileSelected)="onFileSelected($event)"></app-file-input>
+            </div>
+          </mat-tab>
+
+          <mat-tab  formGroupName="enderecoProjeto" >
+            <ng-template mat-tab-label>
+              <span [ngClass]="formControls.get('enderecoProjeto')?.invalid ?'tab-invalid' : ''">Endereço do Projeto</span>
+            </ng-template>
+            <mat-form-field>
+              <mat-label>CEP</mat-label>
+              <input [readonly]="visualizar" (keyup)="buscarEnderecoProjeto()" maxlength="8" type="text" matInput formControlName="cep"/>
+              <mat-error *ngIf="formControls.get('enderecoProjeto.cep')?.hasError('required')" >
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field>
+    
+            <div class="inputs-row-form">
+              <mat-form-field>
+                <mat-label>Rua</mat-label>
+                <input [readonly]="visualizar"  type="text" matInput formControlName="rua" />
+                <mat-error *ngIf="formControls.get('enderecoProjeto.rua')?.hasError('required')">
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Número</mat-label>
+                <input [readonly]="visualizar"  type="text" matInput formControlName="numero" />
+                <mat-error *ngIf="formControls.get('enderecoProjeto.numero')?.hasError('required')" >
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Complemento</mat-label>
+                <input [readonly]="visualizar" type="text" matInput formControlName="complemento" />
+              </mat-form-field>
+            </div>
+            
+            <div class="inputs-row-form">
+              <mat-form-field>
+                <mat-label>Bairro</mat-label>
+                <input [readonly]="visualizar"  type="text" matInput  formControlName="bairro" />
+                <mat-error *ngIf="formControls.get('enderecoProjeto.bairro')?.hasError('required')" >
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Cidade/UF</mat-label>
+                <input [readonly]="visualizar"  type="text" matInput formControlName="cidadeUf"  />
+                <mat-error *ngIf="formControls.get('enderecoProjeto.cidadeUf')?.hasError('required')" >
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </mat-tab>
+         
+          <mat-tab formGroupName="enderecoDefinitivo" > 
+            <ng-template mat-tab-label>
+              <span [ngClass]="formControls.get('enderecoDefinitivo')?.invalid ?'tab-invalid' : ''">Endereço Definitivo</span>
+            </ng-template>
+              <mat-form-field>
+                <mat-label>CEP</mat-label>
+                <input [readonly]="visualizar" (keyup)="buscarEnderecoDefinitivo()" maxlength="8" type="text" matInput formControlName="cep"/>
+                <mat-error *ngIf="formControls.get('enderecoDefinitivo.cep')?.hasError('required')" >
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+              
+    
+              <div class="inputs-row-form">
+                <mat-form-field>
+                  <mat-label>Rua</mat-label>
+                  <input [readonly]="visualizar"  type="text" matInput formControlName="rua" />
+                  <mat-error *ngIf="formControls.get('enderecoDefinitivo.rua')?.hasError('required')">
+                    Este campo é <strong>obrigatório</strong>
+                  </mat-error>
+                </mat-form-field>
+       
+                  <mat-form-field>
+                    <mat-label>Número</mat-label>
+                    <input [readonly]="visualizar"  type="text" matInput formControlName="numero" />
+                    <mat-error *ngIf="formControls.get('enderecoDefinitivo.numero')?.hasError('required')" >
+                      Este campo é <strong>obrigatório</strong>
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>Complemento</mat-label>
+                    <input [readonly]="visualizar" type="text" matInput formControlName="complemento" />
+                  </mat-form-field>
+         
+              </div>
+              
+              <div class="inputs-row-form">
+                <mat-form-field>
+                  <mat-label>Bairro</mat-label>
+                  <input [readonly]="visualizar"  type="text" matInput  formControlName="bairro" />
+                  <mat-error *ngIf="formControls.get('enderecoDefinitivo.bairro')?.hasError('required')" >
+                    Este campo é <strong>obrigatório</strong>
+                  </mat-error>
+                </mat-form-field>
+      
+                <mat-form-field>
+                  <mat-label>Cidade/UF</mat-label>
+                  <input [readonly]="visualizar"  type="text" matInput formControlName="cidadeUf"  />
+                  <mat-error *ngIf="formControls.get('enderecoDefinitivo.cidadeUf')?.hasError('required')" >
+                    Este campo é <strong>obrigatório</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+
+              <div class="inputs-row-form">
+                <mat-form-field>
+                  <mat-label>Matricula</mat-label>
+                  <input [readonly]="visualizar"  type="text" matInput formControlName="matricula"  />
+                  <mat-error *ngIf="formControls.get('enderecoDefinitivo.matricula')?.hasError('required')" >
+                    Este campo é <strong>obrigatório</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+          </mat-tab>
+
+        
+        </mat-tab-group>
+  
+  
+  
+        <div class="area-botao-form " *ngIf="isLoggedIn && this.imovelId === 0 || this.imovelId === undefined">
+          <button mat-raised-button color="primary" (click)="cadastrar()" [disabled]="!formularioValido()">Cadastrar</button>
+          <button  mat-raised-button color="link" routerLink="/lista/prefeituras">Voltar</button>
+        </div>
+
+        <div class="area-botao-form " *ngIf="isLoggedIn && this.imovelId !== 0 && this.imovelId !== undefined">
+          <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizar()"  [disabled]="!formularioValido()"> Atualizar</button>
+          <button mat-raised-button color="link" routerLink="/lista/prefeituras">Voltar</button>
+        </div>
+      </mat-card-content>
+    </form>
+  </mat-card>
+</div>

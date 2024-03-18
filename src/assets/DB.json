@@ -185,8 +185,8 @@
     {"icon": "tag_faces", "label": "Contratante", "route": "/lista/contratantes"},
     {"icon": "location_city", "label": "Imóvel", "route": "/lista/imovel"},
     {"icon": "nature_people", "label": "Vendedores", "route": "/lista/vendedores"},
-    {"icon": "flag", "label": "Prefeitura", "route": "/lista/prefeitura"},
-    {"icon": "gavel", "label": "Cartório", "route": "/lista/cartorio"},
+    {"icon": "flag", "label": "Prefeitura", "route": "/lista/prefeituras"},
+    {"icon": "gavel", "label": "Cartório", "route": "/lista/cartorios"},
     {"icon": "local_atm", "label": "Vendas/pagamentos", "route": "/lista/vendasPagamentos"}, 
     {"icon": "border_color", "label": "Contratos", "route": "/lista/contratos"}, 
     {"icon": "touch_app", "label": "Gerar Serviços/Contratos", "route": "/lista/serviçosContratos"},
@@ -205,7 +205,7 @@
     {"icon": "nature_people", "label": "Vendedores", "route": "/lista/vendedores"},
     {"icon": "flag", "label": "Prefeitura", "route": "/lista/prefeitura"},
     {"icon": "gavel", "label": "Cartório", "route": "/lista/cartorio"},
-    {"icon": "local_atm", "label": "Vendas/pagamentos", "route": "/lista/vendasPagamentos"}, 
+    {"icon": "local_atm", "label": "Vendas/pagamentos", "route": "/lista/vendaPagamento"}, 
     {"icon": "border_color", "label": "Contratos", "route": "/lista/contratos"}, 
     {"icon": "touch_app", "label": "Gerar Serviços/Contratos", "route": "/lista/serviçosContratos"},
     {"icon": "attach_money", "label": "Valores", "route": "/lista/valores"},
@@ -344,5 +344,94 @@
         "email": "prefeitura@org.com"
       }
     }
+  ],
+  "contratos":[
+    {
+      "id": 1, 
+      "endereco":{
+        "rua": "Rua Salvador Gianetti",
+        "numero": "12",
+        "bairro": "Guaianazes",
+        "complemento": "",
+        "cidade": "São Paulo ",
+        "estado": "São Paulo ",
+        "cep": "08410000"
+      },
+       "nome":"Marcela teste",
+        "cpf":"93733643089",
+     
+      "crf":{
+        "numerocrf":"9999999",
+        "crfentregue":"entregue",
+        "statusentrega":"entregue"
+      },
+      "cartorio":{
+        "nome":"Catorio name",
+        "cnpj":"22335935000161",
+        "telefone": "(11) 983475047",
+        "email": "prefeitura@org.com"
+      }
+    }
+  ],
+  "vendasPagamentos":[
+    {
+      "id": 1, 
+      "endereco":{
+        "rua": "Rua Salvador Gianetti",
+        "numero": "12",
+        "bairro": "Guaianazes",
+        "complemento": "",
+        "cidade": "São Paulo ",
+        "estado": "São Paulo ",
+        "cep": "08410000"
+      },
+       "nome":"Marcela teste",
+        "cpf":"93733643089",
+     
+      "situacao":{        
+        "situacaopagamento":"pago",
+        "statusentrega":"entregue"
+      },
+      "cartorio":{
+        "nome":"Catorio name",
+        "cnpj":"22335935000161",
+        "telefone": "(11) 983475047",
+        "email": "prefeitura@org.com"
+      }
+    }
+  ],
+
+  "imoveis":[
+    {
+      "id": 1,
+      "enderecoPorta": {
+        "rua": "Rua Salvador Gianetti",
+        "numero": "12",
+        "bairro": "Guaianazes",
+        "complemento": "",
+        "cidadeUf": "São Paulo / SP",
+        "cep": "08410000",
+        "iptu": "11111",
+        "fotos": "1212"
+      },
+      "enderecoProjeto": {
+        "rua": "Rua Salvador Gianetti",
+        "numero": "12",
+        "bairro": "Guaianazes",
+        "complemento": "",
+        "cidadeUf": "São Paulo / SP",
+        "cep": "08410000"
+      },
+      "enderecoDefinitivo": {
+        "rua": "Rua Salvador Gianetti",
+        "numero": "12",
+        "bairro": "Guaianazes",
+        "complemento": "",
+        "cidadeUf": "São Paulo / SP",
+        "cep": "08410000",
+        "matricula": "1212"
+      }
+    }
   ]
+  
 }

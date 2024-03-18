@@ -14,6 +14,14 @@ import { PrefeituraFormComponent } from './pages/prefeitura/prefeitura-form/pref
 import { PrefeituraGridComponent } from './pages/prefeitura/prefeitura-grid/prefeitura-grid.component';
 import { AcessoGridComponent } from './pages/acessos/acesso-grid/acesso-grid.component';
 import { AcessoFormComponent } from './pages/acessos/acesso-form/acesso-form.component';
+import { ContratosGridComponent } from './pages/contratos/contratos-grid/contratos-grid.component';
+import { ContratosFormComponent } from './pages/contratos/contratos-form/contratos-form.component';
+import { CartorioFormComponent } from './pages/cartorio/cartorio-form/cartorio-form.component';
+import { CartorioGridComponent } from './pages/cartorio/cartorio-grid/cartorio-grid.component';
+import { VendaPagamentoFormComponent } from './pages/vendas-pagamentos/venda-pagamento-form/venda-pagamento-form.component';
+import { VendaPagamentoGridComponent } from './pages/vendas-pagamentos/venda-pagamento-grid/venda-pagamento-grid.component';
+import { ImovelFormComponent } from './pages/imoveis/imovel-form/imovel-form.component';
+import { ImovelGridComponent } from './pages/imoveis/imovel-grid/imovel-grid.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -54,8 +62,34 @@ const routes: Routes = [
   { path: 'acesso/permissao/usuario/:id', component: AcessoFormComponent, canActivate: [authGuard] },
   { path: 'acesso/adicionar/grupo/:id', component: AcessoFormComponent, canActivate: [authGuard] },
   { path: 'novo/acesso', component: AcessoFormComponent, canActivate: [authGuard] },
-  { path: 'lista/acessos', component: AcessoGridComponent, canActivate: [authGuard] }
+  { path: 'lista/acessos', component: AcessoGridComponent, canActivate: [authGuard] },
+   //contratos
+ { path: 'contratos/:id', component: ContratanteFormComponent, canActivate: [authGuard] },
+ { path: 'contratos/:id/:tela', component: ContratosFormComponent, canActivate: [authGuard] },
+ { path: 'novo/contratos', component: ContratosFormComponent, canActivate: [authGuard] },
+ { path: 'lista/contratos', component: ContratosGridComponent, canActivate: [authGuard] },
+    
+ //vendasPagamentos
+    { path: 'vendasPagamentos/:id', component: VendaPagamentoFormComponent, canActivate: [authGuard] },
+    { path: 'vendasPagamentos/:id/:tela', component: VendaPagamentoFormComponent, canActivate: [authGuard] },
+    { path: 'novo/vendasPagamentos', component: VendaPagamentoFormComponent, canActivate: [authGuard] },
+    { path: 'lista/vendasPagamentos', component: VendaPagamentoGridComponent, canActivate: [authGuard] },
+
+  //cartorio
+  { path: 'cartorio/:id', component: CartorioFormComponent, canActivate: [authGuard] },
+  { path: 'cartorio/:id/:tela', component: CartorioFormComponent, canActivate: [authGuard] },
+  { path: 'novo/cartorio', component: CartorioFormComponent, canActivate: [authGuard] },
+  { path: 'lista/cartorios', component: CartorioGridComponent, canActivate: [authGuard] },
+
+  //cartorio
+  { path: 'imovel/:id', component: ImovelFormComponent, canActivate: [authGuard] },
+  { path: 'imovel/:id/:tela', component: ImovelFormComponent, canActivate: [authGuard] },
+  { path: 'novo/imovel', component: ImovelFormComponent, canActivate: [authGuard] },
+  { path: 'lista/imovel', component: ImovelGridComponent, canActivate: [authGuard] }
 ];
+
+
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
