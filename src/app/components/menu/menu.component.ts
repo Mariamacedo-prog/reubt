@@ -1,3 +1,4 @@
+import { AuthService } from './../../auth/auth.service';
 import {Component, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 interface MenuItem {
@@ -31,7 +32,7 @@ export class MenuComponent {
     }, 3000)
   }
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher, private authService: AuthService) {
     this.mobileQuery = media.matchMedia('(max-width: 1200px)');
     this._mobileQueryListener = () => {
       this.isMenuOpen = !this.mobileQuery.matches;
@@ -52,6 +53,10 @@ export class MenuComponent {
 
   ngOnDestroy(): void {
     this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
+  }
+
+  logout(){
+    this.authService.logout()
   }
 
   toggleMenu() {

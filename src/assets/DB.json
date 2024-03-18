@@ -17,20 +17,37 @@
       "cpf":"86839129063"
     }
   ],
-  "grupoAcessos":[
+  "acessos":[
     {
       "id": 2,
       "nivelPermissao": "Total",
-      "usuarios":[],
-      "grupo":1,
-      "telas": []
+      "usuario":{
+        "id": 1,
+        "email":"teste@gmail.com",
+        "nome": "Maria Macedo",
+        "telefone": "(11) 983475047",
+        "cpf":"1111",
+        "telas": []
+      },
+      "grupo":{
+        "id": 1,
+        "nome": "ADMIN",
+        "descricao": "Acesso total ao sistema",
+        "telas": []
+      }
     },
     {
       "id": 3,
       "nivelPermissao": "Visual",
-      "usuarios":[],
-      "grupos":2,
-      "telas": []
+      "usuario":{
+        "id": 2,
+        "email":"teste111@gmail.com",
+        "nome": "Maria 2121 Macedo",
+        "telefone": "(11) 983471111",
+        "cpf":"86839129063",
+        "telas": []
+      },
+      "grupos":0
     }
   ],
   "funcionarios":[
@@ -161,18 +178,6 @@
       }
     }
   ],
-  "gruposAcessos":[
-    {
-      "id": 1,
-      "nome": "ADMIN",
-      "descricao": "Acesso total ao sistema"
-    },
-    {
-      "id": 2,
-      "nome": "FUNC",
-      "descricao": "Acesso as telas de gestao"
-    }
-  ],
   "menu":[
     {"icon": "group", "label": "Usuários", "route": "/lista/usuarios"}, 
     {"icon": "how_to_reg", "label": "Acessos", "route": "/lista/acessos"},
@@ -180,10 +185,16 @@
     {"icon": "tag_faces", "label": "Contratante", "route": "/lista/contratantes"},
     {"icon": "location_city", "label": "Imóvel", "route": "/lista/imovel"},
     {"icon": "nature_people", "label": "Vendedores", "route": "/lista/vendedores"},
-    {"icon": "flag", "label": "Prefeitura", "route": "/lista/prefeituras"},
-    {"icon": "gavel", "label": "Cartório", "route": "/lista/cartorios"},
+    {"icon": "flag", "label": "Prefeitura", "route": "/lista/prefeitura"},
+    {"icon": "gavel", "label": "Cartório", "route": "/lista/cartorio"},
     {"icon": "local_atm", "label": "Vendas/pagamentos", "route": "/lista/vendasPagamentos"}, 
-    {"icon": "border_color", "label": "Contratos", "route": "/lista/contratos"}
+    {"icon": "border_color", "label": "Contratos", "route": "/lista/contratos"}, 
+    {"icon": "touch_app", "label": "Gerar Serviços/Contratos", "route": "/lista/serviçosContratos"},
+    {"icon": "attach_money", "label": "Valores", "route": "/lista/valores"},
+    {"icon": "credit_card", "label": "Pagamentos", "route": "/lista/pagamentos"},
+    {"icon": "timeline", "label": "Juros/parcelamentos", "route": "/lista/jurosParcelamentos"},
+    {"icon": "mail", "label": "Emissão ao cartório", "route": "/lista/emissaoAoCartorio"}, 
+    {"icon": "print", "label": "Importação", "route": "/lista/importacao"}
   ],
   "menu2":[
     {"icon": "group", "label": "Usuários", "route": "/lista/usuarios"}, 
@@ -200,7 +211,6 @@
     {"icon": "attach_money", "label": "Valores", "route": "/lista/valores"},
     {"icon": "credit_card", "label": "Pagamentos", "route": "/lista/pagamentos"},
     {"icon": "timeline", "label": "Juros/parcelamentos", "route": "/lista/jurosParcelamentos"},
-    {"icon": "file_copy", "label": "Arquivos", "route": "/lista/arquivos"},
     {"icon": "mail", "label": "Emissão ao cartório", "route": "/lista/emissaoAoCartorio"}, 
     {"icon": "print", "label": "Importação", "route": "/lista/importacao"}
   ],
@@ -240,7 +250,99 @@
       { "label": "Viúvo", "id": 4 },
       { "label": "União Estável", "id": 5 },
       { "label": "Separado Judicialmente", "id": 6 }
+  ],
+  "gruposAcessos":[
+    {
+      "id": 1,
+      "nome": "ADMIN",
+      "descricao": "Acesso total ao sistema",
+      "telas": [
+        {
+            "tela": "Usuários",
+            "nivel": "Total"
+        },
+        {
+            "tela": "Acessos",
+            "nivel": "Total"
+        },
+        {
+            "tela": "Funcionários",
+            "nivel": "Total"
+        },
+        {
+            "tela": "Contratante",
+            "nivel": "Total"
+        },
+        {
+            "tela": "Imóvel",
+            "nivel": "Total"
+        },
+        {
+            "tela": "Vendedores",
+            "nivel": "Total"
+        },
+        {
+            "tela": "Prefeitura",
+            "nivel": "Total"
+        },
+        {
+            "tela": "Cartório",
+            "nivel": "Total"
+        },
+        {
+            "tela": "Vendas/pagamentos",
+            "nivel": "Total"
+        },
+        {
+            "tela": "Contratos",
+            "nivel": "Total"
+        }
+    ]
+    },
+    {
+      "id": 2,
+      "nome": "FUNC",
+      "descricao": "Acesso as telas de gestao",
+      "telas": []
+    }
+  ],
+  "telas":[
+    {"icon": "group", "label": "Usuários", "id": 1}, 
+    {"icon": "how_to_reg", "label": "Acessos", "id": 2},
+    {"icon": "account_box", "label": "Funcionários", "id":3},
+    {"icon": "tag_faces", "label": "Contratante", "id": 4},
+    {"icon": "location_city", "label": "Imóvel", "id": 5},
+    {"icon": "nature_people", "label": "Vendedores", "id": 6},
+    {"icon": "flag", "label": "Prefeitura", "id": 7},
+    {"icon": "gavel", "label": "Cartório", "id": 8},
+    {"icon": "local_atm", "label": "Vendas/pagamentos", "id": 9}, 
+    {"icon": "border_color", "label": "Contratos", "id": 10}
+  ],
+  "cartorios":[
+    {
+      "id": 1, 
+      "endereco":{
+        "rua": "Rua Salvador Gianetti",
+        "numero": "12",
+        "bairro": "Guaianazes",
+        "complemento": "",
+        "cidade_uf": "São Paulo / SP",
+        "cep": "08410000"
+      },
+      "representante":{
+        "nome":"Marcela teste",
+        "estadoCivil":"Casado",
+        "nacionalidade":"Brasileiro",
+        "cpf":"93733643089",
+        "rg":"412588821",
+        "cargo": "teste"
+      },
+      "cartorio":{
+        "nome":"Catorio name",
+        "cnpj":"22335935000161",
+        "telefone": "(11) 983475047",
+        "email": "prefeitura@org.com"
+      }
+    }
   ]
-
-
 }

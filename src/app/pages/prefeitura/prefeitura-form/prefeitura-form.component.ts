@@ -233,17 +233,5 @@ responsavelFormControls = this.formBuilder.group({
   formularioValido(): boolean {
     return this.formControls.valid;
   }
-  
-  validarGrupo(formGroup: FormGroup): boolean {
-    let isValid = true;
-  
-    Object.keys(formGroup.controls).forEach(controlName => {
-      const control = formGroup.get(controlName);
-      if (control && !control.valid) {
-        isValid = false;
-      }
-    });
-  
-    return isValid;
-  }
+
 }

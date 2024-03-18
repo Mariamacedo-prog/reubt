@@ -1,0 +1,73 @@
+<div class="container-form" >
+  <mat-card class="card-form " >
+    <mat-card-header >
+      <mat-card-title>Cadastro de Acesso</mat-card-title>
+    </mat-card-header>
+
+    <form [formGroup]="formControls">
+      <mat-card-content >
+        <div formGroupName="usuario">
+          <mat-form-field>
+            <mat-label>Nome do Usuário</mat-label>
+            <input matInput disabled [value]="formControls.get('usuario.nome')?.value"/>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>CPF</mat-label>
+            <input  matInput (keyup)="localizaUsuario()" formControlName="cpf" />
+            <mat-error *ngIf="formControls.get('usuario.cpf')?.hasError('required')">
+              Este campo é <strong>obrigatório</strong>
+            </mat-error>
+            <mat-error *ngIf="formControls.get('usuario.cpf')?.hasError('cpfInvalido')">cpf inválido</mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div *ngIf="formControls.get('usuario.nome')?.value">
+          <mat-card >
+            <mat-card-header >
+              <mat-card-title>Permissões</mat-card-title>
+            </mat-card-header>
+            <span class="permissao-list-section">
+              <ul>
+                @for (tela of arrayTelas; track tela) {
+                  <mat-card class="card-tela" >
+                    <li class="li-tela">
+                      <div class="nome-tela"> <mat-icon >{{tela.icon}}</mat-icon> <p>{{tela.label}}</p></div>
+                      <mat-chip-listbox  (change)="permissaoTela(tela.label, $event)">
+                        <mat-chip-option [selected]="true" value="Restrito" color="warn"> Restrito</mat-chip-option>
+                        <mat-chip-option value="Consulta">Consulta</mat-chip-option>
+                        <mat-chip-option value="Alteração">Alteração</mat-chip-option>
+                        <mat-chip-option value="Total">Total</mat-chip-option>
+                      </mat-chip-listbox>
+                    </li>
+                  </mat-card>
+                }
+              </ul>
+            </span>
+  
+          </mat-card>
+
+          <mat-card >
+            <mat-card-header >
+              <mat-card-title>Adicionar a um grupo</mat-card-title>
+            </mat-card-header>
+            <mat-form-field class="search-field-grid">
+              <mat-label>Grupo</mat-label>
+              <mat-select (selectionChange)="onSelectGrupo($event)" >
+               @for (grupo of databaseInfo.gruposAcessos; track grupo) {
+                  <mat-option  [value]="grupo">{{grupo.nome}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+  
+          </mat-card>
+
+        </div>
+  
+        <div class="area-botao-form " *ngIf="isLoggedIn">
+          <button mat-raised-button color="primary" (click)="cadastrar()" [disabled]="!formularioValido()">Cadastrar</button>
+          <button  mat-raised-button color="link" routerLink="/lista/acessos">Voltar</button>
+        </div>
+      </mat-card-content>
+    </form>
+  </mat-card>
+</div>

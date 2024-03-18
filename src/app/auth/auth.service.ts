@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Observable, of } from 'rxjs';
 import { tap, delay } from 'rxjs/operators';
@@ -13,7 +14,7 @@ export class AuthService {
   private db: any = {usuarios: [], acessos: [],funcionarios: [], contratante: [], menu:[]};
   public usuarioLogado: any;
 
-  constructor(private http: HttpClient) {
+  constructor(private router: Router,private http: HttpClient) {
     this.carregarDb().subscribe({
       next: (data) => {
         this.db = data;
@@ -83,5 +84,7 @@ export class AuthService {
     localStorage.removeItem('usuario');
     this.isLoggedIn = false;
     this.usuarioLogado = null;
+    this.saveDb();
+    this.router.navigate(['/login']);
   }
 }

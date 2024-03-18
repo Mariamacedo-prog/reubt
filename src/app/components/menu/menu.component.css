@@ -5,14 +5,17 @@ nav {
   background-color: #3f51b5;
   padding: 10px;
 }
-
+.headerAreaMenu{
+  display: flex;
+  flex-direction: column;
+}
 ul {
   list-style-type: none;
   padding: 0;
   transition: width 0.3s ease;
   overflow-y: auto;
   overflow-x: hidden;
-  max-height: 90vh;
+
   margin-top: 20px;
 }
 
@@ -40,13 +43,10 @@ a:hover {
 
 
 .menu {
-  height: 100vh;
-}
-
-.menu {
-  /* position: fixed;
+  position: fixed;
+  top: 0;
   left: 0;
-  top: 0; */
+  height: 100vh;
   width: 250px; 
   background-color: #3f51b5;
   color: #fff;
@@ -73,10 +73,18 @@ a:hover {
   width: 50px;
 }
 
+mat-icon{
+  cursor: pointer;
+}
+
 
 @media screen and (max-width: 800px) {
   .menu-open {
     width: 100%; 
+  }
+  .headerAreaMenu{
+    flex-direction: row;
+    justify-content: space-between;
   }
 
   .menu-closed {

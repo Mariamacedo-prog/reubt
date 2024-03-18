@@ -22,6 +22,7 @@ import { ContratantesModule } from './pages/contratantes/contratantes.module';
 import { VendedoresModule } from './pages/vendedores/vendedores.module';
 import { PrefeituraModule } from './pages/prefeitura/prefeitura.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
+import { AcessosModule } from './pages/acessos/acessos.module';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FuncionariosModule,
     ContratantesModule,
     VendedoresModule,
-    PrefeituraModule
+    PrefeituraModule,
+    AcessosModule
   ],
   providers: [
     AuthService
