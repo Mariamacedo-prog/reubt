@@ -10,6 +10,8 @@ import { ContratanteGridComponent } from './pages/contratantes/contratante-grid/
 import { ContratanteFormComponent } from './pages/contratantes/contratante-form/contratante-form.component';
 import { VendedorFormComponent } from './pages/vendedores/vendedor-form/vendedor-form.component';
 import { VendedorGridComponent } from './pages/vendedores/vendedor-grid/vendedor-grid.component';
+import { PrefeituraFormComponent } from './pages/prefeitura/prefeitura-form/prefeitura-form.component';
+import { PrefeituraGridComponent } from './pages/prefeitura/prefeitura-grid/prefeitura-grid.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -38,7 +40,13 @@ const routes: Routes = [
     { path: 'vendedor/:id', component: VendedorFormComponent, canActivate: [authGuard] },
     { path: 'vendedor/:id/:tela', component: VendedorFormComponent, canActivate: [authGuard] },
     { path: 'novo/vendedor', component: VendedorFormComponent, canActivate: [authGuard] },
-    { path: 'lista/vendedores', component: VendedorGridComponent, canActivate: [authGuard] }
+    { path: 'lista/vendedores', component: VendedorGridComponent, canActivate: [authGuard] },
+
+      //contratante
+      { path: 'prefeitura/:id', component: PrefeituraFormComponent, canActivate: [authGuard] },
+      { path: 'prefeitura/:id/:tela', component: PrefeituraFormComponent, canActivate: [authGuard] },
+      { path: 'nova/prefeitura', component: PrefeituraFormComponent, canActivate: [authGuard] },
+      { path: 'lista/prefeituras', component: PrefeituraGridComponent, canActivate: [authGuard] }
 ];
 
 @NgModule({

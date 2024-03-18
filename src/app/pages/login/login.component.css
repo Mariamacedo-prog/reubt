@@ -3,6 +3,7 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
+  width: 100vw;
   background-color: #f0f2f5; /* Cor de fundo semelhante à do Facebook */
 }
 
@@ -77,11 +78,4 @@ button {
 .divider {
   margin: 0 10px;
   color: #555;
-}
-
-
-@media screen and (max-width: 800px) {
-  .login-container {
-    margin-left: -50px;
-  }
 }

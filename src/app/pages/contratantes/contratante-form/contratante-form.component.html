@@ -1,7 +1,7 @@
-<div class="registration-container">
+<div class="container-form ">
 
 
-  <mat-card class="funcionario-card" >
+  <mat-card class="card-form " >
     <mat-card-header>
       <mat-card-title>Cadastro de Contratante</mat-card-title>
     </mat-card-header>
@@ -10,7 +10,7 @@
       <mat-tab-group >
  
         <mat-tab  label="Informações" class="tab-1"> 
-          <div>
+          <div class="inputs-row-form">
             <mat-form-field>
               <mat-label>Nome</mat-label>
               <input [readonly]="visualizar"  matInput [formControl]="nomeFormControl" />
@@ -27,13 +27,16 @@
 
           </div>
     
-          <div>
+          <div class="inputs-row-form">
   
             <mat-form-field>
               <mat-label>RG</mat-label>
               <input [readonly]="visualizar"  matInput [formControl]="rgFormControl"  />
               <mat-error *ngIf="rgFormControl.hasError('required')">
                 Este campo é <strong>obrigatório</strong>
+              </mat-error>
+              <mat-error *ngIf="rgFormControl.hasError('rgInvalid')">
+                Número do RG inválido.
               </mat-error>
             </mat-form-field> 
   
@@ -60,7 +63,7 @@
             </mat-form-field>  
           </div>
  
-          <div>
+          <div class="inputs-row-form">
             <mat-form-field>
               <mat-label>Profissão</mat-label>
               <input [readonly]="visualizar"  matInput [formControl]="profissaoFormControl" (input)="formatarTelefone()" />
@@ -78,8 +81,8 @@
             </mat-form-field> 
           </div>
 
-          <div>
-            <mat-form-field class="search-field">
+          <div class="inputs-row-form">
+            <mat-form-field class="search-field-grid">
               <mat-label>Estado Civil</mat-label>
               <mat-select [formControl]="estadoCivilFormControl" (selectionChange)="selectEstadoCivil()">
                 <mat-option *ngFor="let estado of estadoCivil" [value]="estado.label">{{estado.label}}</mat-option>
@@ -88,7 +91,7 @@
             </mat-form-field>
           </div>
      
-          <div *ngIf="isMarried">  
+          <div *ngIf="isMarried" class="inputs-row-form">  
             <mat-form-field>
               <mat-label>Nome Cônjuge</mat-label>
               <input [readonly]="visualizar"  matInput [formControl]="nomeConjugueFormControl" />
@@ -136,13 +139,13 @@
 
 
 
-        <div class="area-botao" *ngIf="isLoggedIn && this.contratanteId === 0 || this.contratanteId === undefined">
-          <button mat-raised-button color="primary" (click)="cadastrarContratante()" [disabled]="!formularioValido()">Cadastrar</button>
+        <div class="area-botao-form " *ngIf="isLoggedIn && this.contratanteId === 0 || this.contratanteId === undefined">
+          <button mat-raised-button color="primary" (click)="cadastrar()" [disabled]="!formularioValido()">Cadastrar</button>
           <button  mat-raised-button color="link" routerLink="/lista/contratantes">Voltar</button>
         </div>
 
-        <div class="area-botao" *ngIf="isLoggedIn && this.contratanteId !== 0 && this.contratanteId !== undefined">
-          <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizarContratante()" [disabled]="!formularioValido()"> Atualizar</button>
+        <div class="area-botao-form " *ngIf="isLoggedIn && this.contratanteId !== 0 && this.contratanteId !== undefined">
+          <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizar()" [disabled]="!formularioValido()"> Atualizar</button>
           <button mat-raised-button color="link" routerLink="/lista/contratantes">Voltar</button>
         </div>
     </mat-card-content>

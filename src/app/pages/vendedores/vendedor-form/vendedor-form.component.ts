@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CepService } from '../../../services/cep.service';
+import { ValidateService } from '../../../services/validate.service';
 
 @Component({
   selector: 'app-vendedor-form',
@@ -11,27 +12,31 @@ import { CepService } from '../../../services/cep.service';
   styleUrl: './vendedor-form.component.css'
 })
 export class VendedorFormComponent {
+
+  constructor(private toolboxService: ToolboxService, private router: Router, 
+    private route: ActivatedRoute, private cepService: CepService, private validateService: ValidateService) {}
+
   vendedorId = 0;
   isLoggedIn: boolean = false;
   databaseInfo: any = {};
   options: string[] = [];
   filteredOptions: Observable<string[]> = of([]);
   visualizar: boolean = false;
+  
 
   nomeFormControl = new FormControl('', Validators.required);
-  cpfFormControl = new FormControl('', [Validators.required, this.validateCPF]);
+  cpfFormControl = new FormControl('', [Validators.required, this.validateService.validateCPF]);
   ruaFormControl = new FormControl('', [Validators.required]);
   numeroFormControl = new FormControl('', [Validators.required]);
   bairroFormControl = new FormControl('', [Validators.required]);
   complementoFormControl = new FormControl('');
   cidadeUfFormControl = new FormControl('', [Validators.required]);
-  rgFormControl = new FormControl('');
+  rgFormControl = new FormControl('',  Validators.pattern(/^\d{9}$/));
   cepFormControl = new FormControl('', [Validators.required]);
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   telefoneFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]);
 
-  constructor(private toolboxService: ToolboxService, private router: Router, 
-    private route: ActivatedRoute, private cepService: CepService) {}
+
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -68,7 +73,7 @@ export class VendedorFormComponent {
     }
   }
 
-  cadastrarFuncionario() {
+  cadastrar() {
     const storedDb = localStorage.getItem('appDb');
     if (storedDb) {
       this.databaseInfo = JSON.parse(storedDb);
@@ -110,7 +115,7 @@ export class VendedorFormComponent {
     }
   }
 
-  atualizarVendedor(){
+  atualizar(){
     const storedDb = localStorage.getItem('appDb');
     if (storedDb) {
       this.databaseInfo = JSON.parse(storedDb);
@@ -154,8 +159,6 @@ export class VendedorFormComponent {
     }
   }
 
-
-
   formularioValido(): boolean {
     return (
         this.nomeFormControl.valid &&
@@ -176,42 +179,6 @@ export class VendedorFormComponent {
       this.isLoggedIn = false;
     }
 
-  }
-
-  validateCPF(control: FormControl): { [key: string]: any } | null {
-    const cpf = control.value?.replace(/[^\d]/g, '');
-
-    if (!cpf || cpf.length !== 11) {
-      return { 'cpfInvalido': true };
-    }
-
-    if (/^(\d)\1{10}$/.test(cpf)) {
-      return { 'cpfInvalido': true };
-    }
-
-    let sum = 0;
-    for (let i = 0; i < 9; i++) {
-      sum += parseInt(cpf.charAt(i)) * (10 - i);
-    }
-    let remainder = 11 - (sum % 11);
-    let digit = remainder >= 10 ? 0 : remainder;
-
-    if (parseInt(cpf.charAt(9)) !== digit) {
-      return { 'cpfInvalido': true };
-    }
-
-    sum = 0;
-    for (let i = 0; i < 10; i++) {
-      sum += parseInt(cpf.charAt(i)) * (11 - i);
-    }
-    remainder = 11 - (sum % 11);
-    digit = remainder >= 10 ? 0 : remainder;
-
-    if (parseInt(cpf.charAt(10)) !== digit) {
-      return { 'cpfInvalido': true };
-    }
-
-    return null;
   }
 
   formatarTelefone() {
@@ -252,6 +219,7 @@ export class VendedorFormComponent {
     }
     
   }
+
   limparEndereco(){
     this.ruaFormControl.setValue('');
     this.bairroFormControl.setValue('');

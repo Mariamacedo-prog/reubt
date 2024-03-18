@@ -17,20 +17,20 @@
       "cpf":"86839129063"
     }
   ],
-  "acessos":[
-    {
-      "id": 1,
-      "usuarios":[],
-      "grupos":[],
-      "telas": [],
-      "permissoes": []
-    },
+  "grupoAcessos":[
     {
       "id": 2,
+      "nivelPermissao": "Total",
       "usuarios":[],
-      "grupos":[],
-      "telas": [],
-      "permissoes": []
+      "grupo":1,
+      "telas": []
+    },
+    {
+      "id": 3,
+      "nivelPermissao": "Visual",
+      "usuarios":[],
+      "grupos":2,
+      "telas": []
     }
   ],
   "funcionarios":[
@@ -131,6 +131,48 @@
       "valoresRecebidos": 229.11
     }
   ],
+  "prefeituras":[
+    {
+      "id": 2,
+      "endereco":{
+        "rua": "Rua Salvador Gianetti",
+        "numero": "12",
+        "bairro": "Guaianazes",
+        "complemento": "",
+        "cidade_uf": "São Paulo / SP",
+        "cep": "08410000"
+      },
+      "responsavel":{
+        "nome":"Marcela teste",
+        "estadoCivil":"Casado",
+        "nacionalidade":"Brasileiro",
+        "cpf":"93733643089",
+        "rg":"412588821"
+      },
+      "prefeitura":{
+        "nome":"Marcela teste",
+        "cnpj":"22335935000161",
+        "telefone": "(11) 983475047",
+        "email": "prefeitura@org.com"
+      },
+      "representante":{
+        "nome":"Marcela teste",
+        "cargo": "rest"
+      }
+    }
+  ],
+  "gruposAcessos":[
+    {
+      "id": 1,
+      "nome": "ADMIN",
+      "descricao": "Acesso total ao sistema"
+    },
+    {
+      "id": 2,
+      "nome": "FUNC",
+      "descricao": "Acesso as telas de gestao"
+    }
+  ],
   "menu":[
     {"icon": "group", "label": "Usuários", "route": "/lista/usuarios"}, 
     {"icon": "how_to_reg", "label": "Acessos", "route": "/lista/acessos"},
@@ -138,8 +180,8 @@
     {"icon": "tag_faces", "label": "Contratante", "route": "/lista/contratantes"},
     {"icon": "location_city", "label": "Imóvel", "route": "/lista/imovel"},
     {"icon": "nature_people", "label": "Vendedores", "route": "/lista/vendedores"},
-    {"icon": "flag", "label": "Prefeitura", "route": "/lista/prefeitura"},
-    {"icon": "gavel", "label": "Cartório", "route": "/lista/cartorio"},
+    {"icon": "flag", "label": "Prefeitura", "route": "/lista/prefeituras"},
+    {"icon": "gavel", "label": "Cartório", "route": "/lista/cartorios"},
     {"icon": "local_atm", "label": "Vendas/pagamentos", "route": "/lista/vendasPagamentos"}, 
     {"icon": "border_color", "label": "Contratos", "route": "/lista/contratos"}
   ],

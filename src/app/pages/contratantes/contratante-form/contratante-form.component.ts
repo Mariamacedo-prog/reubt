@@ -3,7 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CepService } from '../../../services/cep.service';
+import { ValidateService } from '../../../services/validate.service';
 
 @Component({
   selector: 'app-contratante-form',
@@ -20,9 +20,13 @@ export class ContratanteFormComponent {
   filteredOptions: Observable<string[]> = of([]);
   visualizar: boolean = false;
 
+  
+  constructor(private toolboxService: ToolboxService, private router: Router, 
+    private route: ActivatedRoute, private validateService: ValidateService) {}
+
   nomeFormControl = new FormControl('', Validators.required);
-  cpfFormControl = new FormControl('', [Validators.required, this.validateCPF]);
-  rgFormControl = new FormControl('', [Validators.required, this.validateRG]);
+  cpfFormControl = new FormControl('', [Validators.required, this.validateService.validateCPF]);
+  rgFormControl = new FormControl('', [Validators.required, this.validateService.validateRG]);
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   telefoneFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]);
   nacionalidadeFormControl = new FormControl('', [Validators.required]);
@@ -32,8 +36,6 @@ export class ContratanteFormComponent {
   nacionalidadeConjugueFormControl = new FormControl('');
 
 
-  constructor(private toolboxService: ToolboxService, private router: Router, 
-    private route: ActivatedRoute, private cepService: CepService) {}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -76,7 +78,7 @@ export class ContratanteFormComponent {
     
   }
 
-  cadastrarContratante() {
+  cadastrar() {
     const storedDb = localStorage.getItem('appDb');
     if (storedDb) {
       this.databaseInfo = JSON.parse(storedDb);
@@ -116,7 +118,7 @@ export class ContratanteFormComponent {
     }
   }
 
-  atualizarContratante(){
+  atualizar(){
     const storedDb = localStorage.getItem('appDb');
     if (storedDb) {
       this.databaseInfo = JSON.parse(storedDb);
@@ -202,43 +204,7 @@ export class ContratanteFormComponent {
     }
 
   }
-
-  validateCPF(control: FormControl): { [key: string]: any } | null {
-    const cpf = control.value?.replace(/[^\d]/g, '');
-
-    if (!cpf || cpf.length !== 11) {
-      return { 'cpfInvalido': true };
-    }
-
-    if (/^(\d)\1{10}$/.test(cpf)) {
-      return { 'cpfInvalido': true };
-    }
-
-    let sum = 0;
-    for (let i = 0; i < 9; i++) {
-      sum += parseInt(cpf.charAt(i)) * (10 - i);
-    }
-    let remainder = 11 - (sum % 11);
-    let digit = remainder >= 10 ? 0 : remainder;
-
-    if (parseInt(cpf.charAt(9)) !== digit) {
-      return { 'cpfInvalido': true };
-    }
-
-    sum = 0;
-    for (let i = 0; i < 10; i++) {
-      sum += parseInt(cpf.charAt(i)) * (11 - i);
-    }
-    remainder = 11 - (sum % 11);
-    digit = remainder >= 10 ? 0 : remainder;
-
-    if (parseInt(cpf.charAt(10)) !== digit) {
-      return { 'cpfInvalido': true };
-    }
-
-    return null;
-  }
-
+  
   formatarTelefone() {
     if(this.telefoneFormControl.value){
       let telefone = this.telefoneFormControl.value.replace(/\D/g, '');
@@ -258,15 +224,5 @@ export class ContratanteFormComponent {
       console.log('Tamanho do arquivo:', file.size);
       // Faça o que precisar com o arquivo aqui, como enviá-lo para um servidor, etc.
     }
-  }
-
-  validateRG(control: FormControl): { [key: string]: any } | null {
-    const rg = control.value?.replace(/[^\dX]/g, '');
-
-    if (!rg || rg.length !== 9) {
-      return { 'rgInvalid': true };
-    }
-
-    return null; // Retornar null significa que o RG é válido
   }
 }

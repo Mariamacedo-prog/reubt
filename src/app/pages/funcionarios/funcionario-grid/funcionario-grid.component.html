@@ -1,8 +1,8 @@
-<div class="page-container">
+<div class="page-container-grid">
   <h1>Listagem de Funcionários</h1>
-  <div class="header">
-    <mat-form-field class="search-field">
-      <input matInput placeholder="Pesquisar por Nome ou CPF" [(ngModel)]="searchTerm" (keyup)="procurarNomeOuCpf()" />
+  <div class="header-grid">
+    <mat-form-field class="search-field-grid">
+      <input matInput placeholder="Pesquisar por Nome ou CPF" [(ngModel)]="searchTerm" (keyup)="procurar()" />
       <mat-icon matPrefix>search</mat-icon>
     </mat-form-field>
 

@@ -1,5 +1,5 @@
-<div class="registration-container">
-  <mat-card class="usuario-card">
+<div class="container-form ">
+  <mat-card class="card-form ">
     <mat-card-header>
       <mat-card-title>Cadastro de Usuário</mat-card-title>
     </mat-card-header>
@@ -13,7 +13,7 @@
         </mat-error>
       </mat-form-field>
 
-      <div>
+      <div class="inputs-row-form">
         <mat-form-field>
           <mat-label>Email</mat-label>
           <input [readonly]="visualizar" type="email" matInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com" />
@@ -43,7 +43,7 @@
         <mat-error *ngIf="loginCpfFormControl.hasError('cpfInvalido')">CPF inválido</mat-error>
       </mat-form-field>
 
-      <div>
+      <div class="inputs-row-form">
         <mat-form-field>
           <mat-label>Senha</mat-label>
           <input [readonly]="visualizar" matInput type="password" [formControl]="senhaFormControl" />
@@ -71,14 +71,14 @@
         </mat-form-field>
       </div>
 
-        <div class="area-botao" *ngIf="this.userId === 0 || this.userId === undefined">
-          <button mat-raised-button color="primary" (click)="cadastrarUsuario()" [disabled]="!formularioValido()">Cadastrar</button>
+        <div class="area-botao-form " *ngIf="this.userId === 0 || this.userId === undefined">
+          <button mat-raised-button color="primary" (click)="cadastrar()" [disabled]="!formularioValido()">Cadastrar</button>
           <button *ngIf="isLoggedIn == false" mat-raised-button color="link" routerLink="/login">Voltar</button>
           <button *ngIf="isLoggedIn" mat-raised-button color="link" routerLink="/lista/usuarios">Voltar</button>
         </div>
 
-        <div class="area-botao" *ngIf="isLoggedIn && this.userId !== 0 && this.userId !== undefined">
-          <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizarUsuatio()" [disabled]="!formularioValido()"> Atualizar</button>
+        <div class="area-botao-form " *ngIf="isLoggedIn && this.userId !== 0 && this.userId !== undefined">
+          <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizar()" [disabled]="!formularioValido()"> Atualizar</button>
           <button mat-raised-button color="link" routerLink="/lista/usuarios">Voltar</button>
         </div>
     </mat-card-content>

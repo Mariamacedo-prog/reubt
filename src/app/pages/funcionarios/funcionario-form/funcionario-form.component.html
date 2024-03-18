@@ -1,7 +1,7 @@
-<div class="registration-container">
+<div class="container-form ">
 
 
-  <mat-card class="funcionario-card" >
+  <mat-card class="card-form " >
     <mat-card-header>
       <mat-card-title>Cadastro de Funcionário</mat-card-title>
     </mat-card-header>
@@ -17,7 +17,7 @@
             </mat-error>
           </mat-form-field>
     
-          <div>
+          <div class="inputs-row-form">
             <mat-form-field>
               <mat-label>Email</mat-label>
               <input [readonly]="visualizar"  type="email" matInput [formControl]="emailFormControl" placeholder="Ex.pat@example.com" />
@@ -70,41 +70,37 @@
           
         </mat-tab>
         <mat-tab label="Endereço"> 
-          <mat-form-field>
-            <mat-label>CEP</mat-label>
-            <input [readonly]="visualizar" (keyup)="buscarEndereco()" maxlength="8" type="text" matInput [formControl]="cepFormControl" />
-            <mat-error *ngIf="cepFormControl.hasError('required')" >
-              Este campo é <strong>obrigatório</strong>
-            </mat-error>
-          </mat-form-field>
-
-          <div>
+          <div class="inputs-row-form">
             <mat-form-field>
-              <mat-label>Rua</mat-label>
-              <input [readonly]="visualizar"  type="text" matInput [formControl]="ruaFormControl" />
-              <mat-error *ngIf="ruaFormControl.hasError('required')" >
+              <mat-label>CEP</mat-label>
+              <input [readonly]="visualizar" (keyup)="buscarEndereco()" maxlength="8" type="text" matInput [formControl]="cepFormControl" />
+              <mat-error *ngIf="cepFormControl.hasError('required')" >
                 Este campo é <strong>obrigatório</strong>
               </mat-error>
             </mat-form-field>
-            <div>
-              <mat-form-field>
-                <mat-label>Número</mat-label>
-                <input [readonly]="visualizar"  type="text" matInput [formControl]="numeroFormControl" />
-                <mat-error *ngIf="numeroFormControl.hasError('required')" >
-                  Este campo é <strong>obrigatório</strong>
-                </mat-error>
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label>Complemento</mat-label>
-                <input [readonly]="visualizar"  type="text" matInput [formControl]="complementoFormControl" />
-                <mat-error *ngIf="complementoFormControl.hasError('required')" >
-                  Este campo é <strong>obrigatório</strong>
-                </mat-error>
-              </mat-form-field>
-            </div>
+            <mat-form-field>
+              <mat-label>Número</mat-label>
+              <input [readonly]="visualizar"  type="text" matInput [formControl]="numeroFormControl" />
+              <mat-error *ngIf="numeroFormControl.hasError('required')" >
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Complemento</mat-label>
+              <input [readonly]="visualizar"  type="text" matInput [formControl]="complementoFormControl" />
+              <mat-error *ngIf="complementoFormControl.hasError('required')" >
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field>
           </div>
 
-
+          <mat-form-field>
+            <mat-label>Rua</mat-label>
+            <input [readonly]="visualizar"  type="text" matInput [formControl]="ruaFormControl" />
+            <mat-error *ngIf="ruaFormControl.hasError('required')" >
+              Este campo é <strong>obrigatório</strong>
+            </mat-error>
+          </mat-form-field>
         
 
           <mat-form-field>
@@ -128,13 +124,13 @@
 
 
 
-        <div class="area-botao" *ngIf="isLoggedIn && this.funcionarioId === 0 || this.funcionarioId === undefined">
-          <button mat-raised-button color="primary" (click)="cadastrarFuncionario()" [disabled]="!formularioValido()">Cadastrar</button>
+        <div class="area-botao-form " *ngIf="isLoggedIn && this.funcionarioId === 0 || this.funcionarioId === undefined">
+          <button mat-raised-button color="primary" (click)="cadastrar()" [disabled]="!formularioValido()">Cadastrar</button>
           <button  mat-raised-button color="link" routerLink="/lista/funcionarios">Voltar</button>
         </div>
 
-        <div class="area-botao" *ngIf="isLoggedIn && this.funcionarioId !== 0 && this.funcionarioId !== undefined">
-          <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizarFuncionario()" [disabled]="!formularioValido()"> Atualizar</button>
+        <div class="area-botao-form " *ngIf="isLoggedIn && this.funcionarioId !== 0 && this.funcionarioId !== undefined">
+          <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizar()" [disabled]="!formularioValido()"> Atualizar</button>
           <button mat-raised-button color="link" routerLink="/lista/funcionarios">Voltar</button>
         </div>
     </mat-card-content>

@@ -1,5 +1,5 @@
-<div class="registration-container">
-  <mat-card class="vendedor-card" >
+<div class="container-form ">
+  <mat-card class="card-form " >
     <mat-card-header>
       <mat-card-title>Cadastro de Vendedor</mat-card-title>
     </mat-card-header>
@@ -15,7 +15,7 @@
             </mat-error>
           </mat-form-field>
     
-          <div>
+          <div class="inputs-row-form">
             <mat-form-field>
               <mat-label>Email</mat-label>
               <input [readonly]="visualizar"  type="email" matInput [formControl]="emailFormControl" placeholder="Ex.pat@example.com" />
@@ -39,7 +39,7 @@
             </mat-form-field>  
           </div>
     
-          <div>
+          <div class="inputs-row-form">
             <mat-form-field>
               <mat-label>CPF</mat-label>
               <input [readonly]="visualizar"  matInput [formControl]="cpfFormControl" />
@@ -48,13 +48,14 @@
       
             <mat-form-field>
               <mat-label>RG</mat-label>
-              <input [readonly]="visualizar"  matInput [formControl]="rgFormControl" />
+              <input maxlength="9" [readonly]="visualizar"  matInput [formControl]="rgFormControl" />
+              <mat-error *ngIf="rgFormControl?.hasError('pattern')">
+                Número do RG inválido.
+              </mat-error>
             </mat-form-field>
-          </div>
-
-
-          
+          </div>          
         </mat-tab>
+
         <mat-tab label="Endereço"> 
           <mat-form-field>
             <mat-label>CEP</mat-label>
@@ -64,7 +65,7 @@
             </mat-error>
           </mat-form-field>
 
-          <div>
+          <div class="inputs-row-form">
             <mat-form-field>
               <mat-label>Rua</mat-label>
               <input [readonly]="visualizar"  type="text" matInput [formControl]="ruaFormControl" />
@@ -72,7 +73,7 @@
                 Este campo é <strong>obrigatório</strong>
               </mat-error>
             </mat-form-field>
-            <div>
+            <div class="inputs-row-form">
               <mat-form-field>
                 <mat-label>Número</mat-label>
                 <input [readonly]="visualizar"  type="text" matInput [formControl]="numeroFormControl" />
@@ -90,9 +91,6 @@
             </div>
           </div>
 
-
-        
-
           <mat-form-field>
             <mat-label>Bairro</mat-label>
             <input [readonly]="visualizar"  type="text" matInput [formControl]="bairroFormControl" />
@@ -108,19 +106,18 @@
               Este campo é <strong>obrigatório</strong>
             </mat-error>
           </mat-form-field>
-
         </mat-tab>
       </mat-tab-group>
 
 
 
-        <div class="area-botao" *ngIf="isLoggedIn && this.vendedorId === 0 || this.vendedorId === undefined">
-          <button mat-raised-button color="primary" (click)="cadastrarFuncionario()" [disabled]="!formularioValido()">Cadastrar</button>
+        <div class="area-botao-form " *ngIf="isLoggedIn && this.vendedorId === 0 || this.vendedorId === undefined">
+          <button mat-raised-button color="primary" (click)="cadastrar()" [disabled]="!formularioValido()">Cadastrar</button>
           <button  mat-raised-button color="link" routerLink="/lista/vendedores">Voltar</button>
         </div>
 
-        <div class="area-botao" *ngIf="isLoggedIn && this.vendedorId !== 0 && this.vendedorId !== undefined">
-          <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizarVendedor()" [disabled]="!formularioValido()"> Atualizar</button>
+        <div class="area-botao-form " *ngIf="isLoggedIn && this.vendedorId !== 0 && this.vendedorId !== undefined">
+          <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizar()" [disabled]="!formularioValido()"> Atualizar</button>
           <button mat-raised-button color="link" routerLink="/lista/vendedores">Voltar</button>
         </div>
     </mat-card-content>

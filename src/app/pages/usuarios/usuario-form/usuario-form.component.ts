@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
+import { ValidateService } from '../../../services/validate.service';
 
 @Component({
   selector: 'app-usuario-form',
@@ -9,6 +10,11 @@ import { ToolboxService } from '../../../components/toolbox/toolbox.service';
   styleUrls: ['./usuario-form.component.css']
 })
 export class UsuarioFormComponent {
+
+  constructor(private toolboxService: ToolboxService, private router: Router, private route: ActivatedRoute,
+    private validateService: ValidateService
+    ) {}
+
   userId = 0;
   visualizar: boolean = false;
   isLoggedIn: boolean = false;
@@ -18,12 +24,11 @@ export class UsuarioFormComponent {
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   nomeFormControl = new FormControl('', Validators.required);
   telefoneFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]);
-  loginCpfFormControl = new FormControl('', [Validators.required, this.validateCPF]);
-  senhaFormControl = new FormControl('', [Validators.required,   Validators.minLength(8), Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)]);
+  loginCpfFormControl = new FormControl('', [Validators.required, this.validateService.validateCPF]);
+  senhaFormControl = new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)]);
   confirmSenhaFormControl = new FormControl('', [Validators.required, this.compararSenhas.bind(this)]);
 
 
-  constructor(private toolboxService: ToolboxService, private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -52,44 +57,6 @@ export class UsuarioFormComponent {
           }
         }
       }
-    }
-  }
-
-  cadastrarUsuario() {
-    if(this.confirmSenhaFormControl.value != this.senhaFormControl.value){
-      this.toolboxService.showTooltip('error', 'Senhas divergentes!', 'ERRO!');
-    }
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      this.databaseInfo = JSON.parse(storedDb);
-    }
-    if(this.databaseInfo.usuarios){
-      const usuarioPeloCpf = this.databaseInfo.usuarios.find((usuario: any) => usuario.cpf == this.loginCpfFormControl.value);
-      if(usuarioPeloCpf){
-        this.toolboxService.showTooltip('error', 'Usuário com CPF já existe na base de dados!', 'ERRO CPF!');
-        return;
-      }
-
-      const usuarioPeloEmail = this.databaseInfo.usuarios.find((usuario: any) => usuario.email == this.emailFormControl.value);
-      if(usuarioPeloEmail){
-        this.toolboxService.showTooltip('error', 'Usuário com E-mail já existe na base de dados!', 'ERRO CPF!');
-        return;
-      }
-
-      this.databaseInfo.usuarios.push(
-        {
-          "id": Math.floor(Math.random() * 10000),
-          "email":this.emailFormControl.value,
-          "senha": this.senhaFormControl.value,
-          "nome": this.nomeFormControl.value,
-          "telefone": this.telefoneFormControl.value,
-          "cpf":this.loginCpfFormControl.value
-        }
-      )
-      localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
-
-      this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/login']);
     }
   }
 
@@ -161,7 +128,45 @@ export class UsuarioFormComponent {
 
   }
 
-  atualizarUsuatio(){
+  cadastrar() {
+    if(this.confirmSenhaFormControl.value != this.senhaFormControl.value){
+      this.toolboxService.showTooltip('error', 'Senhas divergentes!', 'ERRO!');
+    }
+    const storedDb = localStorage.getItem('appDb');
+    if (storedDb) {
+      this.databaseInfo = JSON.parse(storedDb);
+    }
+    if(this.databaseInfo.usuarios){
+      const usuarioPeloCpf = this.databaseInfo.usuarios.find((usuario: any) => usuario.cpf == this.loginCpfFormControl.value);
+      if(usuarioPeloCpf){
+        this.toolboxService.showTooltip('error', 'Usuário com CPF já existe na base de dados!', 'ERRO CPF!');
+        return;
+      }
+
+      const usuarioPeloEmail = this.databaseInfo.usuarios.find((usuario: any) => usuario.email == this.emailFormControl.value);
+      if(usuarioPeloEmail){
+        this.toolboxService.showTooltip('error', 'Usuário com E-mail já existe na base de dados!', 'ERRO CPF!');
+        return;
+      }
+
+      this.databaseInfo.usuarios.push(
+        {
+          "id": Math.floor(Math.random() * 10000),
+          "email":this.emailFormControl.value,
+          "senha": this.senhaFormControl.value,
+          "nome": this.nomeFormControl.value,
+          "telefone": this.telefoneFormControl.value,
+          "cpf":this.loginCpfFormControl.value
+        }
+      )
+      localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
+
+      this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
+      this.router.navigate(['/login']);
+    }
+  }
+
+  atualizar(){
     if(this.confirmSenhaFormControl.value != this.senhaFormControl.value){
       this.toolboxService.showTooltip('error', 'Senhas divergentes!', 'ERRO!');
     }

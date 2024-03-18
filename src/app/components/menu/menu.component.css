@@ -13,6 +13,7 @@ ul {
   overflow-y: auto;
   overflow-x: hidden;
   max-height: 90vh;
+  margin-top: 20px;
 }
 
 li {
@@ -43,9 +44,9 @@ a:hover {
 }
 
 .menu {
-  position: fixed;
+  /* position: fixed;
   left: 0;
-  top: 0;
+  top: 0; */
   width: 250px; 
   background-color: #3f51b5;
   color: #fff;
@@ -80,16 +81,20 @@ a:hover {
 
   .menu-closed {
     width: 100%; 
-    height: 30px;
+    height: 40px;
   }
-
+  .menu {
+    position: fixed;
+    left: 0;
+    top: 0;
+  }
 
   .menu-open .menu-list {
     display: block; /* ou qualquer outra propriedade de exibição que você desejar */
   }
 
   ul {
-    max-height: 80vh;
 
+    max-height: 80vh;
   }
 }

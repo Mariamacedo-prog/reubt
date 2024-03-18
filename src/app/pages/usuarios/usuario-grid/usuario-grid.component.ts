@@ -38,7 +38,7 @@ export class UsuarioGridComponent {
     }, 1000)
  
   }
-  procurarNomeOuCpf() {
+  procurar() {
     this.dataSourceFilter = this.dataSource.filter((usuario: any) => usuario.nome.includes(this.searchTerm) || usuario.cpf.includes(this.searchTerm));
     if(this.searchTerm.length == 0){
       this.dataSourceFilter = this.dataSource;

@@ -20,6 +20,8 @@ import { UsuariosModule } from './pages/usuarios/usuarios.module';
 import { FuncionariosModule } from './pages/funcionarios/funcionarios.module';
 import { ContratantesModule } from './pages/contratantes/contratantes.module';
 import { VendedoresModule } from './pages/vendedores/vendedores.module';
+import { PrefeituraModule } from './pages/prefeitura/prefeitura.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { VendedoresModule } from './pages/vendedores/vendedores.module';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    BrowserAnimationsModule, 
     MatInputModule,
     MatFormFieldModule,
     MatCardModule,
@@ -42,10 +45,10 @@ import { VendedoresModule } from './pages/vendedores/vendedores.module';
     UsuariosModule,
     FuncionariosModule,
     ContratantesModule,
-    VendedoresModule
+    VendedoresModule,
+    PrefeituraModule
   ],
   providers: [
-    provideAnimationsAsync('noop'),
     AuthService
   ],
   bootstrap: [AppComponent]

@@ -4,6 +4,7 @@ import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, Observable } from 'rxjs';
 import { CepService } from '../../../services/cep.service';
+import { ValidateService } from '../../../services/validate.service';
 
 @Component({
   selector: 'app-funcionario-form',
@@ -11,6 +12,10 @@ import { CepService } from '../../../services/cep.service';
   styleUrl: './funcionario-form.component.css'
 })
 export class FuncionarioFormComponent {
+
+  constructor(private toolboxService: ToolboxService, private router: Router, 
+    private route: ActivatedRoute, private cepService: CepService, private validateService: ValidateService) {}
+
   funcionarioId = 0;
   isLoggedIn: boolean = false;
   databaseInfo: any = {};
@@ -19,7 +24,7 @@ export class FuncionarioFormComponent {
   visualizar: boolean = false;
 
   nomeFormControl = new FormControl('', Validators.required);
-  cpfFormControl = new FormControl('', [Validators.required, this.validateCPF]);
+  cpfFormControl = new FormControl('', [Validators.required, this.validateService.validateCPF]);
   ruaFormControl = new FormControl('', [Validators.required]);
   numeroFormControl = new FormControl('', [Validators.required]);
   bairroFormControl = new FormControl('', [Validators.required]);
@@ -30,8 +35,6 @@ export class FuncionarioFormComponent {
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   telefoneFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]);
 
-  constructor(private toolboxService: ToolboxService, private router: Router, 
-    private route: ActivatedRoute, private cepService: CepService) {}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -87,7 +90,7 @@ export class FuncionarioFormComponent {
     }
   }
 
-  cadastrarFuncionario() {
+  cadastrar() {
     const storedDb = localStorage.getItem('appDb');
     if (storedDb) {
       this.databaseInfo = JSON.parse(storedDb);
@@ -128,7 +131,7 @@ export class FuncionarioFormComponent {
     }
   }
 
-  atualizarFuncionario(){
+  atualizar(){
     const storedDb = localStorage.getItem('appDb');
     if (storedDb) {
       this.databaseInfo = JSON.parse(storedDb);
@@ -194,43 +197,6 @@ export class FuncionarioFormComponent {
     }else{
       this.isLoggedIn = false;
     }
-
-  }
-
-  validateCPF(control: FormControl): { [key: string]: any } | null {
-    const cpf = control.value?.replace(/[^\d]/g, '');
-
-    if (!cpf || cpf.length !== 11) {
-      return { 'cpfInvalido': true };
-    }
-
-    if (/^(\d)\1{10}$/.test(cpf)) {
-      return { 'cpfInvalido': true };
-    }
-
-    let sum = 0;
-    for (let i = 0; i < 9; i++) {
-      sum += parseInt(cpf.charAt(i)) * (10 - i);
-    }
-    let remainder = 11 - (sum % 11);
-    let digit = remainder >= 10 ? 0 : remainder;
-
-    if (parseInt(cpf.charAt(9)) !== digit) {
-      return { 'cpfInvalido': true };
-    }
-
-    sum = 0;
-    for (let i = 0; i < 10; i++) {
-      sum += parseInt(cpf.charAt(i)) * (11 - i);
-    }
-    remainder = 11 - (sum % 11);
-    digit = remainder >= 10 ? 0 : remainder;
-
-    if (parseInt(cpf.charAt(10)) !== digit) {
-      return { 'cpfInvalido': true };
-    }
-
-    return null;
   }
 
   formatarTelefone() {
@@ -271,6 +237,7 @@ export class FuncionarioFormComponent {
     }
     
   }
+
   limparEndereco(){
     this.ruaFormControl.setValue('');
     this.bairroFormControl.setValue('');

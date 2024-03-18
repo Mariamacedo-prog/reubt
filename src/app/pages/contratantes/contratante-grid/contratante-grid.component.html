@@ -1,8 +1,8 @@
-<div class="page-container">
+<div class="page-container-grid">
   <h1>Listagem de Contratantes</h1>
-  <div class="header">
-    <div class="header-filtro">
-      <mat-form-field class="search-field">
+  <div >
+    <div class=" inputs-row-form">
+      <mat-form-field class="search-field-grid">
         <mat-label>Situação do Pagamento</mat-label>
         <mat-select>
           <!-- @for (food of foods; track food) {
@@ -12,33 +12,15 @@
           <mat-option >não ok</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field class="search-field">
+      <mat-form-field class="search-field-grid">
         <mat-label>Escolha uma Data</mat-label>
         <input matInput [matDatepicker]="picker">
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
-    </div>
 
-    <div class="header-filtro"> 
-      <mat-form-field class="search-field">
-        <mat-label>Cidade</mat-label>
-        <mat-select>
-          <mat-option >São paulo</mat-option>
-          <mat-option >Ferraz de Vasconcelos</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field class="search-field">
-        <mat-label>Estado</mat-label>
-        <mat-select>
-          <mat-option >São paulo</mat-option>
-          <mat-option >Rio de Janeiro</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field class="search-field">
+      <mat-form-field class="search-field-grid">
         <mat-label>Cartórios</mat-label>
         <mat-select>
           <mat-option > cartório São paulo</mat-option>
@@ -47,8 +29,28 @@
       </mat-form-field>
     </div>
 
-    <div class="header-filtro">
-      <mat-form-field class="search-field">
+    <div class=" inputs-row-form" > 
+      <mat-form-field class="search-field-grid">
+        <mat-label>Cidade</mat-label>
+        <mat-select>
+          <mat-option >São paulo</mat-option>
+          <mat-option >Ferraz de Vasconcelos</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="search-field-grid">
+        <mat-label>Estado</mat-label>
+        <mat-select>
+          <mat-option >São paulo</mat-option>
+          <mat-option >Rio de Janeiro</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+ 
+    </div>
+
+    <div class=" inputs-row-form">
+      <mat-form-field class="search-field-grid">
         <input matInput placeholder="Pesquisar por Nome ou CPF" [(ngModel)]="searchTerm" (keyup)="procurar()" />
         <mat-icon matPrefix>search</mat-icon>
       </mat-form-field>

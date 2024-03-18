@@ -13,14 +13,11 @@ interface MenuItem {
 })
 export class MenuComponent {
   @Output() menuToggled = new EventEmitter<boolean>();
-
-  
-  menuItens: MenuItem[] = [
-  
-  ];
-
+  menuItens: MenuItem[] = [];
   isMenuOpen = false;
   mobileQuery: MediaQueryList;
+
+  private _mobileQueryListener: () => void;
 
   ngOnInit(): void {
     setTimeout(() => {
@@ -33,8 +30,6 @@ export class MenuComponent {
       }
     }, 3000)
   }
-
-  private _mobileQueryListener: () => void;
 
   constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher) {
     this.mobileQuery = media.matchMedia('(max-width: 1200px)');
