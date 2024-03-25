@@ -89,7 +89,7 @@ export class AcessoFormComponent {
 
     localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
     this.toolboxService.showTooltip('success', 'Cadastro de Permissão realizada com sucesso!', 'Sucesso!');
-    this.router.navigate(['/lista/acessos']);
+    this.router.navigate(['/acesso/lista']);
   }
 
   isAuthenticated(){

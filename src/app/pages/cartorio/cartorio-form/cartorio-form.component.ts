@@ -135,7 +135,7 @@ export class CartorioFormComponent {
 
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
       this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/lista/cartorios']);
+      this.router.navigate(['/cartorio/lista']);
     }
   }
 
@@ -168,7 +168,7 @@ export class CartorioFormComponent {
 
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
       this.toolboxService.showTooltip('success', 'Cadastro atualizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/lista/cartorios']);
+      this.router.navigate(['/cartorio/lista']);
     }
   }
 

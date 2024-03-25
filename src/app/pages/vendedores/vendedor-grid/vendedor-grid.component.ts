@@ -14,7 +14,7 @@ export class VendedorGridComponent {
   searchTerm: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService) {}
   adicionarNovoVendedor() {
-    this.router.navigate(["/novo/vendedor"]);
+    this.router.navigate(["/vendedor/novo"]);
   }
  
   ngOnInit(): void {
@@ -39,11 +39,11 @@ export class VendedorGridComponent {
   }
 
   visualizarItem(element: any){
-    this.router.navigate(["/vendedor/" + element.id + "/visualizar"]);
+    this.router.navigate(["/vendedor/form/" + element.id + "/visualizar"]);
   }
 
   editarItem(element: any){
-    this.router.navigate(["/vendedor/" + element.id]);
+    this.router.navigate(["/vendedor/form/" + element.id]);
   }
 
   deletarItem(element: any){

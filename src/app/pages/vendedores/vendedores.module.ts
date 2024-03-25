@@ -11,13 +11,19 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { RouterModule, Routes } from '@angular/router';
+import { authGuard } from '../../auth/auth.guard';
 
-
+const routes: Routes = [
+  { path: 'form/:id', component: VendedorFormComponent, canActivate: [authGuard] },
+  { path: 'form/:id/:tela', component: VendedorFormComponent, canActivate: [authGuard] },
+  { path: 'novo', component: VendedorFormComponent, canActivate: [authGuard] },
+  { path: 'lista', component: VendedorGridComponent, canActivate: [authGuard] }
+];
 
 @NgModule({
   declarations: [VendedorFormComponent, VendedorGridComponent],
   imports: [
-    AppRoutingModule,
     CommonModule,
     FormsModule,
     MatInputModule,
@@ -27,7 +33,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatIconModule,
     MatTabsModule,
     MatCardModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    RouterModule.forChild(routes)
   ]
 })
 export class VendedoresModule { }

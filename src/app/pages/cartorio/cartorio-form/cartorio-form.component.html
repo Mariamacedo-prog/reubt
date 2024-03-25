@@ -176,12 +176,12 @@
     
           <div class="area-botao-form " *ngIf="isLoggedIn && this.cartorioId === 0 || this.cartorioId === undefined">
             <button mat-raised-button color="primary" (click)="cadastrar()" [disabled]="!formularioValido()">Cadastrar</button>
-            <button  mat-raised-button color="link" routerLink="/lista/cartorios">Voltar</button>
+            <button  mat-raised-button color="link" routerLink="/cartorio/lista">Voltar</button>
           </div>
   
           <div class="area-botao-form " *ngIf="isLoggedIn && this.cartorioId !== 0 && this.cartorioId !== undefined">
             <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizar()"  [disabled]="!formularioValido()"> Atualizar</button>
-            <button mat-raised-button color="link" routerLink="/lista/cartorios">Voltar</button>
+            <button mat-raised-button color="link" routerLink="/cartorio/lista">Voltar</button>
           </div>
         </mat-card-content>
       </form>

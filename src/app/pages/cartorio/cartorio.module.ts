@@ -12,12 +12,18 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import {MatSelectModule} from '@angular/material/select';
+import { RouterModule, Routes } from '@angular/router';
+import { authGuard } from '../../auth/auth.guard';
 
-
+const routes: Routes = [
+  { path: 'form/:id', component: CartorioFormComponent, canActivate: [authGuard] },
+  { path: 'form/:id/:tela', component: CartorioFormComponent, canActivate: [authGuard] },
+  { path: 'novo', component: CartorioFormComponent, canActivate: [authGuard] },
+  { path: 'lista', component: CartorioGridComponent, canActivate: [authGuard] },
+];
 @NgModule({
   declarations: [CartorioFormComponent, CartorioGridComponent],
   imports: [
-    AppRoutingModule,
     CommonModule,
     FormsModule,
     MatInputModule,
@@ -28,7 +34,8 @@ import {MatSelectModule} from '@angular/material/select';
     MatTabsModule,
     MatCardModule,
     MatAutocompleteModule,
-    MatSelectModule
+    MatSelectModule,
+    RouterModule.forChild(routes)
   ]
 })
 export class CartorioModule { }

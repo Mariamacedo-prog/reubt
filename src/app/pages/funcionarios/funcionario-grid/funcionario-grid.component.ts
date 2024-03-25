@@ -14,7 +14,7 @@ export class FuncionarioGridComponent {
   searchTerm: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService) {}
   adicionarNovoFuncionario() {
-    this.router.navigate(["/novo/funcionario"]);
+    this.router.navigate(["/funcionario/novo"]);
   }
  
   ngOnInit(): void {
@@ -39,11 +39,11 @@ export class FuncionarioGridComponent {
   }
 
   visualizarItem(element: any){
-    this.router.navigate(["/funcionario/" + element.id + "/visualizar"]);
+    this.router.navigate(["/funcionario/form/" + element.id + "/visualizar"]);
   }
 
   editarItem(element: any){
-    this.router.navigate(["/funcionario/" + element.id]);
+    this.router.navigate(["/funcionario/form/" + element.id]);
   }
 
   deletarItem(element: any){

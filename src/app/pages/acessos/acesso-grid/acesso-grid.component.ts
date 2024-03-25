@@ -36,7 +36,7 @@ export class AcessoGridComponent {
   }
 
   adicionarNovo() {
-    this.router.navigate(["/novo/acesso"]);
+    this.router.navigate(["/acesso/novo"]);
   }
   
   procurar() {
@@ -47,7 +47,7 @@ export class AcessoGridComponent {
   }
 
   adicionarNovoGrupo() {
-    this.router.navigate(["/novo/acesso"]);
+    this.router.navigate(["/acesso/novo"]);
   }
   
   procurarGrupo() {
@@ -58,11 +58,11 @@ export class AcessoGridComponent {
   }
 
   visualizarItem(element: any){
-    this.router.navigate(["/usuario/" + element.usuario.id + "/visualizar"]);
+    this.router.navigate(["/usuario/form/" + element.usuario.id + "/visualizar"]);
   }
 
   editarItem(element: any){
-    this.router.navigate(["/usuario/" + element.usuario.id]);
+    this.router.navigate(["/usuario/form/" + element.usuario.id]);
   }
 
   deletarItem(element: any){

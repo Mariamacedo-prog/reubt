@@ -11,12 +11,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { RouterModule, Routes } from '@angular/router';
+import { authGuard } from '../../auth/auth.guard';
+
+const routes: Routes = [
+  { path: 'form/:id', component: FuncionarioFormComponent, canActivate: [authGuard] },
+  { path: 'form/:id/:tela', component: FuncionarioFormComponent, canActivate: [authGuard] },
+  { path: 'novo', component: FuncionarioFormComponent, canActivate: [authGuard] },
+  { path: 'lista', component: FuncionarioGridComponent, canActivate: [authGuard] }
+];
 
 
 @NgModule({
   declarations: [FuncionarioGridComponent, FuncionarioFormComponent ],
   imports: [
-    AppRoutingModule,
     CommonModule,
     FormsModule,
     MatInputModule,
@@ -26,7 +34,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatIconModule,
     MatTabsModule,
     MatCardModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    RouterModule.forChild(routes)
   ]
 })
 export class FuncionariosModule { }

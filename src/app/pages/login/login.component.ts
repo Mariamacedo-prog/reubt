@@ -25,7 +25,7 @@ export class LoginComponent {
       if (this.authService.isLoggedIn) {
         const redirectUrl = this.authService.redirectUrl
           ? this.authService.redirectUrl
-          : '/lista/usuarios';
+          : '/usuario/lista';
         this.router.navigate([redirectUrl]);
       }else{
         this.toolboxService.showTooltip('error', 'Usuário ou senha incorreta!', 'ERRO!');

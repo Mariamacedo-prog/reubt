@@ -15,12 +15,20 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { InputfileModule } from '../../components/inputfile/inputfile.module';
+import { RouterModule, Routes } from '@angular/router';
+import { authGuard } from '../../auth/auth.guard';
 
+  const routes: Routes = [
+  { path: 'form/:id', component: ContratosFormComponent, canActivate: [authGuard] },
+  { path: 'form/:id/:tela', component: ContratosFormComponent, canActivate: [authGuard] },
+  { path: 'novo', component: ContratosFormComponent, canActivate: [authGuard] },
+  { path: 'lista', component: ContratosGridComponent, canActivate: [authGuard] },
+];
+  
 
 @NgModule({
   declarations: [ ContratosGridComponent, ContratosFormComponent ],
   imports: [
-    AppRoutingModule,
     CommonModule,
     FormsModule,
     MatInputModule,
@@ -34,7 +42,8 @@ import { InputfileModule } from '../../components/inputfile/inputfile.module';
     MatDatepickerModule,
     MatNativeDateModule,
     MatAutocompleteModule,
-    InputfileModule 
+    InputfileModule ,
+    RouterModule.forChild(routes)
   ]
 })
 export class ContratosModule { }

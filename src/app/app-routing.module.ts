@@ -27,65 +27,35 @@ const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent},
 
-  //usuario
-  { path: 'novo/cadastro/usuario', component: UsuarioFormComponent},
-  { path: 'usuario/:id', component: UsuarioFormComponent, canActivate: [authGuard] },
-  { path: 'usuario/:id/:tela', component: UsuarioFormComponent, canActivate: [authGuard] },
-  { path: 'cadastrar/usuario', component: UsuarioFormComponent, canActivate: [authGuard] },
-  { path: 'lista/usuarios', component: UsuarioGridComponent, canActivate: [authGuard] },
+  // Rotas de prefeitura
+  { path: 'prefeitura', loadChildren: () => import('./pages/prefeitura/prefeitura.module').then(m => m.PrefeituraModule) },
 
-  //funcionario
-  { path: 'funcionario/:id', component: FuncionarioFormComponent, canActivate: [authGuard] },
-  { path: 'funcionario/:id/:tela', component: FuncionarioFormComponent, canActivate: [authGuard] },
-  { path: 'novo/funcionario', component: FuncionarioFormComponent, canActivate: [authGuard] },
-  { path: 'lista/funcionarios', component: FuncionarioGridComponent, canActivate: [authGuard] },
+  // Rotas de usuario
+  { path: 'usuario', loadChildren: () => import('./pages/usuarios/usuarios.module').then(m => m.UsuariosModule) },
 
-  //contratante
-  { path: 'contratante/:id', component: ContratanteFormComponent, canActivate: [authGuard] },
-  { path: 'contratante/:id/:tela', component: ContratanteFormComponent, canActivate: [authGuard] },
-  { path: 'novo/contratante', component: ContratanteFormComponent, canActivate: [authGuard] },
-  { path: 'lista/contratantes', component: ContratanteGridComponent, canActivate: [authGuard] },
+  // Rotas de funcionario
+  { path: 'funcionario', loadChildren: () => import('./pages/funcionarios/funcionarios.module').then(m => m.FuncionariosModule) },
 
-  //vendedor
-  { path: 'vendedor/:id', component: VendedorFormComponent, canActivate: [authGuard] },
-  { path: 'vendedor/:id/:tela', component: VendedorFormComponent, canActivate: [authGuard] },
-  { path: 'novo/vendedor', component: VendedorFormComponent, canActivate: [authGuard] },
-  { path: 'lista/vendedores', component: VendedorGridComponent, canActivate: [authGuard] },
+  // Rotas de contratante
+  { path: 'contratante', loadChildren: () => import('./pages/contratantes/contratantes.module').then(m => m.ContratantesModule) },
+  
+  // Rotas de vendedor
+  { path: 'vendedor', loadChildren: () => import('./pages/vendedores/vendedores.module').then(m => m.VendedoresModule) },
 
-  //prefeitura
-  { path: 'prefeitura/:id', component: PrefeituraFormComponent, canActivate: [authGuard] },
-  { path: 'prefeitura/:id/:tela', component: PrefeituraFormComponent, canActivate: [authGuard] },
-  { path: 'nova/prefeitura', component: PrefeituraFormComponent, canActivate: [authGuard] },
-  { path: 'lista/prefeituras', component: PrefeituraGridComponent, canActivate: [authGuard] },
+  // Rotas de acesso
+  { path: 'acesso', loadChildren: () => import('./pages/acessos/acessos.module').then(m => m.AcessosModule) },
 
-  //acessos
-  { path: 'acesso/permissao/usuario/:id', component: AcessoFormComponent, canActivate: [authGuard] },
-  { path: 'acesso/adicionar/grupo/:id', component: AcessoFormComponent, canActivate: [authGuard] },
-  { path: 'novo/acesso', component: AcessoFormComponent, canActivate: [authGuard] },
-  { path: 'lista/acessos', component: AcessoGridComponent, canActivate: [authGuard] },
-   //contratos
- { path: 'contratos/:id', component: ContratanteFormComponent, canActivate: [authGuard] },
- { path: 'contratos/:id/:tela', component: ContratosFormComponent, canActivate: [authGuard] },
- { path: 'novo/contratos', component: ContratosFormComponent, canActivate: [authGuard] },
- { path: 'lista/contratos', component: ContratosGridComponent, canActivate: [authGuard] },
-    
- //vendasPagamentos
-    { path: 'vendasPagamentos/:id', component: VendaPagamentoFormComponent, canActivate: [authGuard] },
-    { path: 'vendasPagamentos/:id/:tela', component: VendaPagamentoFormComponent, canActivate: [authGuard] },
-    { path: 'novo/vendasPagamentos', component: VendaPagamentoFormComponent, canActivate: [authGuard] },
-    { path: 'lista/vendasPagamentos', component: VendaPagamentoGridComponent, canActivate: [authGuard] },
+  // Rotas de contrato
+  { path: 'contrato', loadChildren: () => import('./pages/contratos/contratos.module').then(m => m.ContratosModule) },
 
-  //cartorio
-  { path: 'cartorio/:id', component: CartorioFormComponent, canActivate: [authGuard] },
-  { path: 'cartorio/:id/:tela', component: CartorioFormComponent, canActivate: [authGuard] },
-  { path: 'novo/cartorio', component: CartorioFormComponent, canActivate: [authGuard] },
-  { path: 'lista/cartorios', component: CartorioGridComponent, canActivate: [authGuard] },
+  // Rotas de vendasPagamentos
+  { path: 'vendasPagamentos', loadChildren: () => import('./pages/vendas-pagamentos/vendas-pagamentos.module').then(m => m.VendaPagamentoModule) },
 
-  //cartorio
-  { path: 'imovel/:id', component: ImovelFormComponent, canActivate: [authGuard] },
-  { path: 'imovel/:id/:tela', component: ImovelFormComponent, canActivate: [authGuard] },
-  { path: 'novo/imovel', component: ImovelFormComponent, canActivate: [authGuard] },
-  { path: 'lista/imovel', component: ImovelGridComponent, canActivate: [authGuard] }
+  // Rotas de cartorio
+  { path: 'cartorio', loadChildren: () => import('./pages/cartorio/cartorio.module').then(m => m.CartorioModule) },
+
+  // Rotas de imovel
+  { path: 'imovel', loadChildren: () => import('./pages/imoveis/imovel.module').then(m => m.ImovelModule) },
 ];
 
 

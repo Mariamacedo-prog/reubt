@@ -111,7 +111,7 @@ export class VendedorFormComponent {
 
       this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
 
-      this.router.navigate(['/lista/vendedores']);
+      this.router.navigate(['/vendedor/lista']);
     }
   }
 
@@ -155,7 +155,7 @@ export class VendedorFormComponent {
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
 
       this.toolboxService.showTooltip('success', 'Cadastro atualizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/lista/vendedores']);
+      this.router.navigate(['/vendedor/lista']);
     }
   }
 

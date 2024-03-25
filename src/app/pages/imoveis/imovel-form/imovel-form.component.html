@@ -196,12 +196,12 @@
   
         <div class="area-botao-form " *ngIf="isLoggedIn && this.imovelId === 0 || this.imovelId === undefined">
           <button mat-raised-button color="primary" (click)="cadastrar()" [disabled]="!formularioValido()">Cadastrar</button>
-          <button  mat-raised-button color="link" routerLink="/lista/prefeituras">Voltar</button>
+          <button  mat-raised-button color="link" routerLink="/prefeitura/lista">Voltar</button>
         </div>
 
         <div class="area-botao-form " *ngIf="isLoggedIn && this.imovelId !== 0 && this.imovelId !== undefined">
           <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizar()"  [disabled]="!formularioValido()"> Atualizar</button>
-          <button mat-raised-button color="link" routerLink="/lista/prefeituras">Voltar</button>
+          <button mat-raised-button color="link" routerLink="/prefeitura/lista">Voltar</button>
         </div>
       </mat-card-content>
     </form>

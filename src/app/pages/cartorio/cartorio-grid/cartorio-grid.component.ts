@@ -14,7 +14,7 @@ export class CartorioGridComponent {
   searchTerm: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService) {}
   adicionarNovaCartorio() {
-    this.router.navigate(["/novo/cartorio"]);
+    this.router.navigate(["/cartorio/novo"]);
   }
  
   ngOnInit(): void {
@@ -39,11 +39,11 @@ export class CartorioGridComponent {
   }
 
   visualizarItem(element: any){
-    this.router.navigate(["/cartorio/" + element.id + "/visualizar"]);
+    this.router.navigate(["/cartorio/form/" + element.id + "/visualizar"]);
   }
 
   editarItem(element: any){
-    this.router.navigate(["/cartorio/" + element.id]);
+    this.router.navigate(["/cartorio/form/" + element.id]);
   }
 
   deletarItem(element: any){

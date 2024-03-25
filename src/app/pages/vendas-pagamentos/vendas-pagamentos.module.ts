@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VendaPagamentoGridComponent } from './venda-pagamento-grid/venda-pagamento-grid.component';
 import { VendaPagamentoFormComponent } from './venda-pagamento-form/venda-pagamento-form.component';
-import { AppRoutingModule } from '../../app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,12 +14,19 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { InputfileModule } from '../../components/inputfile/inputfile.module';
+import { RouterModule, Routes } from '@angular/router';
+import { authGuard } from '../../auth/auth.guard';
 
+const routes: Routes = [
+   { path: 'form/:id', component: VendaPagamentoFormComponent, canActivate: [authGuard] },
+   { path: 'form/:id/:tela', component: VendaPagamentoFormComponent, canActivate: [authGuard] },
+   { path: 'novo', component: VendaPagamentoFormComponent, canActivate: [authGuard] },
+   { path: 'lista', component: VendaPagamentoGridComponent, canActivate: [authGuard] },
+];
 
 @NgModule({
   declarations: [ VendaPagamentoGridComponent, VendaPagamentoFormComponent ],
   imports: [
-    AppRoutingModule,
     CommonModule,
     FormsModule,
     MatInputModule,
@@ -34,7 +40,8 @@ import { InputfileModule } from '../../components/inputfile/inputfile.module';
     MatDatepickerModule,
     MatNativeDateModule,
     MatAutocompleteModule,
-    InputfileModule 
+    InputfileModule,
+    RouterModule.forChild(routes) 
   ]
 })
 export class VendaPagamentoModule { }

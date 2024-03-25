@@ -15,13 +15,18 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { InputfileModule } from '../../components/inputfile/inputfile.module';
+import { RouterModule, Routes } from '@angular/router';
+import { authGuard } from '../../auth/auth.guard';
 
-
-
+const routes: Routes = [
+  { path: 'form/:id', component: ImovelFormComponent, canActivate: [authGuard] },
+  { path: 'form/:id/:tela', component: ImovelFormComponent, canActivate: [authGuard] },
+  { path: 'novo', component: ImovelFormComponent, canActivate: [authGuard] },
+  { path: 'lista', component: ImovelGridComponent, canActivate: [authGuard] },
+];  
 @NgModule({
   declarations: [ImovelFormComponent, ImovelGridComponent],
   imports: [
-    AppRoutingModule,
     CommonModule,
     FormsModule,
     MatInputModule,
@@ -35,7 +40,8 @@ import { InputfileModule } from '../../components/inputfile/inputfile.module';
     MatDatepickerModule,
     MatNativeDateModule,
     MatAutocompleteModule,
-    InputfileModule
+    InputfileModule ,
+    RouterModule.forChild(routes)
   ]
 })
 export class ImovelModule { }

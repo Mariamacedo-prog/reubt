@@ -141,12 +141,12 @@
 
         <div class="area-botao-form " *ngIf="isLoggedIn && this.contratanteId === 0 || this.contratanteId === undefined">
           <button mat-raised-button color="primary" (click)="cadastrar()" [disabled]="!formularioValido()">Cadastrar</button>
-          <button  mat-raised-button color="link" routerLink="/lista/contratantes">Voltar</button>
+          <button  mat-raised-button color="link" routerLink="/contratante/lista">Voltar</button>
         </div>
 
         <div class="area-botao-form " *ngIf="isLoggedIn && this.contratanteId !== 0 && this.contratanteId !== undefined">
           <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizar()" [disabled]="!formularioValido()"> Atualizar</button>
-          <button mat-raised-button color="link" routerLink="/lista/contratantes">Voltar</button>
+          <button mat-raised-button color="link" routerLink="/contratante/lista">Voltar</button>
         </div>
     </mat-card-content>
   </mat-card>

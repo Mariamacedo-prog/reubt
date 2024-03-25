@@ -204,7 +204,7 @@ export class UsuarioFormComponent {
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
 
       this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/lista/usuarios']);
+      this.router.navigate(['/usuario/lista']);
     }
   }
 

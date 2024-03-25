@@ -14,7 +14,7 @@ export class PrefeituraGridComponent {
   searchTerm: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService) {}
   adicionarNovaPrefeitura() {
-    this.router.navigate(["/nova/prefeitura"]);
+    this.router.navigate(["/prefeitura/nova"]);
   }
  
   ngOnInit(): void {
@@ -39,11 +39,11 @@ export class PrefeituraGridComponent {
   }
 
   visualizarItem(element: any){
-    this.router.navigate(["/prefeitura/" + element.id + "/visualizar"]);
+    this.router.navigate(["/prefeitura/form/" + element.id + "/visualizar"]);
   }
 
   editarItem(element: any){
-    this.router.navigate(["/prefeitura/" + element.id]);
+    this.router.navigate(["/prefeitura/form/" + element.id]);
   }
 
   deletarItem(element: any){

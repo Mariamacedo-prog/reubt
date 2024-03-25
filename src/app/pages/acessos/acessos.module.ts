@@ -14,6 +14,15 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatListModule} from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
+import { RouterModule, Routes } from '@angular/router';
+import { authGuard } from '../../auth/auth.guard';
+
+const routes: Routes = [
+  { path: 'permissao/usuario/:id', component: AcessoFormComponent, canActivate: [authGuard] },
+  { path: 'adicionar/grupo/:id', component: AcessoFormComponent, canActivate: [authGuard] },
+  { path: 'novo', component: AcessoFormComponent, canActivate: [authGuard] },
+  { path: 'lista', component: AcessoGridComponent, canActivate: [authGuard] }
+];
 
 @NgModule({
   declarations: [
@@ -21,7 +30,6 @@ import { MatSelectModule } from '@angular/material/select';
     AcessoFormComponent
   ],
   imports: [
-    AppRoutingModule,
     CommonModule,
     FormsModule,
     MatInputModule,
@@ -34,7 +42,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatSelectModule,
     MatAutocompleteModule,
     MatChipsModule,
-    MatListModule
+    MatListModule,
+    RouterModule.forChild(routes)
   ]
 })
 export class AcessosModule { }

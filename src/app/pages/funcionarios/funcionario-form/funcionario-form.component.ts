@@ -127,7 +127,7 @@ export class FuncionarioFormComponent {
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
 
       this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/lista/funcionarios']);
+      this.router.navigate(['/funcionario/lista']);
     }
   }
 
@@ -171,7 +171,7 @@ export class FuncionarioFormComponent {
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
 
       this.toolboxService.showTooltip('success', 'Cadastro atualizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/lista/funcionarios']);
+      this.router.navigate(['/funcionario/lista']);
     }
   }
 

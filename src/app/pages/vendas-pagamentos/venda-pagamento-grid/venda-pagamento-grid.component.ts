@@ -14,7 +14,7 @@ export class VendaPagamentoGridComponent {
   searchTerm: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService) {}
   adicionarNovo() {
-    this.router.navigate(["/novo/vendasPagamentos"]);
+    this.router.navigate(["/vendasPagamentos/novo"]);
   }
 
   ngOnInit(): void {

@@ -14,7 +14,7 @@ export class ImovelGridComponent {
   searchTerm: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService) {}
   adicionarNovo() {
-    this.router.navigate(["/novo/imovel"]);
+    this.router.navigate(["/imovel/novo"]);
   }
 
   ngOnInit(): void {
@@ -37,11 +37,11 @@ export class ImovelGridComponent {
   }
 
   visualizarItem(element: any){
-    this.router.navigate(["/contratante/" + element.id + "/visualizar"]);
+    this.router.navigate(["/contratante/form/" + element.id + "/visualizar"]);
   }
 
   editarItem(element: any){
-    this.router.navigate(["/contratante/" + element.id]);
+    this.router.navigate(["/contratante/form/" + element.id]);
   }
 
   deletarItem(element: any){

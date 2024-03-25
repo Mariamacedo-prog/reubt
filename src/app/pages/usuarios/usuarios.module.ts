@@ -1,3 +1,4 @@
+import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -8,13 +9,19 @@ import { UsuarioGridComponent } from './usuario-grid/usuario-grid.component';
 import { UsuarioFormComponent } from './usuario-form/usuario-form.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
-import { AppRoutingModule } from '../../app-routing.module';
+import { authGuard } from '../../auth/auth.guard';
 
+const routes: Routes = [
+  { path: 'novo/cadastro', component: UsuarioFormComponent},
+  { path: 'novo', component: UsuarioFormComponent, canActivate: [authGuard] },
+  { path: 'form/:id', component: UsuarioFormComponent, canActivate: [authGuard] },
+  { path: 'form/:id/:tela', component: UsuarioFormComponent, canActivate: [authGuard] },
+  { path: 'lista', component: UsuarioGridComponent, canActivate: [authGuard] }
+];
 
 @NgModule({
-  declarations: [UsuarioGridComponent,UsuarioFormComponent ],
+  declarations: [ UsuarioGridComponent, UsuarioFormComponent ],
   imports: [
-    AppRoutingModule,
     CommonModule,
     FormsModule,
     MatInputModule,
@@ -22,7 +29,8 @@ import { AppRoutingModule } from '../../app-routing.module';
     ReactiveFormsModule,
     MatTableModule,
     MatIconModule,
-    MatCardModule
+    MatCardModule,
+    RouterModule.forChild(routes)
   ]
 })
 export class UsuariosModule { }

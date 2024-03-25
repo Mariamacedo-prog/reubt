@@ -14,7 +14,7 @@ export class ContratosGridComponent {
   searchTerm: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService) {}
   adicionarNovo() {
-    this.router.navigate(["/novo/contrato"]);
+    this.router.navigate(["/contrato/novo"]);
   }
 
   ngOnInit(): void {
@@ -37,11 +37,11 @@ export class ContratosGridComponent {
   }
 
   visualizarItem(element: any){
-    this.router.navigate(["/contratos/" + element.id + "/visualizar"]);
+    this.router.navigate(["/contratos/form/" + element.id + "/visualizar"]);
   }
 
   editarItem(element: any){
-    this.router.navigate(["/contratos/" + element.id]);
+    this.router.navigate(["/contratos/form/" + element.id]);
   }
 
   deletarItem(element: any){

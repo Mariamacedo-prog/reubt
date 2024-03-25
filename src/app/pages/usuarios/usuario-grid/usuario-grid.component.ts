@@ -15,7 +15,7 @@ export class UsuarioGridComponent {
   searchTerm: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService) {}
   adicionarNovoUsuario() {
-    this.router.navigate(["/cadastrar/usuario"]);
+    this.router.navigate(["/usuario/novo"]);
   }
 
   limparPesquisa() {
@@ -46,11 +46,11 @@ export class UsuarioGridComponent {
   }
 
   visualizarItem(element: any){
-    this.router.navigate(["/usuario/" + element.id + "/visualizar"]);
+    this.router.navigate(["/usuario/form/" + element.id + "/visualizar"]);
   }
 
   editarItem(element: any){
-    this.router.navigate(["/usuario/" + element.id]);
+    this.router.navigate(["/usuario/form/" + element.id]);
   }
 
   deletarItem(element: any){

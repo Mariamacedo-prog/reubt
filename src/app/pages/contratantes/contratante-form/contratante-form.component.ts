@@ -114,7 +114,7 @@ export class ContratanteFormComponent {
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
 
       this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/lista/contratantes']);
+      this.router.navigate(['/contratante/lista']);
     }
   }
 
@@ -157,7 +157,7 @@ export class ContratanteFormComponent {
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
 
       this.toolboxService.showTooltip('success', 'Cadastro atualizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/lista/contratantes']);
+      this.router.navigate(['/contratante/lista']);
     }
   }
 

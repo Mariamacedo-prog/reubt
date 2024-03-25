@@ -131,7 +131,7 @@ export class ImovelFormComponent {
 
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
       this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/lista/imovel']);
+      this.router.navigate(['/imovel/lista']);
     }
   }
 
@@ -164,7 +164,7 @@ export class ImovelFormComponent {
 
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
       this.toolboxService.showTooltip('success', 'Cadastro atualizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/lista/prefeituras']);
+      this.router.navigate(['/prefeitura/lista']);
     }
   }
 
