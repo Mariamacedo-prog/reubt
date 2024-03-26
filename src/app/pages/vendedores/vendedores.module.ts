@@ -13,6 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from '../../auth/auth.guard';
+import { InputfileModule } from '../../components/inputfile/inputfile.module';
 
 const routes: Routes = [
   { path: 'form/:id', component: VendedorFormComponent, canActivate: [authGuard] },
@@ -34,6 +35,7 @@ const routes: Routes = [
     MatTabsModule,
     MatCardModule,
     MatAutocompleteModule,
+    InputfileModule ,
     RouterModule.forChild(routes)
   ]
 })

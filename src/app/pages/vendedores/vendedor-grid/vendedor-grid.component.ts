@@ -8,7 +8,7 @@ import { ToolboxService } from '../../../components/toolbox/toolbox.service';
   styleUrl: './vendedor-grid.component.css'
 })
 export class VendedorGridComponent {
-  displayedColumns: string[] = ['nome', 'cpf', 'telefone', 'email', 'actions'];
+  displayedColumns: string[] = ['foto','nome', 'cpf', 'telefone', 'email', 'actions'];
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';

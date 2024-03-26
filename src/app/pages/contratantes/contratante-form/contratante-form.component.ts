@@ -21,6 +21,8 @@ export class ContratanteFormComponent {
   visualizar: boolean = false;
   formControls!: FormGroup;
 
+  filteredCartorios: any[] = [];
+  timeoutId: any;
   
   constructor(private toolboxService: ToolboxService, private router: Router, 
     private route: ActivatedRoute, private validateService: ValidateService,private formBuilder: FormBuilder) {}
@@ -33,6 +35,11 @@ export class ContratanteFormComponent {
     cetidaoCasamentoFile:[{base64: '',type: ''}],
     rgConjugueFile:[{base64: '',type: ''}],
     cpfConjugueFile:[{base64: '',type: ''}]
+  });
+
+  cartorioFormControls = this.formBuilder.group({
+    nome: ['', Validators.required],
+    cns: ['', [Validators.required, this.validateService.validateCNS]]
   });
 
 
@@ -49,6 +56,7 @@ export class ContratanteFormComponent {
       estadoCivil: ['', [Validators.required]],
       nomeConjugue: [''],
       nacionalidadeConjugue: [''],
+      cartorio: this.cartorioFormControls,
       anexos: this.anexosFormControl
     });
 
@@ -65,7 +73,7 @@ export class ContratanteFormComponent {
     const storedDb = localStorage.getItem('appDb');
     if (storedDb) {
       this.databaseInfo = JSON.parse(storedDb);
-      console.log(this.databaseInfo )
+     
       this.estadoCivil = this.databaseInfo.estadoCivil;
         if(this.contratanteId){
           if(this.databaseInfo.contratantes){
@@ -91,8 +99,9 @@ export class ContratanteFormComponent {
               this.formControls.get('anexos')?.get('rgConjugueFile')?.setValue(contratantePeloCpf.anexos.rgConjugueFile);
               this.formControls.get('anexos')?.get('cpfConjugueFile')?.setValue(contratantePeloCpf.anexos.cpfConjugueFile);
 
-              console.log('VALORES',this.formControls.getRawValue())
-              console.log('ANEXOS',this.formControls.get('anexos')?.getRawValue())
+              this.formControls.get('cartorio')?.get('nome')?.setValue(contratantePeloCpf.cartorio.nome);
+              this.formControls.get('cartorio')?.get('cns')?.setValue(contratantePeloCpf.cartorio.cns);
+
               if(contratantePeloCpf.estadoCivil == 'Casado' || contratantePeloCpf.estadoCivil == 'União Estável'){
                 this.isMarried = true;
               }
@@ -218,5 +227,39 @@ export class ContratanteFormComponent {
 
   saveFileBase64(event: { base64: string, type: string }, fileName: string){
     this.anexosFormControl?.get(fileName)?.patchValue(event);
+  }
+
+  handleKeyUp(event: any) {
+    clearTimeout(this.timeoutId); 
+    const nome = event.target.value.trim();
+    if (nome.length >= 3) {
+      this.timeoutId = setTimeout(() => {
+        this.buscarCartorios(nome);
+      }, 3000); 
+    } else {
+
+      this.filteredCartorios = [];
+    }
+  }
+  
+  buscarCartorios(nome: string) {
+    this.filteredCartorios = this.databaseInfo.cartorios.filter((item: any) => {
+
+      return item.cartorio.nome.toLowerCase().includes(nome.toLowerCase());
+    });
+
+    
+  }
+
+  selectedCartorio(item: any){
+    console.log(item.cartorio)
+    if(item.cartorio){
+      if(item.cartorio.nome){
+        this.formControls.get('cartorio')?.get('nome')?.setValue(item.cartorio.nome);
+      }
+      if(item.cartorio.cns){
+        this.formControls.get('cartorio')?.get('cns')?.setValue(item.cartorio.cns);
+      }
+    }
   }
 }

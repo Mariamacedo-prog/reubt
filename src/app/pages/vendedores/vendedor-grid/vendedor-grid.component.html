@@ -10,6 +10,17 @@
   </div>
 
   <table mat-table [dataSource]="dataSourceFilter" class="mat-elevation-z8">
+    <ng-container matColumnDef="foto" >
+      <th mat-header-cell *matHeaderCellDef  class="photo-cell" > Foto</th>
+      <td mat-cell *matCellDef="let element"  class="photo-cell" > 
+        <div *ngIf="element.foto.type != 'pdf' && element.foto.base64">
+          <img [src]="element.foto.base64" class="photo"  alt="Imagem Selecionada" />
+        </div>
+        <div *ngIf="element.foto.type == 'pdf'">
+          <img src="https://tse2.mm.bing.net/th?id=OIP.Sgwxt7I44kEVycO_ixKG2wHaHa&pid=Api&P=0&h=180" class="photo" alt="Imagem Selecionada" />
+        </div>
+      </td>
+    </ng-container>
     <ng-container matColumnDef="nome">
       <th mat-header-cell *matHeaderCellDef > Nome</th>
       <td mat-cell *matCellDef="let element" > {{element.nome}} </td>

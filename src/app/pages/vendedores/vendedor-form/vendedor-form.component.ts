@@ -35,7 +35,7 @@ export class VendedorFormComponent {
   cepFormControl = new FormControl('', [Validators.required]);
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   telefoneFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]);
-
+  fotoFormControl = new FormControl({base64: '',type: ''});
 
 
   ngOnInit(): void {
@@ -67,6 +67,7 @@ export class VendedorFormComponent {
             this.complementoFormControl.setValue(vendedorPeloCpf.complemento);
             this.cidadeUfFormControl.setValue(vendedorPeloCpf.cidadeUf);
             this.cepFormControl.setValue(vendedorPeloCpf.cep);
+            this.fotoFormControl.patchValue(vendedorPeloCpf.foto);
           }
         }
       }
@@ -104,7 +105,8 @@ export class VendedorFormComponent {
           "rg":this.rgFormControl.value,
           "email": this.emailFormControl.value,
           "telefone":this.telefoneFormControl.value,
-          "cep": this.cepFormControl.value
+          "cep": this.cepFormControl.value,
+          "foto": this.fotoFormControl.value
         }
       )
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
@@ -148,7 +150,8 @@ export class VendedorFormComponent {
           "bairro": this.bairroFormControl.value,
           "complemento": this.complementoFormControl.value,
           "cidadeUf": this.cidadeUfFormControl.value,
-          "cep": this.cepFormControl.value
+          "cep": this.cepFormControl.value,
+          "foto": this.fotoFormControl.value
         };
       }
 
@@ -224,5 +227,18 @@ export class VendedorFormComponent {
     this.ruaFormControl.setValue('');
     this.bairroFormControl.setValue('');
     this.cidadeUfFormControl.setValue('');
+  }
+
+  
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      console.log('Nome do arquivo:', file.name);
+      console.log('Tamanho do arquivo:', file.size);
+    }
+  }
+
+  saveFileBase64(event: { base64: string, type: string }){
+    this.fotoFormControl?.patchValue(event);
   }
 }

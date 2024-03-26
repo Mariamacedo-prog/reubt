@@ -10,6 +10,32 @@
       <mat-card-content >
         <mat-tab-group >
           <mat-tab  label="Informações" class="tab-1"> 
+            
+            <div class="inputs-row-form" formGroupName="cartorio">
+              <mat-form-field class="example-full-width">
+                <mat-label>Nome do Cartório</mat-label>
+                <input type="text"
+                      [readonly]="visualizar"
+                       matInput
+                       formControlName="nome"
+                       [matAutocomplete]="auto"
+                       (keyup)="handleKeyUp($event)">
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                    <mat-option *ngFor="let option of filteredCartorios" [value]="option.cartorio.nome" (onSelectionChange)="selectedCartorio(option)">
+                      {{option.cartorio.nome + " - CNS: " + option.cartorio.cns}}
+                    </mat-option>
+                </mat-autocomplete>
+     
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label>CNS do Cartório</mat-label>
+                <input  disabled matInput [value]="formControls.get('cartorio.cns')?.value"  />
+
+              </mat-form-field>
+            </div>
+                
+
             <div class="inputs-row-form">
               <mat-form-field>
                 <mat-label>Nome</mat-label>
@@ -24,12 +50,9 @@
                 <mat-error *ngIf="formControls?.get('cpf')?.hasError('cpfInvalido')">CPF inválido</mat-error>
                 <mat-error *ngIf="formControls?.get('cpf')?.hasError('required')">CPF inválido</mat-error>
               </mat-form-field>
-        
-  
             </div>
       
             <div class="inputs-row-form">
-    
               <mat-form-field>
                 <mat-label>RG</mat-label>
                 <input [readonly]="visualizar"  matInput formControlName="rg"  />
@@ -149,11 +172,7 @@
            </div>
   
           </mat-tab>
-  
-          <mat-tab label="Campo Anexo Produtos" [disabled]="true" class="tab-1"> 
-            
-  
-          </mat-tab>
+
         </mat-tab-group>
   
   

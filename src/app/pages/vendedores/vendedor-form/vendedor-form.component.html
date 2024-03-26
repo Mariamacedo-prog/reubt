@@ -7,14 +7,23 @@
     <mat-card-content >
       <mat-tab-group >
         <mat-tab  label="Dados Pessoais"> 
-          <mat-form-field>
-            <mat-label>Nome</mat-label>
-            <input [readonly]="visualizar"  matInput [formControl]="nomeFormControl" />
-            <mat-error *ngIf="nomeFormControl.hasError('required')">
-              Este campo é <strong>obrigatório</strong>
-            </mat-error>
-          </mat-form-field>
-    
+          <div class="inputs-row-form">
+            <app-file-input [nome]="'Foto: '" 
+                            [fileInput]="this.fotoFormControl.value ? this.fotoFormControl.value : {base64: '',type: ''}"
+                            (fileOutput)="saveFileBase64($event)" 
+                            (fileSelected)="onFileSelected($event)">
+            </app-file-input>
+         
+        
+       
+        </div>
+        <mat-form-field>
+          <mat-label>Nome</mat-label>
+          <input [readonly]="visualizar"  matInput [formControl]="nomeFormControl" />
+          <mat-error *ngIf="nomeFormControl.hasError('required')">
+            Este campo é <strong>obrigatório</strong>
+          </mat-error>
+        </mat-form-field>
           <div class="inputs-row-form">
             <mat-form-field>
               <mat-label>Email</mat-label>
