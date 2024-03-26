@@ -92,4 +92,14 @@ export class ValidateService {
 
     return null;
   }
+
+  validateCNS(control: FormControl): { [key: string]: any } | null {
+    const cns = control.value?.replace(/[^\dX]/g, '');
+
+    if (!cns || cns.length !== 6) {
+      return { 'cnsInvalid': true };
+    }
+
+    return null;
+  }
 }

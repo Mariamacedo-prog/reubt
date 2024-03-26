@@ -63,7 +63,7 @@ export class FuncionarioFormComponent {
             this.numeroFormControl.setValue(funcionarioPeloCpf.numero);
             this.bairroFormControl.setValue(funcionarioPeloCpf.bairro);
             this.complementoFormControl.setValue(funcionarioPeloCpf.complemento);
-            this.cidadeUfFormControl.setValue(funcionarioPeloCpf.cidade_uf);
+            this.cidadeUfFormControl.setValue(funcionarioPeloCpf.cidadeUf);
             this.cepFormControl.setValue(funcionarioPeloCpf.cep);
           }
         }
@@ -117,7 +117,7 @@ export class FuncionarioFormComponent {
           "numero": this.numeroFormControl.value,
           "bairro": this.bairroFormControl.value,
           "complemento": this.complementoFormControl.value,
-          "cidade_uf": this.cidadeUfFormControl.value,
+          "cidadeUf": this.cidadeUfFormControl.value,
           "usuario":this.usuarioFormControl.value,
           "email": this.emailFormControl.value,
           "telefone":this.telefoneFormControl.value,
@@ -160,7 +160,7 @@ export class FuncionarioFormComponent {
           "numero": this.numeroFormControl.value,
           "bairro": this.bairroFormControl.value,
           "complemento": this.complementoFormControl.value,
-          "cidade_uf": this.cidadeUfFormControl.value,
+          "cidadeUf": this.cidadeUfFormControl.value,
           "usuario":this.usuarioFormControl.value,
           "email": this.emailFormControl.value,
           "telefone":this.telefoneFormControl.value,

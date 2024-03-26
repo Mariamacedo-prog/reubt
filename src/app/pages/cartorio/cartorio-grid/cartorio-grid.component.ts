@@ -8,7 +8,7 @@ import { ToolboxService } from '../../../components/toolbox/toolbox.service';
   styleUrl: './cartorio-grid.component.css'
 })
 export class CartorioGridComponent {
-  displayedColumns: string[] = ['nome', 'cnpj', 'cargo', 'cidade', 'email', 'telefone', 'actions'];
+  displayedColumns: string[] = ['nome', 'cnpj', 'cns', 'cargo', 'cidade', 'email', 'telefone', 'actions'];
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';

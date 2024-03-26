@@ -56,6 +56,7 @@ const routes: Routes = [
 
   // Rotas de imovel
   { path: 'imovel', loadChildren: () => import('./pages/imoveis/imovel.module').then(m => m.ImovelModule) },
+
 ];
 
 

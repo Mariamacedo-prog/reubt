@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,25 +19,39 @@ export class ContratanteFormComponent {
   options: string[] = [];
   filteredOptions: Observable<string[]> = of([]);
   visualizar: boolean = false;
+  formControls!: FormGroup;
 
   
   constructor(private toolboxService: ToolboxService, private router: Router, 
-    private route: ActivatedRoute, private validateService: ValidateService) {}
+    private route: ActivatedRoute, private validateService: ValidateService,private formBuilder: FormBuilder) {}
 
-  nomeFormControl = new FormControl('', Validators.required);
-  cpfFormControl = new FormControl('', [Validators.required, this.validateService.validateCPF]);
-  rgFormControl = new FormControl('', [Validators.required, this.validateService.validateRG]);
-  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
-  telefoneFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]);
-  nacionalidadeFormControl = new FormControl('', [Validators.required]);
-  profissaoFormControl = new FormControl('', [Validators.required]);
-  estadoCivilFormControl = new FormControl('', [Validators.required]);
-  nomeConjugueFormControl = new FormControl('');
-  nacionalidadeConjugueFormControl = new FormControl('');
-
+  anexosFormControl = this.formBuilder.group({
+    rgFile: [{base64: '',type: ''}, Validators.required],
+    cpfFile: [{base64: '',type: ''}, Validators.required],
+    comprovanteAquisicaoImovelFile: [{base64: '',type: ''}, Validators.required],
+    comprovanteEnderecofile: [{base64: '',type: ''}, Validators.required],
+    cetidaoCasamentoFile:[{base64: '',type: ''}],
+    rgConjugueFile:[{base64: '',type: ''}],
+    cpfConjugueFile:[{base64: '',type: ''}]
+  });
 
 
   ngOnInit(): void {
+    this.formControls = this.formBuilder.group({
+      id: [0, Validators.required],
+      nome: ['', Validators.required],
+      cpf: ['', [Validators.required, this.validateService.validateCPF]],
+      rg: ['', [Validators.required, this.validateService.validateRG]],
+      email: ['', [Validators.required, Validators.email]],
+      telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
+      nacionalidade: ['', [Validators.required]],
+      profissao: ['', [Validators.required]],
+      estadoCivil: ['', [Validators.required]],
+      nomeConjugue: [''],
+      nacionalidadeConjugue: [''],
+      anexos: this.anexosFormControl
+    });
+
     this.route.params.subscribe(params => {
        this.contratanteId = params['id'];
 
@@ -57,17 +71,28 @@ export class ContratanteFormComponent {
           if(this.databaseInfo.contratantes){
             const contratantePeloCpf = this.databaseInfo.contratantes.find((contratante: any) => contratante.id == this.contratanteId);
             if(contratantePeloCpf){
-              this.nomeFormControl.setValue(contratantePeloCpf.nome);
-              this.cpfFormControl.setValue(contratantePeloCpf.cpf);
-              this.rgFormControl.setValue(contratantePeloCpf.rg);
-              this.emailFormControl.setValue(contratantePeloCpf.email);
-              this.telefoneFormControl.setValue(contratantePeloCpf.telefone);
-              this.nacionalidadeFormControl.setValue(contratantePeloCpf.nacionalidade);
-              this.profissaoFormControl.setValue(contratantePeloCpf.profissao);
-              this.estadoCivilFormControl.setValue(contratantePeloCpf.estadoCivil);
-              this.nomeConjugueFormControl.setValue(contratantePeloCpf.nomeConjugue);
-              this.nacionalidadeConjugueFormControl.setValue(contratantePeloCpf.nacionalidadeConjugue);
+              this.formControls?.get('id')?.setValue(contratantePeloCpf.id);
+              this.formControls?.get('nome')?.setValue(contratantePeloCpf.nome);
+              this.formControls?.get('cpf')?.setValue(contratantePeloCpf.cpf);
+              this.formControls?.get('rg')?.setValue(contratantePeloCpf.rg);
+              this.formControls?.get('email')?.setValue(contratantePeloCpf.email);
+              this.formControls?.get('telefone')?.setValue(contratantePeloCpf.telefone);
+              this.formControls?.get('nacionalidade')?.setValue(contratantePeloCpf.nacionalidade);
+              this.formControls?.get('profissao')?.setValue(contratantePeloCpf.profissao);
+              this.formControls?.get('estadoCivil')?.setValue(contratantePeloCpf.estadoCivil);
+              this.formControls?.get('nomeConjugue')?.setValue(contratantePeloCpf.nomeConjugue);
+              this.formControls?.get('nacionalidadeConjugue')?.setValue(contratantePeloCpf.nacionalidadeConjugue);
 
+              this.formControls.get('anexos')?.get('rgFile')?.setValue(contratantePeloCpf.anexos.rgFile);
+              this.formControls.get('anexos')?.get('cpfFile')?.setValue(contratantePeloCpf.anexos.cpfFile);
+              this.formControls.get('anexos')?.get('comprovanteAquisicaoImovelFile')?.setValue(contratantePeloCpf.anexos.comprovanteAquisicaoImovelFile);
+              this.formControls.get('anexos')?.get('comprovanteEnderecofile')?.setValue(contratantePeloCpf.anexos.comprovanteEnderecofile);
+              this.formControls.get('anexos')?.get('cetidaoCasamentoFile')?.setValue(contratantePeloCpf.anexos.cetidaoCasamentoFile);
+              this.formControls.get('anexos')?.get('rgConjugueFile')?.setValue(contratantePeloCpf.anexos.rgConjugueFile);
+              this.formControls.get('anexos')?.get('cpfConjugueFile')?.setValue(contratantePeloCpf.anexos.cpfConjugueFile);
+
+              console.log('VALORES',this.formControls.getRawValue())
+              console.log('ANEXOS',this.formControls.get('anexos')?.getRawValue())
               if(contratantePeloCpf.estadoCivil == 'Casado' || contratantePeloCpf.estadoCivil == 'União Estável'){
                 this.isMarried = true;
               }
@@ -75,7 +100,6 @@ export class ContratanteFormComponent {
           }
         }
     }
-    
   }
 
   cadastrar() {
@@ -84,32 +108,22 @@ export class ContratanteFormComponent {
       this.databaseInfo = JSON.parse(storedDb);
     }
     if(this.databaseInfo.contratantes){
-      const contratantePeloCpf = this.databaseInfo.contratantes.find((contratante: any) => contratante.cpf == this.cpfFormControl.value);
+      const contratantePeloCpf = this.databaseInfo.contratantes.find((contratante: any) => contratante.cpf == this.formControls?.get('cpf')?.value);
       if(contratantePeloCpf){
         this.toolboxService.showTooltip('error', 'contratante com CPF já existe na base de dados!', 'ERRO CPF!');
         return;
       }
 
-      const contratantePeloEmail = this.databaseInfo.contratantes.find((contratante: any) => contratante.email == this.emailFormControl.value);
+      const contratantePeloEmail = this.databaseInfo.contratantes.find((contratante: any) => contratante.email == this.formControls?.get('email')?.value);
       if(contratantePeloEmail){
         this.toolboxService.showTooltip('error', 'contratante com E-mail já existe na base de dados!', 'ERRO CPF!');
         return;
       }
 
+      this.formControls?.get('id')?.setValue(Math.floor(Math.random() * 100000));
+
       this.databaseInfo.contratantes.push(
-        {
-          id: Math.floor(Math.random() * 100000),
-          nome: this.nomeFormControl.value,
-          cpf: this.cpfFormControl.value,
-          rg: this.rgFormControl.value,
-          email: this.emailFormControl.value,
-          telefone: this.telefoneFormControl.value,
-          nacionalidade: this.nacionalidadeFormControl.value,
-          profissao: this.profissaoFormControl.value,
-          estadoCivil: this.estadoCivilFormControl.value,
-          nomeConjugue: this.nomeConjugueFormControl.value,
-          nacionalidadeConjugue: this.nacionalidadeConjugueFormControl.value
-        }
+       this.formControls.getRawValue()
       )
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
 
@@ -125,13 +139,13 @@ export class ContratanteFormComponent {
     }
     
     if(this.databaseInfo.contratantes){
-      const contratantePeloCpf = this.databaseInfo.contratantes.find((contratante: any) => contratante.cpf == this.cpfFormControl.value && contratante.id != this.contratanteId);
+      const contratantePeloCpf = this.databaseInfo.contratantes.find((contratante: any) => contratante.cpf == this.formControls?.get('cpf')?.value && contratante.id != this.contratanteId);
       if(contratantePeloCpf){
         this.toolboxService.showTooltip('error', 'contratante com CPF já existe na base de dados!', 'ERRO CPF!');
         return;
       }
 
-      const contratantePeloEmail = this.databaseInfo.contratantes.find((contratante: any) => contratante.email == this.emailFormControl.value && contratante.id != this.contratanteId);
+      const contratantePeloEmail = this.databaseInfo.contratantes.find((contratante: any) => contratante.email == this.formControls?.get('email')?.value && contratante.id != this.contratanteId);
       if(contratantePeloEmail){
         this.toolboxService.showTooltip('error', 'contratante com E-mail já existe na base de dados!', 'ERRO CPF!');
         return;
@@ -139,19 +153,7 @@ export class ContratanteFormComponent {
 
       const index = this.databaseInfo.contratantes.findIndex((item: any) => item.id == this.contratanteId);
       if (index !== -1) {
-        this.databaseInfo.contratantes[index] = {
-          id: this.contratanteId,
-          nome: this.nomeFormControl.value,
-          cpf: this.cpfFormControl.value,
-          rg: this.rgFormControl.value,
-          email: this.emailFormControl.value,
-          telefone: this.telefoneFormControl.value,
-          nacionalidade: this.nacionalidadeFormControl.value,
-          profissao: this.profissaoFormControl.value,
-          estadoCivil: this.estadoCivilFormControl.value,
-          nomeConjugue: this.nomeConjugueFormControl.value,
-          nacionalidadeConjugue: this.nacionalidadeConjugueFormControl.value
-        };
+        this.databaseInfo.contratantes[index] = this.formControls.getRawValue();
       }
 
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
@@ -161,38 +163,28 @@ export class ContratanteFormComponent {
     }
   }
 
-
   selectEstadoCivil() {
-    const estadoCivilAtual = this.estadoCivilFormControl.value?.toString();
+    const estadoCivilAtual = this.formControls?.get('estadoCivil')?.value?.toString();
     
     if (estadoCivilAtual === 'Casado' || estadoCivilAtual === 'União Estável') {
       this.isMarried = true;
-      this.nomeConjugueFormControl.setValidators([Validators.required]);
-      this.nacionalidadeConjugueFormControl.setValidators([Validators.required]);
+      this.formControls?.get('nomeConjugue')?.setValidators([Validators.required]);
+      this.formControls?.get('nacionalidadeConjugue')?.setValidators([Validators.required]);
     } else {
       this.isMarried = false;
-      this.nomeConjugueFormControl.clearValidators();
-      this.nacionalidadeConjugueFormControl.clearValidators();
-      this.nomeConjugueFormControl.setValue("");
-      this.nacionalidadeConjugueFormControl.setValue("");
+      this.formControls?.get('nomeConjugue')?.clearValidators();
+      this.formControls?.get('nacionalidadeConjugue')?.clearValidators();
+      this.formControls?.get('nomeConjugue')?.setValue("");
+      this.formControls?.get('nacionalidadeConjugue')?.setValue("");
     }
 
-    this.nomeConjugueFormControl.updateValueAndValidity();
-    this.nacionalidadeConjugueFormControl.updateValueAndValidity();
+    this.formControls?.get('nomeConjugue')?.updateValueAndValidity();
+    this.formControls?.get('nacionalidadeConjugue')?.updateValueAndValidity();
   }
 
   formularioValido(): boolean {
     return (
-      this.nomeFormControl.valid &&
-      this.cpfFormControl.valid &&
-      this.rgFormControl.valid &&
-      this.emailFormControl.valid &&
-      this.telefoneFormControl.valid &&
-      this.nacionalidadeFormControl.valid &&
-      this.profissaoFormControl.valid &&
-      this.estadoCivilFormControl.valid &&
-      this.nomeConjugueFormControl.valid &&
-      this.nacionalidadeConjugueFormControl.valid
+      this.formControls.valid
     );
   }
 
@@ -202,17 +194,16 @@ export class ContratanteFormComponent {
     }else{
       this.isLoggedIn = false;
     }
-
   }
   
   formatarTelefone() {
-    if(this.telefoneFormControl.value){
-      let telefone = this.telefoneFormControl.value.replace(/\D/g, '');
+    if(this.formControls?.get('telefone')?.value){
+      let telefone = this.formControls?.get('telefone')?.value.replace(/\D/g, '');
 
       if (telefone.length === 11) {
-        this.telefoneFormControl.setValue(`(${telefone.substring(0, 2)}) ${telefone.substring(2, 7)}-${telefone.substring(7)}`);
+        this.formControls?.get('telefone')?.setValue(`(${telefone.substring(0, 2)}) ${telefone.substring(2, 7)}-${telefone.substring(7)}`);
       } else if (telefone.length === 10) {
-        this.telefoneFormControl.setValue(`(${telefone.substring(0, 2)}) ${telefone.substring(2, 6)}-${telefone.substring(6)}`);
+        this.formControls?.get('telefone')?.setValue(`(${telefone.substring(0, 2)}) ${telefone.substring(2, 6)}-${telefone.substring(6)}`);
       }
     }
   }
@@ -222,7 +213,10 @@ export class ContratanteFormComponent {
     if (file) {
       console.log('Nome do arquivo:', file.name);
       console.log('Tamanho do arquivo:', file.size);
-      // Faça o que precisar com o arquivo aqui, como enviá-lo para um servidor, etc.
     }
+  }
+
+  saveFileBase64(event: { base64: string, type: string }, fileName: string){
+    this.anexosFormControl?.get(fileName)?.patchValue(event);
   }
 }

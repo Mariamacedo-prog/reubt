@@ -28,7 +28,16 @@
                   </mat-error>
                   <mat-error *ngIf="formControls.get('cartorio.cnpj')?.hasError('cnpjInvalido')">CNPJ inválido</mat-error>
                 </mat-form-field>
-  
+                
+                <mat-form-field>
+                  <mat-label>CNS</mat-label>
+                  <input [readonly]="visualizar"  matInput formControlName="cns" />
+                  <mat-error *ngIf="formControls.get('cartorio.cns')?.hasError('required')">
+                    Este campo é <strong>obrigatório</strong>
+                  </mat-error>
+                  <mat-error *ngIf="formControls.get('cartorio.cns')?.hasError('cnsInvalid')">CNS inválido</mat-error>
+                </mat-form-field>
+
                 <mat-form-field>
                   <mat-label>Telefone</mat-label>
                   <input [readonly]="visualizar"  matInput  formControlName="telefone" (input)="formatarTelefone()" />

@@ -65,7 +65,7 @@ export class VendedorFormComponent {
             this.numeroFormControl.setValue(vendedorPeloCpf.numero);
             this.bairroFormControl.setValue(vendedorPeloCpf.bairro);
             this.complementoFormControl.setValue(vendedorPeloCpf.complemento);
-            this.cidadeUfFormControl.setValue(vendedorPeloCpf.cidade_uf);
+            this.cidadeUfFormControl.setValue(vendedorPeloCpf.cidadeUf);
             this.cepFormControl.setValue(vendedorPeloCpf.cep);
           }
         }
@@ -100,7 +100,7 @@ export class VendedorFormComponent {
           "numero": this.numeroFormControl.value,
           "bairro": this.bairroFormControl.value,
           "complemento": this.complementoFormControl.value,
-          "cidade_uf": this.cidadeUfFormControl.value,
+          "cidadeUf": this.cidadeUfFormControl.value,
           "rg":this.rgFormControl.value,
           "email": this.emailFormControl.value,
           "telefone":this.telefoneFormControl.value,
@@ -147,7 +147,7 @@ export class VendedorFormComponent {
           "numero": this.numeroFormControl.value,
           "bairro": this.bairroFormControl.value,
           "complemento": this.complementoFormControl.value,
-          "cidade_uf": this.cidadeUfFormControl.value,
+          "cidadeUf": this.cidadeUfFormControl.value,
           "cep": this.cepFormControl.value
         };
       }

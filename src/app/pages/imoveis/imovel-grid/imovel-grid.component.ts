@@ -8,7 +8,7 @@ import { ToolboxService } from '../../../components/toolbox/toolbox.service';
   styleUrl: './imovel-grid.component.css'
 })
 export class ImovelGridComponent {
-  displayedColumns: string[] = ['nome', 'cpf', 'cidade', 'estado' , 'actions'];
+  displayedColumns: string[] = ['nome', 'cpf', 'cidade',  'nucleo', 'actions'];
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
@@ -21,27 +21,27 @@ export class ImovelGridComponent {
     setTimeout(() => {
       const storedDb = localStorage.getItem('appDb');
       if (storedDb) {
-        if(JSON.parse(storedDb).contratantes){
-          this.dataSource = JSON.parse(storedDb).contratantes;
-          this.dataSourceFilter = JSON.parse(storedDb).contratantes;
+        if(JSON.parse(storedDb).imoveis){
+          this.dataSource = JSON.parse(storedDb).imoveis;
+          this.dataSourceFilter = JSON.parse(storedDb).imoveis;
         }
       }
     }, 1000)
   }
 
   procurar() {
-    this.dataSourceFilter = this.dataSource.filter((contratante: any) => contratante.nome.includes(this.searchTerm) || contratante.cpf.includes(this.searchTerm));
+    this.dataSourceFilter = this.dataSource.filter((imovel: any) => imovel.contratante.nome.includes(this.searchTerm) || imovel.contratante.cpf.includes(this.searchTerm));
     if(this.searchTerm.length == 0){
       this.dataSourceFilter = this.dataSource;
     }
   }
 
   visualizarItem(element: any){
-    this.router.navigate(["/contratante/form/" + element.id + "/visualizar"]);
+    this.router.navigate(["/imovel/form/" + element.id + "/visualizar"]);
   }
 
   editarItem(element: any){
-    this.router.navigate(["/contratante/form/" + element.id]);
+    this.router.navigate(["/imovel/form/" + element.id]);
   }
 
   deletarItem(element: any){
@@ -50,15 +50,15 @@ export class ImovelGridComponent {
     if (storedDb) {
       databaseInfo = JSON.parse(storedDb);
     }
-    const index = databaseInfo.contratantes.findIndex((item: any) => item.id == element.id);
+    const index = databaseInfo.imoveis.findIndex((item: any) => item.id == element.id);
 
     if (index !== -1) {
-      databaseInfo.contratantes.splice(index, 1)
-      this.toolboxService.showTooltip('success', 'Contratante foi deletado com sucesso!', 'SUCESSO!');
+      databaseInfo.imoveis.splice(index, 1)
+      this.toolboxService.showTooltip('success', 'Imovel foi deletado com sucesso!', 'SUCESSO!');
     }
 
     localStorage.setItem('appDb', JSON.stringify(databaseInfo));
-    this.dataSourceFilter = databaseInfo.contratantes;
-    this.dataSource = databaseInfo.contratantes;
+    this.dataSourceFilter = databaseInfo.imoveis;
+    this.dataSource = databaseInfo.imoveis;
   }
 }

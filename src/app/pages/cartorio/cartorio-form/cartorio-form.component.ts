@@ -30,7 +30,8 @@ export class CartorioFormComponent {
     nome: ['', Validators.required],
     cnpj: ['', [Validators.required, this.validateService.validateCNPJ]],
     telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
-    email: ['', [Validators.required, Validators.email]]
+    email: ['', [Validators.required, Validators.email]],
+    cns:['', [Validators.required, this.validateService.validateCNS]]
   });
 
   enderecoFormControls = this.formBuilder.group({
@@ -87,6 +88,7 @@ export class CartorioFormComponent {
           this.formControls.get('cartorio')?.get('cnpj')?.setValue(item.cartorio.cnpj);
           this.formControls.get('cartorio')?.get('telefone')?.setValue(item.cartorio.telefone);
           this.formControls.get('cartorio')?.get('email')?.setValue(item.cartorio.email);
+          this.formControls.get('cartorio')?.get('cns')?.setValue(item.cartorio.cns);
 
           this.formControls.get('representante')?.get('nome')?.setValue(item.representante.nome);
           this.formControls.get('representante')?.get('estadoCivil')?.setValue(item.representante.estadoCivil);
@@ -115,17 +117,21 @@ export class CartorioFormComponent {
     if(this.databaseInfo.cartorios){
       const cartorioPeloCnpj = this.databaseInfo.cartorios.find((item: any) => item.cartorio.cnpj == this.formControls.get('cartorio')?.get('cnpj')?.value);
       if(cartorioPeloCnpj){
-        this.toolboxService.showTooltip('error', 'Cartorio com CNPJ já existe na base de dados!', 'ERRO CPF!');
+        this.toolboxService.showTooltip('error', 'Cartorio com CNPJ já existe na base de dados!', 'ERRO CNPJ!');
         return;
       }
 
       const cartorioPeloEmail = this.databaseInfo.cartorios.find((item: any) => item.cartorio.email == this.formControls.get('cartorio')?.get('email')?.value);
       if(cartorioPeloEmail){
-        this.toolboxService.showTooltip('error', 'Cartorio com E-mail já existe na base de dados!', 'ERRO CPF!');
+        this.toolboxService.showTooltip('error', 'Cartorio com E-mail já existe na base de dados!', 'ERRO E-MAIL!');
         return;
       }
 
-
+      const cartorioPeloCns = this.databaseInfo.cartorios.find((item: any) => item.cartorio.cns == this.formControls.get('cartorio')?.get('cns')?.value);
+      if(cartorioPeloCns){
+        this.toolboxService.showTooltip('error', 'Cartorio com CNS já existe na base de dados!', 'ERRO CNS!');
+        return;
+      }
 
       this.formControls.get('id')?.setValue(Math.floor(Math.random() * 100000));
 
@@ -149,13 +155,19 @@ export class CartorioFormComponent {
     if(this.databaseInfo.cartorios){
       const cartorioPeloCnpj = this.databaseInfo.cartorios.find((item: any) => item.cartorio.cnpj == this.formControls.get('cartorio')?.get('cnpj')?.value && item.id != this.cartorioId);
       if(cartorioPeloCnpj){
-        this.toolboxService.showTooltip('error', 'cartorio com CNPJ já existe na base de dados!', 'ERRO CPF!');
+        this.toolboxService.showTooltip('error', 'cartorio com CNPJ já existe na base de dados!', 'ERRO CNPJ!');
         return;
       }
 
       const cartorioPeloEmail = this.databaseInfo.cartorios.find((item: any) => item.cartorio.email == this.formControls.get('cartorio')?.get('email')?.value && item.id != this.cartorioId);
       if(cartorioPeloEmail){
-        this.toolboxService.showTooltip('error', 'cartorio com E-mail já existe na base de dados!', 'ERRO CPF!');
+        this.toolboxService.showTooltip('error', 'cartorio com E-mail já existe na base de dados!', 'ERRO E-mail!');
+        return;
+      }
+
+      const cartorioPeloCns = this.databaseInfo.cartorios.find((item: any) => item.cartorio.cns == this.formControls.get('cartorio')?.get('cns')?.value && item.id != this.cartorioId);
+      if(cartorioPeloCns){
+        this.toolboxService.showTooltip('error', 'cartorio com CNS já existe na base de dados!', 'ERRO CNS!');
         return;
       }
 
