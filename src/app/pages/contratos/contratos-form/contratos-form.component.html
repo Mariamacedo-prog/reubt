@@ -1,1 +1,89 @@
-<p>contratos-form works!</p>
+<div class="container-form">
+  <mat-card class="card-form " >
+    <mat-card-header>
+      <mat-card-title>Cadastro de Contrato</mat-card-title>
+    </mat-card-header>
+
+
+    <form [formGroup]="formControls">
+      <mat-card-content >
+        <div formGroupName="contratante">
+
+          <button (click)="gerarMatricula()" style="margin-left: 10px;" *ngIf="formControls.get('crf.numerocrf')?.value == 0" mat-stroked-button color="accent">Adicionar Matricula</button>
+          <mat-form-field>
+            <mat-label>CRF</mat-label>
+            <input disabled [readonly]="visualizar" matInput [value]="formControls.get('crf.numerocrf')?.value"/>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width"> 
+            <mat-label>CPF do Contratante</mat-label>
+            <input type="text"
+                  [readonly]="visualizar"
+                    matInput
+                    formControlName="cpf"
+                    [matAutocomplete]="autoCpf"
+                    (keyup)="handleKeyUpContratante($event)">
+            <mat-autocomplete autoActiveFirstOption #autoCpf="matAutocomplete">
+                <mat-option *ngFor="let option of filteredContratantes" [value]="option.cpf" (onSelectionChange)="selectContratante(option)">
+                  {{option.nome + " - " + option.cpf}}
+                </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        
+          <div class="inputs-row-form">
+            <mat-form-field>
+              <mat-label>Nome</mat-label>
+              <input disabled [readonly]="visualizar" matInput [value]="formControls.get('contratante.nome')?.value"/>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>RG</mat-label>
+              <input [readonly]="visualizar"  matInput disabled  [value]="formControls.get('contratante.rg')?.value" />
+            </mat-form-field> 
+          </div>
+        </div>
+        
+        <div class="inputs-row-form" formGroupName="cartorio">
+          <mat-form-field class="example-full-width">
+            <mat-label>Nome do Cartório</mat-label>
+            <input disabled matInput [value]="formControls.get('cartorio.nome')?.value" >
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>CNS do Cartório</mat-label>
+            <input  disabled matInput [value]="formControls.get('cartorio.cns')?.value"  />
+          </mat-form-field>
+        </div>
+
+        <!-- <iframe *ngIf="documentUrl" [src]="documentUrl" style="width: 800px; height: 600px;"></iframe> -->
+
+          <div class="area-botao-form " *ngIf="isLoggedIn && this.contratoId === 0 || this.contratoId === undefined">
+            <button mat-raised-button color="primary" (click)="cadastrar()" [disabled]="!formularioValido()">Cadastrar</button>
+            <button  mat-raised-button color="link" routerLink="/contrato/lista">Voltar</button>
+          </div>
+  
+          <div class="area-botao-form " *ngIf="isLoggedIn && this.contratoId !== 0 && this.contratoId !== undefined">
+     
+            <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizar()" [disabled]="!formularioValido()"> Atualizar</button>
+            <button mat-raised-button color="link" routerLink="/contrato/lista">Voltar</button>
+          </div>
+      </mat-card-content>
+    </form>
+    <button [disabled]="!formularioValido()" mat-stroked-button  color="primary" (click)="generateWordFile()">
+      <mat-icon>download</mat-icon>
+      Download Contrato
+    </button>
+  </mat-card>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -121,7 +121,7 @@
       "id": 1,
       "nome":"Celebadar",
       "nacionalidade":"brasileiro",
-      "estado_civil": "solteiro(a)",
+      "estadoCivil": "solteiro(a)",
       "profissao": "medica",
       "cpf": "1258494010085",
       "rg": "172631919",
@@ -172,7 +172,7 @@
       "id": 2,
       "nome":"Ce aasa asds asdsdsad",
       "nacionalidade":"brasileiro",
-      "estado_civil": "solteiro(a)",
+      "estadoCivil": "solteiro(a)",
       "profissao": "medica",
       "cpf": "28022009091",
       "rg": "243856726",
@@ -403,28 +403,35 @@
   "contratos":[
     {
       "id": 1, 
-      "endereco":{
-        "rua": "Rua Salvador Gianetti",
-        "numero": "12",
-        "bairro": "Guaianazes",
-        "complemento": "",
-        "cidade": "São Paulo ",
-        "estado": "São Paulo ",
-        "cep": "08410000"
-      },
-       "nome":"Marcela teste",
-        "cpf":"93733643089",
-     
-      "crf":{
-        "numerocrf":"9999999",
-        "crfentregue":"entregue",
-        "statusentrega":"entregue"
-      },
       "cartorio":{
         "nome":"Catorio name",
-        "cnpj":"22335935000161",
+        "cns":"123456"
+      },
+      "endereco":{
+        "rua": "Rua Conselheiro Ribas",
+        "numero": "399",
+        "bairro": "Bairro Vila Anastácio",
+        "complemento": "a",
+        "cidadeUf": "São Paulo / SP"
+      },
+      "contratante":{
+        "id": 1,
+        "nome":"Celebadar",
+        "nacionalidade":"brasileiro",
+        "estadoCivil": "solteiro(a)",
+        "cpf": "1258494010085",
+        "rg": "172631919",
         "telefone": "(11) 983475047",
-        "email": "prefeitura@org.com"
+        "email": "123@gmail.com"
+      },
+      "crf":{
+        "numerocrf":0,
+        "crfentregue":"",
+        "statusentrega":""
+      },
+      "empresa":{
+        "nome":"LC - REURB BRASIL Assessoria e consultoria Ltda",
+        "cnpj":"07.893.365/0001-31"
       }
     }
   ],
@@ -492,6 +499,19 @@
         "cep": "08410000",
         "nucleoInformal": "",
         "matricula": "1212"
+      }
+    }
+  ],
+  "empresa":[
+    {
+      "nome": "LC - REURB BRASIL Assessoria e consultoria Ltda",
+      "cnpj": "07.893.365/0001-31",
+      "endereco": {
+        "rua": "Rua Conselheiro Ribas",
+        "numero": "399",
+        "bairro": "Bairro Vila Anastácio",
+        "complemento": "a",
+        "cidadeUf": "São Paulo / SP"
       }
     }
   ]

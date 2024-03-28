@@ -12,6 +12,7 @@ export class InputfileComponent {
   maxNomeBotaoLength: number = 25;
   pdfSrc: any;
   imagemSrc: string | undefined;
+  @Input() accept: string = '.pdf,.jpg';
 
   @Input() fileInput: { base64: string, type: string }= { base64: '', type: '' };
   @Output() fileOutput: EventEmitter<{ base64: string, type: string }> = new EventEmitter<{ base64: string, type: string }>();

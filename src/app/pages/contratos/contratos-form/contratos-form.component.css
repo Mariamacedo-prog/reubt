@@ -1,0 +1,10 @@
+
+.input-file-row{
+  display: flex;
+  justify-content:space-between;
+}
+
+.div-column{
+  display: flex;
+  flex-direction: column;
+}

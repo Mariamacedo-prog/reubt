@@ -9,6 +9,7 @@
         <mat-tab  label="Dados Pessoais"> 
           <div class="inputs-row-form">
             <app-file-input [nome]="'Foto: '" 
+                            [accept]="'.jpg'"
                             [fileInput]="this.fotoFormControl.value ? this.fotoFormControl.value : {base64: '',type: ''}"
                             (fileOutput)="saveFileBase64($event)" 
                             (fileSelected)="onFileSelected($event)">

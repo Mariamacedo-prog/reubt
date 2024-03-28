@@ -8,7 +8,7 @@ import { ToolboxService } from '../../../components/toolbox/toolbox.service';
   styleUrl: './contratos-grid.component.css'
 })
 export class ContratosGridComponent {
-  displayedColumns: string[] = ['nome', 'cpf', 'cidade', 'estado' ,'statusEntrega', 'cartorio','crfEntregue','nCrf', 'actions'];
+  displayedColumns: string[] = ['nome', 'cpf', 'cidade', 'statusEntrega', 'cartorio','crfEntregue','nCrf', 'actions'];
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
@@ -30,18 +30,18 @@ export class ContratosGridComponent {
   }
 
   procurar() {
-    this.dataSourceFilter = this.dataSource.filter((contratos: any) => contratos.nome.includes(this.searchTerm) || contratos.cpf.includes(this.searchTerm));
+    this.dataSourceFilter = this.dataSource.filter((contrato: any) => contrato.nome.includes(this.searchTerm) || contrato.cpf.includes(this.searchTerm));
     if(this.searchTerm.length == 0){
       this.dataSourceFilter = this.dataSource;
     }
   }
 
   visualizarItem(element: any){
-    this.router.navigate(["/contratos/form/" + element.id + "/visualizar"]);
+    this.router.navigate(["/contrato/form/" + element.id + "/visualizar"]);
   }
 
   editarItem(element: any){
-    this.router.navigate(["/contratos/form/" + element.id]);
+    this.router.navigate(["/contrato/form/" + element.id]);
   }
 
   deletarItem(element: any){

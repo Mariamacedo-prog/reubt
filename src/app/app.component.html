@@ -9,30 +9,38 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  main {
+
+
+  .main {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    height: 100vh; 
     width: 100vw;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    box-sizing: inherit;
+    grid-column-gap: 20px;
+  }
+
+  .content {
+    overflow-y: auto; 
   }
 
   @media screen and (max-width: 800px) {
     main {
+      display: flex;
       flex-direction: column;
     }
     .menu-auth{
       padding-top: 70px;
     }
   }
-
 </style>
 
 
 <main class="main">
-  <app-menu class="menu-teste" (menuToggled)="onMenuToggled($event)"></app-menu>
-  <router-outlet class="content" [ngClass]="{'menu-auth': isLoggedIn, 'menu-open-margin': isMenuOpen, 'menu-closed-margin': !isMenuOpen}">
-  </router-outlet>
+  <app-menu (menuToggled)="onMenuToggled($event)"></app-menu>
+  <div class="content">
+    <router-outlet  [ngClass]="{'menu-auth': isLoggedIn, 'menu-open-margin': isMenuOpen, 'menu-closed-margin': !isMenuOpen}">
+    </router-outlet>
+  </div>
 </main>
 
 

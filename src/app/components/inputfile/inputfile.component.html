@@ -9,7 +9,8 @@
 
 <div class="input-file-area">
   <p class="input-file-titulo">{{nome}}</p>
-  <input type="file" accept=".pdf,.jpg" (change)="onFileSelected($event)" #fileInput style="display: none" />
+
+  <input type="file" [accept]="accept" (change)="onFileSelected($event)" #fileInput style="display: none" />
   <button ></button>
   <button mat-stroked-button color="primary" (click)="fileInput.click()">{{nomeBotao}}</button>
 </div>

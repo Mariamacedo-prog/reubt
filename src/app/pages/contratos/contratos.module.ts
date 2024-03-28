@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContratosGridComponent } from './contratos-grid/contratos-grid.component';
 import { ContratosFormComponent } from './contratos-form/contratos-form.component';
-import { AppRoutingModule } from '../../app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,6 +16,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { InputfileModule } from '../../components/inputfile/inputfile.module';
 import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from '../../auth/auth.guard';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
   const routes: Routes = [
   { path: 'form/:id', component: ContratosFormComponent, canActivate: [authGuard] },
@@ -43,6 +43,7 @@ import { authGuard } from '../../auth/auth.guard';
     MatNativeDateModule,
     MatAutocompleteModule,
     InputfileModule ,
+    NgxDocViewerModule,
     RouterModule.forChild(routes)
   ]
 })

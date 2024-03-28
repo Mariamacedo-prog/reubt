@@ -235,7 +235,7 @@ export class ContratanteFormComponent {
     if (nome.length >= 3) {
       this.timeoutId = setTimeout(() => {
         this.buscarCartorios(nome);
-      }, 3000); 
+      }, 2000); 
     } else {
 
       this.filteredCartorios = [];
@@ -244,11 +244,8 @@ export class ContratanteFormComponent {
   
   buscarCartorios(nome: string) {
     this.filteredCartorios = this.databaseInfo.cartorios.filter((item: any) => {
-
-      return item.cartorio.nome.toLowerCase().includes(nome.toLowerCase());
+      return item.cartorio.nome?.toLowerCase().includes(nome.toLowerCase());
     });
-
-    
   }
 
   selectedCartorio(item: any){
