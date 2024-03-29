@@ -19,6 +19,10 @@ export class AcessoFormComponent {
   telasPermitidas: { tela: string; nivel: any; }[] = [];
   arrayTelas: any = [];
 
+
+  timeoutId: any;
+  filteredCpf: any[] = [];
+  loadingCpf: boolean = false;
   constructor(private toolboxService: ToolboxService, private router: Router, 
     private route: ActivatedRoute, private formBuilder: FormBuilder,
     private validateService: ValidateService, 
@@ -152,5 +156,39 @@ export class AcessoFormComponent {
     this.formControls.get('grupo')?.get('id')?.setValue(selectedGroup.id);
 
     console.log('Selected Group:', this.formControls.getRawValue(),  this.formControls);
+  }
+
+  handleKeyUp(event: any){
+    this.loadingCpf = true;
+    clearTimeout(this.timeoutId); 
+    const nome = event.target.value.trim();
+    if (nome.length >= 3) {
+      this.timeoutId = setTimeout(() => {
+        this.buscarCpf(nome);
+      }, 2000); 
+    } else {
+
+      this.filteredCpf = [];
+    }
+  }
+
+  buscarCpf(cpf: string) {
+    this.filteredCpf = this.databaseInfo.usuarios.filter((item: any) => {
+      return item.cpf?.includes(cpf);
+    });
+    this.loadingCpf = false;
+  }
+
+  selectedCpf(option: any){
+    this.loadingCpf = false;
+    if(option){
+      if(option.nome){
+        this.formControls.get('usuario')?.get('nome')?.setValue(option.nome);
+      }
+      if(option.cpf){
+        this.formControls.get('usuario')?.get('cpf')?.setValue(option.cpf);
+      }
+    }
+    console.log(this.formControls.getRawValue);
   }
 }

@@ -20,8 +20,12 @@ export class FuncionarioFormComponent {
   isLoggedIn: boolean = false;
   databaseInfo: any = {};
   options: string[] = [];
-  filteredOptions: Observable<string[]> = of([]);
+  filteredOptions: any[] = [];
   visualizar: boolean = false;
+
+  timeoutId: any;
+  filteredUsuario: any[] = [];
+  loadingUsuario: boolean = false;
 
   nomeFormControl = new FormControl('', Validators.required);
   cpfFormControl = new FormControl('', [Validators.required, this.validateService.validateCPF]);
@@ -71,24 +75,38 @@ export class FuncionarioFormComponent {
     }
   }
 
-  buscarUsuario() {
+  buscarUsuario(nome: string) {
     if (this.usuarioFormControl.value) {
       const filterValue = this.usuarioFormControl.value.toString().toLowerCase();
 
       const storedDb = localStorage.getItem('appDb');
       if (storedDb) {
         this.databaseInfo = JSON.parse(storedDb);
-        if (this.databaseInfo.usuarios) {
-          this.filteredOptions = of(this.databaseInfo.usuarios
-            .filter((option: any) =>
-              option.nome.toLowerCase().includes(filterValue)
-            )
-            .map((option: any) => option.nome)
-          );
-        }
+
+        this.filteredOptions = this.databaseInfo.usuarios.filter((item: any) => {
+          return item.nome.toLowerCase().includes(nome.toLowerCase());
+        });
+        this.loadingUsuario = false;
       }
     }
+ 
   }
+
+  handleKeyUp(event: any){
+    this.loadingUsuario = true;
+    clearTimeout(this.timeoutId); 
+    let nome = event.target.value.trim();
+    if (nome.length >= 3) {
+      this.timeoutId = setTimeout(() => {
+        this.buscarUsuario(nome);
+      }, 2000); 
+    } else {
+
+      this.filteredUsuario = [];
+    }
+  }
+
+
 
   cadastrar() {
     const storedDb = localStorage.getItem('appDb');
@@ -174,8 +192,6 @@ export class FuncionarioFormComponent {
       this.router.navigate(['/funcionario/lista']);
     }
   }
-
-
 
   formularioValido(): boolean {
     return (

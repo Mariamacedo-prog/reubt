@@ -16,8 +16,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { InputfileModule } from '../../components/inputfile/inputfile.module';
 import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from '../../auth/auth.guard';
-import { PagamentoCalculoComponent } from '../../components/pagamento-calculo/pagamento-calculo.component';
 import { PagamentoCalculoModule } from '../../components/pagamento-calculo/pagamento-calculo.module';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
   const routes: Routes = [
   { path: 'form/:id', component: ContratosFormComponent, canActivate: [authGuard] },
@@ -45,6 +45,7 @@ import { PagamentoCalculoModule } from '../../components/pagamento-calculo/pagam
     MatAutocompleteModule,
     InputfileModule ,
     PagamentoCalculoModule,
+    MatProgressBarModule,
     RouterModule.forChild(routes)
   ]
 })

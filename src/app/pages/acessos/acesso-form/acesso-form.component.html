@@ -11,9 +11,23 @@
             <mat-label>Nome do Usuário</mat-label>
             <input matInput disabled [value]="formControls.get('usuario.nome')?.value"/>
           </mat-form-field>
-          <mat-form-field>
+
+          <mat-form-field class="example-full-width">
             <mat-label>CPF</mat-label>
-            <input  matInput (keyup)="localizaUsuario()" formControlName="cpf" />
+            <input type="text"
+                   matInput
+                   formControlName="cpf"
+                   [matAutocomplete]="auto"
+                   (keyup)="handleKeyUp($event)">
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                <mat-option *ngIf="filteredCpf.length === 0 && !loadingCpf" [value]="''">
+                  Não localizado
+                </mat-option>
+                <mat-option *ngFor="let option of filteredCpf" [value]="option.cpf" (onSelectionChange)="selectedCpf(option)">
+                  {{option.nome + " - " + option.cpf}}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-progress-bar *ngIf="loadingCpf" mode="indeterminate"></mat-progress-bar>
             <mat-error *ngIf="formControls.get('usuario.cpf')?.hasError('required')">
               Este campo é <strong>obrigatório</strong>
             </mat-error>

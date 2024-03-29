@@ -7,14 +7,6 @@
       "nome": "Maria Macedo",
       "telefone": "(11) 983475047",
       "cpf":"1111"
-    },
-    {
-      "id": 2,
-      "email":"teste111@gmail.com",
-      "senha":"12345",
-      "nome": "Maria 2121 Macedo",
-      "telefone": "(11) 983471111",
-      "cpf":"86839129063"
     }
   ],
   "acessos":[
@@ -51,33 +43,6 @@
     }
   ],
   "funcionarios":[
-    {
-      "id": 2,
-      "nome":"Marcela teste",
-      "cpf":"12887760041",
-      "rua": "Rua Salvador Gianetti",
-      "numero": "12",
-      "bairro": "Guaianazes",
-      "complemento": "",
-      "cidadeUf": "São Paulo / SP",
-      "usuario": 1,
-      "email": "test@gmail.com",
-      "telefone": "(11) 983475047",
-      "cep": "08410000"
-    }, {
-      "id": 1,
-      "nome":"Maria 2121 Macedo",
-      "cpf":"00549227040",
-      "rua": "Rua Mercado de Ferro",
-      "numero": "231",
-      "bairro": "Vila Aurea",
-      "complemento": "",
-      "cidadeUf": "São Paulo / SP",
-      "usuario": 2,
-      "email": "teste111@gmail.com",
-      "telefone": "(11) 983475047",
-      "cep": "08410000"
-    }
   ],
   "vendedores":[
     {

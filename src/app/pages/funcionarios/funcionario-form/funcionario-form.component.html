@@ -54,14 +54,19 @@
                    placeholder="Escolha um"
                    aria-label="Usuário"
                    matInput
-                   (keyup)="buscarUsuario()"
+                   (keyup)="handleKeyUp($event)"
                    [formControl]="usuarioFormControl"
                    [matAutocomplete]="auto">
             <mat-autocomplete #auto="matAutocomplete">
-              @for (option of filteredOptions | async; track option) {
-                <mat-option [value]="option">{{option}}</mat-option>
+              <mat-option *ngIf="filteredOptions.length === 0 && !loadingUsuario" [value]="''">
+                Não localizado
+              </mat-option>
+              @for (option of filteredOptions; track option) {
+                <mat-option [value]="option.nome">{{option.nome}}</mat-option>
               }
             </mat-autocomplete>
+            <mat-progress-bar *ngIf="loadingUsuario" mode="indeterminate"></mat-progress-bar>
+
             <mat-error *ngIf="usuarioFormControl.hasError('required')" >
               Este campo é <strong>obrigatório</strong>
             </mat-error>

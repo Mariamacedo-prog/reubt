@@ -23,6 +23,8 @@ export class ContratanteFormComponent {
 
   filteredCartorios: any[] = [];
   timeoutId: any;
+
+  loadingCartorio: boolean = false;
   
   constructor(private toolboxService: ToolboxService, private router: Router, 
     private route: ActivatedRoute, private validateService: ValidateService,private formBuilder: FormBuilder) {}
@@ -230,6 +232,7 @@ export class ContratanteFormComponent {
   }
 
   handleKeyUp(event: any) {
+    this.loadingCartorio = true;
     clearTimeout(this.timeoutId); 
     const nome = event.target.value.trim();
     if (nome.length >= 3) {
@@ -246,10 +249,12 @@ export class ContratanteFormComponent {
     this.filteredCartorios = this.databaseInfo.cartorios.filter((item: any) => {
       return item.cartorio.nome?.toLowerCase().includes(nome.toLowerCase());
     });
+    this.loadingCartorio = false;
   }
 
   selectedCartorio(item: any){
     console.log(item.cartorio)
+    this.loadingCartorio = false;
     if(item.cartorio){
       if(item.cartorio.nome){
         this.formControls.get('cartorio')?.get('nome')?.setValue(item.cartorio.nome);

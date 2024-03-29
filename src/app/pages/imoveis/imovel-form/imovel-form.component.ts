@@ -21,6 +21,9 @@ export class ImovelFormComponent {
   estadoCivil: any = {};
   formControls!: FormGroup; 
 
+  timeoutId: any;
+  filteredCpf: any[] = [];
+  loadingCpf: boolean = false;
   constructor(private toolboxService: ToolboxService, private router: Router, 
     private route: ActivatedRoute, private cepService: CepService, private formBuilder: FormBuilder,
     private validateService: ValidateService, 
@@ -67,16 +70,6 @@ export class ImovelFormComponent {
     matricula: ['']
   });
 
-  localizaContrante(){
-    const contratanteByCpf = this.databaseInfo.contratantes.find((item: any) => item.cpf == this.formControls.get('contratante')?.get('cpf')?.value);
-    if(contratanteByCpf){
-      this.formControls.get('contratante')?.get('nome')?.setValue(contratanteByCpf.nome);
-      this.formControls.get('contratante')?.get('id')?.setValue(contratanteByCpf.id);
-      this.formControls.get('id')?.setValue(Math.floor(Math.random() * 100000));
-    }else{
-      this.toolboxService.showTooltip('error', 'Contratante não encontrado na base de dados!', 'ERRO CPF!');
-    }
-  }
 
 
 
@@ -319,6 +312,50 @@ export class ImovelFormComponent {
 
       console.log(this.formControls)
       // Faça o que precisar com o arquivo aqui, como enviá-lo para um servidor, etc.
+    }
+  }
+
+  localizaContrante(){
+    const contratanteByCpf = this.databaseInfo.contratantes.find((item: any) => item.cpf == this.formControls.get('contratante')?.get('cpf')?.value);
+    if(contratanteByCpf){
+      this.formControls.get('contratante')?.get('nome')?.setValue(contratanteByCpf.nome);
+      this.formControls.get('contratante')?.get('id')?.setValue(contratanteByCpf.id);
+      this.formControls.get('id')?.setValue(Math.floor(Math.random() * 100000));
+    }else{
+      this.toolboxService.showTooltip('error', 'Contratante não encontrado na base de dados!', 'ERRO CPF!');
+    }
+  }
+
+  
+  handleKeyUp(event: any){
+    this.loadingCpf = true;
+    clearTimeout(this.timeoutId); 
+    const cpf = event.target.value.trim();
+    if (cpf.length >= 3) {
+      this.timeoutId = setTimeout(() => {
+        this.buscarCpf(cpf);
+      }, 2000); 
+    } else {
+
+      this.filteredCpf = [];
+    }
+  }
+
+  buscarCpf(cpf: string) {
+    this.filteredCpf = this.databaseInfo.contratantes.filter((item: any) => {
+      return item.cpf?.includes(cpf);
+    });
+    this.loadingCpf = false;
+  }
+
+  selectedCpf(option: any){
+    this.loadingCpf = false;
+    if(option){
+      this.formControls.get('contratante')?.get('nome')?.setValue(option.nome);
+      this.formControls.get('contratante')?.get('id')?.setValue(option.id);
+      this.formControls.get('id')?.setValue(Math.floor(Math.random() * 100000));
+    }else{
+      this.toolboxService.showTooltip('error', 'Contratante não encontrado na base de dados!', 'ERRO CPF!');
     }
   }
 }

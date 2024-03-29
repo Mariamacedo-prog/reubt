@@ -28,6 +28,7 @@
                   {{option.nome + " - " + option.cpf}}
                 </mat-option>
             </mat-autocomplete>
+            <mat-progress-bar *ngIf="loadingCpf" mode="indeterminate"></mat-progress-bar>
           </mat-form-field>
         
           <div class="inputs-row-form">

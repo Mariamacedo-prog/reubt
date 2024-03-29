@@ -58,23 +58,24 @@ export class WordService {
   "distribute" | "numTab" | "highKashida" | "lowKashida" | "thaiDistribute" | "right" | undefined = "left"){
     let textArrays:any = []
 
-    for(let item of data){
-      textArrays.push(new TextRun(item));
-    }
 
-    return new Paragraph({
-      children: textArrays
-      ,
-      spacing: {
-          line: 400
-      },
-      alignment: alignment
-    })
+      for(let item of data){
+        textArrays.push(new TextRun(item));
+      }
+      return new Paragraph({
+        children: textArrays
+        ,
+        spacing: {
+            line: 400
+        },
+        alignment: alignment
+      })
+   
   }
 
   transform(numero: number): string {
      const numerosPorExtenso = [
-        'zero', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove',
+        'zero', 'uma', 'duas', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove',
         'dez', 'onze', 'doze', 'treze', 'catorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove',
         'vinte', 'vinte e um', 'vinte e dois', 'vinte e três', 'vinte e quatro', 'vinte e cinco',
         'vinte e seis', 'vinte e sete', 'vinte e oito', 'vinte e nove', 'trinta'
@@ -87,12 +88,27 @@ export class WordService {
     return numerosPorExtenso[numero];
   }
 
-  formatarData(dataString: any) {
-    const data = new Date(dataString);
-    const dia = data.getUTCDate().toString().padStart(2, '0');
-    const mes = (data.getUTCMonth() + 1).toString().padStart(2, '0');
-    const ano = data.getUTCFullYear().toString();
-    return `${dia}/${mes}/${ano}`;
+  gerarEnderecoPorta(imovelDoContratante: any): string{
+    let item = imovelDoContratante.enderecoPorta;
+    if(item){
+      return `${imovelDoContratante?.enderecoPorta?.rua}, n ${imovelDoContratante?.enderecoPorta?.numero}${imovelDoContratante?.enderecoPorta?.complemento ? ' '+ imovelDoContratante?.enderecoPorta?.complemento : ''}, ${imovelDoContratante?.enderecoPorta?.bairro}, ${imovelDoContratante?.enderecoPorta?.cidadeUf}`;
+    }else{
+      return '';
+    }
+  }
+
+  formatarData(dataString: any, dia: boolean = false) {
+    if(dia == false){
+      const data = new Date(dataString);
+      const dia = data.getUTCDate().toString().padStart(2, '0');
+      const mes = (data.getUTCMonth() + 1).toString().padStart(2, '0');
+      const ano = data.getUTCFullYear().toString();
+      return `${dia}/${mes}/${ano}`;
+    }else{
+      const data = new Date(dataString);
+      const dia = data.getUTCDate().toString().padStart(2, '0');
+      return dia;
+    }
   }
 
   verificarDado(dataString: any): string{
@@ -100,6 +116,14 @@ export class WordService {
       return dataString;
     }else{
       return '';
+    }
+  }
+
+  pluralPalavra(quantidade: number, singular: string, plural: string): string{
+    if(quantidade > 1){
+      return plural;
+    }else{
+      return singular;
     }
   }
 
@@ -155,7 +179,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                    
                  },
                  { 
-                   text:`${formControls?.get('contratante')?.get('nome')?.value}, ${formControls?.get('contratante')?.get('nacionalidade')?.value}, ${formControls?.get('contratante')?.get('estadoCivil')?.value}, ${formControls?.get('contratante')?.get('profissao')?.value}, inscrito no CPF sob o n° ${formControls?.get('contratante')?.get('cpf')?.value} e no RG sob o n° ${formControls?.get('contratante')?.get('rg')?.value}, residente e domiciliado na ${formControls?.get('empresa')?.get('endereco')?.get('rua')?.value}, n ${formControls?.get('empresa')?.get('endereco')?.get('numero')?.value} ${formControls?.get('empresa')?.get('endereco')?.get('complemento')?.value}, ${formControls?.get('empresa')?.get('endereco')?.get('bairro')?.value}, ${formControls?.get('empresa')?.get('endereco')?.get('cidadeUf')?.value} doravante denominado `,
+                   text:`${formControls?.get('contratante')?.get('nome')?.value}, ${formControls?.get('contratante')?.get('nacionalidade')?.value}, ${formControls?.get('contratante')?.get('estadoCivil')?.value}, ${formControls?.get('contratante')?.get('profissao')?.value}, inscrito no CPF sob o n° ${formControls?.get('contratante')?.get('cpf')?.value} e no RG sob o n° ${formControls?.get('contratante')?.get('rg')?.value}, residente e domiciliado na rua ` + this.gerarEnderecoPorta(imovelDoContratante),
                    size:25, 
                    font: "Arial",
                    outlineLevel: 2,
@@ -208,7 +232,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                   size:25, 
                   font: "Arial"
                 },
-              { text:"em individualizar a(s) unidade(s) de sua propriedade, situada(s) no " + imovelDoContratante?.enderecoPorta ? `${imovelDoContratante?.enderecoPorta?.rua}, n ${imovelDoContratante?.enderecoPorta?.numero} ${imovelDoContratante?.enderecoPorta?.complemento}, ${imovelDoContratante?.enderecoPorta?.bairro}, ${imovelDoContratante?.enderecoPorta?.cidadeUf}` : "" + " ;", 
+              { text:"em individualizar a(s) unidade(s) de sua propriedade, situada(s) no " + this.gerarEnderecoPorta(imovelDoContratante), 
                   size:25, 
                   font: "Arial"
                 }
@@ -253,7 +277,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                   size:25, 
                   font: "Arial"
                 },
-                { text:" os serviços de individualização da(s) unidade(s) de sua propriedade, situada(s) no  " + imovelDoContratante?.enderecoDefinitivo ? `${imovelDoContratante?.enderecoDefinitivo?.rua}, n ${imovelDoContratante?.enderecoDefinitivo?.numero} ${imovelDoContratante?.enderecoDefinitivo?.complemento}, ${imovelDoContratante?.enderecoDefinitivo?.bairro}, ${imovelDoContratante?.enderecoDefinitivo?.cidadeUf}` : "" + " ;"+" em conformidade com a Lei n° 13.465/2017 (REURB) ", 
+                { text:"os serviços de individualização da(s) unidade(s) de sua propriedade, situada(s) no " + this.gerarEnderecoPorta(imovelDoContratante) + ";"+" em conformidade com a Lei n° 13.465/2017 (REURB) ", 
                   size:25, 
                   font: "Arial"
                 },
@@ -354,70 +378,75 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                   size:25, 
                   font: "Arial"
                 },
-                { text:"(reais), a ser pago da seguinte forma: ", 
+                { text:" a ser pago da seguinte forma: ", 
                   size:25, 
                   font: "Arial"
                 }
               ]),
               space, space,
-              this.gerarParagrafo(
-                [{ text:"        • 10% (dez por cento) de entrada, ",
+               this.gerarParagrafo(
+                [{ text: parcelamentoInfo?.parcelas?.quantidade > 0 ?"        • 10% (dez por cento) de entrada, ": "",
                   bold:true,
                   size:25, 
                   font: "Arial"
                 },
-                { text:"divididos em até ",
+                { text:parcelamentoInfo?.parcelas?.quantidade > 0 ?"divididos em ": "",
                   size:25, 
                   font: "Arial"
                 },
-                { text:"2 (duas) ",
+                { text:parcelamentoInfo?.parcelas?.quantidade > 0 ?`${parcelamentoInfo?.entrada?.quantidade} (${this.transform(parcelamentoInfo?.entrada?.quantidade)}) `: "",
                   bold:true,
                   size:25, 
                   font: "Arial"
                 },
-                { text:"vezes, com vencimento das parcelas nos dias ",
+                { text:parcelamentoInfo?.parcelas?.quantidade > 0 ?`${this.pluralPalavra(parcelamentoInfo?.entrada?.quantidade, 'vez', 'vezes')}, com vencimento ${this.pluralPalavra(parcelamentoInfo?.entrada?.quantidade, 'da', 'das')} ${this.pluralPalavra(parcelamentoInfo?.entrada?.quantidade, 'parcela', 'parcelas')} ${this.pluralPalavra(parcelamentoInfo?.entrada?.quantidade, 'no', 'nos')} ${this.pluralPalavra(parcelamentoInfo?.entrada?.quantidade, 'dia', 'dias')} `: "",
                   size:25, 
                   font: "Arial"
                 },
-                { text:`${this.formatarData(parcelamentoInfo?.entrada?.dataPrimeiroPagamento)} `,
+                { text: parcelamentoInfo?.parcelas?.quantidade > 0 ?`${parcelamentoInfo?.entrada?.quantidade == 1 ?  this.formatarData(parcelamentoInfo?.entrada?.dataPrimeiroPagamento): `${this.formatarData(parcelamentoInfo?.entrada?.dataPrimeiroPagamento)}, ${this.formatarData(parcelamentoInfo?.entrada?.dataUltimoPagamento)}` } `: "",
                   bold:true,
                   size:25, 
                   font: "Arial"
                 }
               ]),
+
+
+
               this.gerarParagrafo(
-                [{ text:"        • O restante, equivalente a 90% (noventa por cento), ",
+                [{ text: parcelamentoInfo?.parcelas?.quantidade > 0 ? "        • O restante, equivalente a 90% (noventa por cento), " : "",
                     bold:true,
                     size:25, 
                     font: "Arial"
                   },
-                  { text:"poderá será dividido em até ",
+                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ? "será dividido em " : "", 
                     size:25, 
                     font: "Arial"
                   },
-                  { text:"30 (trinta) ",
+                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ? `${parcelamentoInfo?.parcelas?.quantidade} (${this.transform(parcelamentoInfo?.parcelas?.quantidade)}) `: "", 
                     bold:true,
                     size:25, 
                     font: "Arial"
                   },
-                  { text:"parcelas mensais e iguais, com vencimento no dia ",
+                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ? "parcelas mensais e iguais, com vencimento no dia ": "",
                     size:25, 
                     font: "Arial"
                   },
-                  { text:`${this.formatarData(parcelamentoInfo?.parcelas?.dataPrimeiroPagamento)} `,
+                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ?`${this.formatarData(parcelamentoInfo?.parcelas?.dataPrimeiroPagamento, true)} `: "",
                     bold:true,
                     size:25, 
                     font: "Arial"
                   },
-                  { text:"de cada mês. ",
+                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ? "de cada mês. ": "",
                     size:25, 
                     font: "Arial"
                   }
               ]),
+
+              space, space,
               this.gerarParagrafo(
-                [{ text:parcelamentoInfo?.parcelas?.quantidade > 0 
-                  ? `        • Quantidade de parcelas proposta pelo CONTRATANTE ${parcelamentoInfo?.parcelas?.quantidade} (${this.transform(parcelamentoInfo?.parcelas?.quantidade)});` 
-                  : `        • Quantidade proposta pelo CONTRATANTE, 1 (${this.transform(1)}) pagamento à vista de ${parcelamentoInfo?.valorAvista?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`,
+                [{ text: parcelamentoInfo?.parcelas?.quantidade > 0 
+                  ? `` 
+                  : `        • Pago em uma única vez, em moeda corrente, na assinatura do presente contrato com 10 % de desconto no valor de ${parcelamentoInfo?.valorAvista?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`,
                   bold:true,
                   size:25, 
                   font: "Arial"
@@ -444,7 +473,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
               }]),
               space,  space,
               this.gerarParagrafo(
-              [{ text:"Os valores das parcelas mensais serão reajustados mensalmente, com a correção da variação do  ",  
+              [{ text:"Os valores das parcelas mensais serão reajustados mensalmente, com a correção da variação do ",  
                 size:25, 
                 font: "Arial"
               },{

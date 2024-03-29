@@ -25,13 +25,12 @@
                       {{option.cartorio.nome + " - CNS: " + option.cartorio.cns}}
                     </mat-option>
                 </mat-autocomplete>
-     
+                <mat-progress-bar *ngIf="loadingCartorio" mode="indeterminate"></mat-progress-bar>
               </mat-form-field>
 
               <mat-form-field>
                 <mat-label>CNS do Cartório</mat-label>
                 <input  disabled matInput [value]="formControls.get('cartorio.cns')?.value"  />
-
               </mat-form-field>
             </div>
                 

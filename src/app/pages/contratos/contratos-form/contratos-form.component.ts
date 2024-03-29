@@ -15,13 +15,15 @@ export class ContratosFormComponent {
   databaseInfo: any = {};
   visualizar: boolean = false;
   formControls!: FormGroup;
-  filteredContratantes: any[] = [];
   timeoutId: any;
 
   showDowloadContrato = false;
   parcelamentoInfo: any = {};
   imovelDoContratante: any = {};
   existeImovel:boolean = false;
+
+  filteredContratantes: any[] = [];
+  loadingCpf: boolean = false;
   constructor(private toolboxService: ToolboxService, private router: Router, private route: ActivatedRoute,private formBuilder: FormBuilder, private wordService: WordService) {
     }
 
@@ -202,6 +204,7 @@ export class ContratosFormComponent {
   }
 
   handleKeyUpContratante(event: any) {
+    this.loadingCpf = true;
     clearTimeout(this.timeoutId); 
     const cpf = event.target.value.trim();
     if (cpf.length >= 3) {
@@ -220,6 +223,7 @@ export class ContratosFormComponent {
          this.filteredContratantes.push(item);
       }  
     });
+    this.loadingCpf = false;
   }
 
   selectContratante(item: any){
@@ -242,6 +246,7 @@ export class ContratosFormComponent {
 
     this.findImovel()
     this.filteredContratantes = [];
+    this.loadingCpf = false;
   }
 
   receiveDataFromChild(data: any) {

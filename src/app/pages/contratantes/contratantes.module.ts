@@ -16,7 +16,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { InputfileModule } from '../../components/inputfile/inputfile.module';
 import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from '../../auth/auth.guard';
-
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 const routes: Routes = [
   { path: 'form/:id', component: ContratanteFormComponent, canActivate: [authGuard] },
@@ -43,6 +43,7 @@ const routes: Routes = [
     MatNativeDateModule,
     MatAutocompleteModule,
     InputfileModule ,
+    MatProgressBarModule,
     RouterModule.forChild(routes)
   ]
 })
