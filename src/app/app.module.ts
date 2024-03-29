@@ -16,6 +16,7 @@ import { AuthService } from './auth/auth.service';
 import { ToolboxComponent } from './components/toolbox/toolbox.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { ImovelModule } from './pages/imoveis/imovel.module';
+import { PagamentoCalculoComponent } from './components/pagamento-calculo/pagamento-calculo.component';
 
 @NgModule({
   declarations: [

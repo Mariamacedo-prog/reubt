@@ -402,65 +402,42 @@
   ],
   "contratos":[
     {
-      "id": 1, 
-      "cartorio":{
-        "nome":"Catorio name",
-        "cns":"123456"
-      },
-      "endereco":{
-        "rua": "Rua Conselheiro Ribas",
-        "numero": "399",
-        "bairro": "Bairro Vila Anastácio",
-        "complemento": "a",
-        "cidadeUf": "São Paulo / SP"
-      },
-      "contratante":{
-        "id": 1,
-        "nome":"Celebadar",
-        "nacionalidade":"brasileiro",
-        "estadoCivil": "solteiro(a)",
-        "cpf": "1258494010085",
-        "rg": "172631919",
+      "id": 98733,
+      "contratante": {
+        "id": 2,
+        "nome": "Ce aasa asds asdsdsad",
+        "cpf": "28022009091",
+        "rg": "243856726",
+        "email": "12345@gmail.com",
         "telefone": "(11) 983475047",
-        "email": "123@gmail.com"
+        "nacionalidade": "brasileiro",
+        "profissao": "medica",
+        "estadoCivil": "solteiro(a)",
+        "imovelId": 0
       },
-      "crf":{
-        "numerocrf":0,
-        "crfentregue":"",
-        "statusentrega":""
+      "crf": {
+        "numerocrf": 269853,
+        "crfentregue": "Entregue",
+        "statusentrega": "Finalizado"
       },
-      "empresa":{
-        "nome":"LC - REURB BRASIL Assessoria e consultoria Ltda",
-        "cnpj":"07.893.365/0001-31"
+      "cartorio": {
+        "nome": "Catorio name",
+        "cns": "123456"
+      },
+      "empresa": {
+        "nome": "LC - REURB BRASIL Assessoria e consultoria Ltda",
+        "cnpj": "07.893.365/0001-31",
+        "endereco": {
+          "rua": "Rua Conselheiro Ribas",
+          "numero": "399",
+          "bairro": "Bairro Vila Anastácio",
+          "complemento": "a",
+          "cidadeUf": "São Paulo / SP"
+        }
       }
     }
   ],
   "vendasPagamentos":[
-    {
-      "id": 1, 
-      "endereco":{
-        "rua": "Rua Salvador Gianetti",
-        "numero": "12",
-        "bairro": "Guaianazes",
-        "complemento": "",
-        "cidade": "São Paulo ",
-        "estado": "São Paulo ",
-        "cep": "08410000"
-      },
-       "nome":"Marcela teste",
-        "cpf":"93733643089",
-     
-      "situacao":{        
-        "situacaopagamento":"pago",
-        "statusentrega":"entregue"
-      },
-      "cartorio":{
-        "nome":"Catorio name",
-        "cnpj":"22335935000161",
-        "telefone": "(11) 983475047",
-        "email": "prefeitura@org.com"
-      }
-    }
   ],
   "imoveis":[
     {

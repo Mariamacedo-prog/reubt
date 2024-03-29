@@ -55,7 +55,34 @@
           </mat-form-field>
         </div>
 
-        <!-- <iframe *ngIf="documentUrl" [src]="documentUrl" style="width: 800px; height: 600px;"></iframe> -->
+        <mat-form-field *ngIf="existeImovel && imovelDoContratante.enderecoPorta.rua != '' && imovelDoContratante.enderecoPorta">
+          <mat-label>Endereço Porta</mat-label>
+          <input disabled [readonly]="visualizar" matInput 
+          [value]="imovelDoContratante.enderecoPorta.rua + ', n '+ 
+          imovelDoContratante.enderecoPorta.numero + ' ' + imovelDoContratante.enderecoPorta.complemento + ', ' +
+          imovelDoContratante.enderecoPorta.bairro + ', ' + imovelDoContratante.enderecoPorta.cidadeUf + ' '"
+          />
+        </mat-form-field>
+
+        <mat-form-field *ngIf="existeImovel && imovelDoContratante.enderecoDefinitivo.rua != '' && imovelDoContratante.enderecoDefinitivo">
+          <mat-label>Endereço Definitivo</mat-label>
+          <input disabled [readonly]="visualizar" matInput 
+          [value]="imovelDoContratante.enderecoDefinitivo.rua + ', n '+ 
+          imovelDoContratante.enderecoDefinitivo.numero + ' ' + imovelDoContratante.enderecoDefinitivo.complemento + ', ' +
+          imovelDoContratante.enderecoDefinitivo.bairro + ', ' + imovelDoContratante.enderecoDefinitivo.cidadeUf + ' '"
+          />
+        </mat-form-field>
+
+        <mat-form-field *ngIf="existeImovel && imovelDoContratante.enderecoProjeto.rua != '' && imovelDoContratante.enderecoProjeto">
+          <mat-label>Endereço Projeto</mat-label>
+          <input disabled [readonly]="visualizar" matInput 
+          [value]="imovelDoContratante.enderecoProjeto.rua + ', n '+ 
+          imovelDoContratante.enderecoProjeto.numero + ' ' + imovelDoContratante.enderecoProjeto.complemento + ', ' +
+          imovelDoContratante.enderecoProjeto.bairro + ', ' + imovelDoContratante.enderecoProjeto.cidadeUf + ' '"
+          />
+        </mat-form-field>
+
+        <app-pagamento-calculo *ngIf="contratoId" [dataContratanteInfo]="formControls.get('contratante')?.getRawValue()" (dataEvent)="receiveDataFromChild($event)"></app-pagamento-calculo>
 
           <div class="area-botao-form " *ngIf="isLoggedIn && this.contratoId === 0 || this.contratoId === undefined">
             <button mat-raised-button color="primary" (click)="cadastrar()" [disabled]="!formularioValido()">Cadastrar</button>
@@ -69,10 +96,15 @@
           </div>
       </mat-card-content>
     </form>
-    <button [disabled]="!formularioValido()" mat-stroked-button  color="primary" (click)="generateWordFile()">
+
+
+    <button *ngIf="contratoId" [disabled]="!formularioValido() || !showDowloadContrato || !parcelamentoInfo.id" mat-stroked-button  color="primary" (click)="generateWordFile()">
       <mat-icon>download</mat-icon>
       Download Contrato
     </button>
+
+  
+
   </mat-card>
 </div>
 

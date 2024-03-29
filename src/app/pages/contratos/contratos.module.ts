@@ -16,7 +16,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { InputfileModule } from '../../components/inputfile/inputfile.module';
 import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from '../../auth/auth.guard';
-import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { PagamentoCalculoComponent } from '../../components/pagamento-calculo/pagamento-calculo.component';
+import { PagamentoCalculoModule } from '../../components/pagamento-calculo/pagamento-calculo.module';
 
   const routes: Routes = [
   { path: 'form/:id', component: ContratosFormComponent, canActivate: [authGuard] },
@@ -43,7 +44,7 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
     MatNativeDateModule,
     MatAutocompleteModule,
     InputfileModule ,
-    NgxDocViewerModule,
+    PagamentoCalculoModule,
     RouterModule.forChild(routes)
   ]
 })

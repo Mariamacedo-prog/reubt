@@ -84,7 +84,6 @@ export class AuthService {
     localStorage.removeItem('usuario');
     this.isLoggedIn = false;
     this.usuarioLogado = null;
-    this.saveDb();
     this.router.navigate(['/login']);
   }
 }
