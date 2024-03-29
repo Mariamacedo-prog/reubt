@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { PagamentoCalculoComponent } from './pagamento-calculo.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -10,6 +10,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { MatNativeDateModule,  DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MY_DATE_FORMATS } from './pagamento-calculo.component';
+
+
 @NgModule({
   declarations: [PagamentoCalculoComponent],
   imports: [
@@ -25,6 +29,10 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     MatRadioModule,
     MatSlideToggleModule
   ],
-  exports: [PagamentoCalculoComponent] 
+  exports: [PagamentoCalculoComponent],
+  providers:[ { provide: MY_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },]
 })
-export class PagamentoCalculoModule { }
+export class PagamentoCalculoModule {
+
+ }

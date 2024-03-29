@@ -19,6 +19,7 @@ import { authGuard } from '../../auth/auth.guard';
 import { PagamentoCalculoModule } from '../../components/pagamento-calculo/pagamento-calculo.module';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 
+
   const routes: Routes = [
   { path: 'form/:id', component: ContratosFormComponent, canActivate: [authGuard] },
   { path: 'form/:id/:tela', component: ContratosFormComponent, canActivate: [authGuard] },
@@ -47,6 +48,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     PagamentoCalculoModule,
     MatProgressBarModule,
     RouterModule.forChild(routes)
-  ]
+  ],
+  providers: [ ] 
 })
 export class ContratosModule { }

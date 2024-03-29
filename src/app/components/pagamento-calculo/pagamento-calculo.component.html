@@ -50,7 +50,10 @@
                     </mat-form-field>
                     <mat-form-field *ngIf="this.formControls?.get('entrada')?.get('valor')?.value > 0">
                       <mat-label>Data do Pagamento</mat-label>
-                      <input [min]="minDate"  matInput (dateChange)="calculateDataFinalEntrada()" [matDatepicker]="pickerPrimeiro" formControlName="dataPrimeiroPagamento"  placeholder="dd/mm/yyyy">
+                      <input [min]="minDate"  matInput (dateChange)="calculateDataFinalEntrada()"
+                       [matDatepicker]="pickerPrimeiro" 
+                       formControlName="dataPrimeiroPagamento"  
+                       placeholder="dd/mm/yyyy">
                       <mat-datepicker-toggle matSuffix [for]="pickerPrimeiro"></mat-datepicker-toggle>
                       <mat-datepicker #pickerPrimeiro ></mat-datepicker>
                     </mat-form-field>
@@ -68,7 +71,12 @@
                 <div class="inputs-row-form">
                   <mat-form-field *ngIf="this.formControls?.get('entrada')?.get('valor')?.value > 0">
                     <mat-label>Data da Primeira parcela da Entrada</mat-label>
-                    <input [min]="minDate"  matInput (dateChange)="calculateDataFinalEntrada()" [matDatepicker]="pickerPrimeiro" formControlName="dataPrimeiroPagamento"  placeholder="dd/mm/yyyy">
+                    <input [min]="minDate"  matInput 
+                    (dateChange)="calculateDataFinalEntrada()" 
+                    [matDatepicker]="pickerPrimeiro" 
+                    formControlName="dataPrimeiroPagamento" 
+                    dateInputFormat="dd/MM/yyyy"
+                     placeholder="dd/mm/yyyy">
                     <mat-datepicker-toggle matSuffix [for]="pickerPrimeiro"></mat-datepicker-toggle>
                     <mat-datepicker #pickerPrimeiro ></mat-datepicker>
                   </mat-form-field>
@@ -76,8 +84,9 @@
     
                   <mat-form-field *ngIf="this.formControls?.get('entrada')?.get('quantidade')?.value > 1" >
                     <mat-label>Data da Final da Entrada</mat-label>
-                    <input [disabled]="true" [min]="minDate" matInput [matDatepicker]="picker" 
-                      [value]="this.formControls.get('entrada')?.get('dataUltimoPagamento')?.value" 
+                    <input [disabled]="true" [min]="minDate" matInput [matDatepicker]="picker"
+                 
+                    formControlName="dataUltimoPagamento" 
                       placeholder="dd/mm/yyyy">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker ></mat-datepicker>

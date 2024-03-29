@@ -3,6 +3,21 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToolboxService } from '../toolbox/toolbox.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
+import {DateAdapter } from '@angular/material/core';
+
+
+
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 interface TypeSelectValue {
   value: number;
@@ -15,7 +30,9 @@ interface TypeSelectValue {
 @Component({
   selector: 'app-pagamento-calculo',
   templateUrl: './pagamento-calculo.component.html',
-  styleUrl: './pagamento-calculo.component.css'
+  styleUrl: './pagamento-calculo.component.css',
+  providers: [
+  ],
 })
 export class PagamentoCalculoComponent {
   planos: TypeSelectValue[] = [
@@ -34,8 +51,8 @@ export class PagamentoCalculoComponent {
 
   @Output() dataEvent = new EventEmitter<any>();
 
-  constructor(private toolboxService: ToolboxService, private formBuilder: FormBuilder) {
-  }
+  constructor(private toolboxService: ToolboxService, private formBuilder: FormBuilder, private adapter: DateAdapter<any>) {}
+
 
   entradaFormControls = this.formBuilder.group({
     quantidade: [0, this.formControls?.get('isAvista')?.value == true ? null : Validators.required],
@@ -53,7 +70,9 @@ export class PagamentoCalculoComponent {
     valorTotal:[0, this.formControls?.get('isAvista')?.value == true ? null : Validators.required]
   });
   
+
   ngOnInit(): void {
+    
     this.formControls = this.formBuilder.group({
       id:[0],
       plano: [null, Validators.required],
@@ -95,6 +114,7 @@ export class PagamentoCalculoComponent {
       this.dataEvent.emit(this.formControls.getRawValue());
       this.existeParcelamento = true;
     }
+    this.calculateDataFinalEntrada();
   }
 
   changePlano(event: any) {
@@ -173,6 +193,19 @@ export class PagamentoCalculoComponent {
     }
   }
 
+  calculateDataFinalParcela() {
+    const quantidadeParcelas = this.formControls?.get('parcelas')?.get('quantidade')?.value;
+    const dataPrimeiroPagamento = this.formControls?.get('parcelas')?.get('dataPrimeiroPagamento')?.value;
+    if (quantidadeParcelas > 1 && dataPrimeiroPagamento) {
+      const dataUltimoPagamento = new Date(dataPrimeiroPagamento);
+      dataUltimoPagamento.setMonth(dataUltimoPagamento.getMonth() + (quantidadeParcelas - 1));
+      this.formControls?.get('parcelas')?.get('dataUltimoPagamento')?.setValue(dataUltimoPagamento);
+    } else {
+      this.formControls?.get('parcelas')?.get('dataUltimoPagamento')?.setValue(null);
+    }
+  }
+
+ 
   listarValorParcela(){
     this.optionsParcelas = [];
     const totalParcela = this.formControls?.get('plano')?.value * 0.90;
@@ -204,17 +237,17 @@ export class PagamentoCalculoComponent {
     }
   }
 
-  calculateDataFinalParcela() {
-    const quantidadeParcelas = this.formControls?.get('parcelas')?.get('quantidade')?.value;
-    const dataPrimeiroPagamento = this.formControls?.get('parcelas')?.get('dataPrimeiroPagamento')?.value;
-    if (quantidadeParcelas > 1 && dataPrimeiroPagamento) {
-        const dataUltimoPagamento = new Date(dataPrimeiroPagamento);
-        dataUltimoPagamento.setMonth(dataUltimoPagamento.getMonth() + (this.formControls?.get('parcelas')?.get('quantidade')?.value - 1));
-        this.formControls?.get('parcelas')?.get('dataUltimoPagamento')?.setValue(dataUltimoPagamento);
-    } else {
-        this.formControls?.get('parcelas')?.get('dataUltimoPagamento')?.setValue(null);
-    }
-  }
+  // calculateDataFinalParcela() {
+  //   const quantidadeParcelas = this.formControls?.get('parcelas')?.get('quantidade')?.value;
+  //   const dataPrimeiroPagamento = this.formControls?.get('parcelas')?.get('dataPrimeiroPagamento')?.value;
+  //   if (quantidadeParcelas > 1 && dataPrimeiroPagamento) {
+  //       const dataUltimoPagamento = new Date(dataPrimeiroPagamento);
+  //       dataUltimoPagamento.setMonth(dataUltimoPagamento.getMonth() + (this.formControls?.get('parcelas')?.get('quantidade')?.value - 1));
+  //       this.formControls?.get('parcelas')?.get('dataUltimoPagamento')?.setValue(dataUltimoPagamento);
+  //   } else {
+  //       this.formControls?.get('parcelas')?.get('dataUltimoPagamento')?.setValue(null);
+  //   }
+  // }
 
   formularioValido(): boolean {
     console.log(this.formControls)

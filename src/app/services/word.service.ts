@@ -35,22 +35,19 @@ export class WordService {
       });
     });
   }
-  obterDataHoraAtual() {
+  obterData() {
+    const meses = [
+        "Janeiro", "Fevereiro", "Março", "Abril",
+        "Maio", "Junho", "Julho", "Agosto",
+        "Setembro", "Outubro", "Novembro", "Dezembro"
+    ];
+
     const dataAtual = new Date();
-  
-    // Obtenha o dia, mês e ano
     const dia = String(dataAtual.getDate()).padStart(2, '0');
-    const mes = String(dataAtual.getMonth() + 1).padStart(2, '0'); // Os meses começam do zero
+    const mes = meses[dataAtual.getMonth()];
     const ano = dataAtual.getFullYear();
-  
-    // Obtenha a hora, minutos e segundos
-    const hora = String(dataAtual.getHours()).padStart(2, '0');
-    const minutos = String(dataAtual.getMinutes()).padStart(2, '0');
-    
-    // Formate a data e hora no formato desejado
-    const dataHoraFormatada = `${dia}/${mes}/${ano} ${hora}:${minutos}`;
-  
-    return dataHoraFormatada;
+
+    return `${dia} de ${mes} de ${ano}`;
   }
 
   gerarParagrafo(data: any, alignment: 
@@ -91,7 +88,7 @@ export class WordService {
   gerarEnderecoPorta(imovelDoContratante: any): string{
     let item = imovelDoContratante.enderecoPorta;
     if(item){
-      return `${imovelDoContratante?.enderecoPorta?.rua}, n ${imovelDoContratante?.enderecoPorta?.numero}${imovelDoContratante?.enderecoPorta?.complemento ? ' '+ imovelDoContratante?.enderecoPorta?.complemento : ''}, ${imovelDoContratante?.enderecoPorta?.bairro}, ${imovelDoContratante?.enderecoPorta?.cidadeUf}`;
+      return `${imovelDoContratante?.enderecoPorta?.rua}, n ${imovelDoContratante?.enderecoPorta?.numero}${imovelDoContratante?.enderecoPorta?.complemento ? ' '+ imovelDoContratante?.enderecoPorta?.complemento : ''}, ${imovelDoContratante?.enderecoPorta?.bairro}, ${imovelDoContratante?.enderecoPorta?.cidadeUf} `;
     }else{
       return '';
     }
@@ -176,7 +173,6 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                    bold:true, 
                    size:25, 
                    font: "Arial",
-                   
                  },
                  { 
                    text:`${formControls?.get('contratante')?.get('nome')?.value}, ${formControls?.get('contratante')?.get('nacionalidade')?.value}, ${formControls?.get('contratante')?.get('estadoCivil')?.value}, ${formControls?.get('contratante')?.get('profissao')?.value}, inscrito no CPF sob o n° ${formControls?.get('contratante')?.get('cpf')?.value} e no RG sob o n° ${formControls?.get('contratante')?.get('rg')?.value}, residente e domiciliado na rua ` + this.gerarEnderecoPorta(imovelDoContratante),
@@ -250,14 +246,13 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                 font: "Arial"
               }]),
               space,  space,
-              space,  space,
               this.gerarParagrafo(
               [{ text:"Cláusula 1ª - Do Objeto", 
                 bold:true, 
                 size:25, 
                 font: "Arial"
               }]),
-              space,  space,
+              space, 
               this.gerarParagrafo([ 
                 { text:'A ', 
                   size:25, 
@@ -358,7 +353,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                 size:25, 
                 font: "Arial"
               }]),
-              space, space,
+              space, 
               this.gerarParagrafo(
                 [{ text:"O valor total dos serviços a serem prestados pela ", 
                   size:25, 
@@ -383,7 +378,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                   font: "Arial"
                 }
               ]),
-              space, space,
+              space,
                this.gerarParagrafo(
                 [{ text: parcelamentoInfo?.parcelas?.quantidade > 0 ?"        • 10% (dez por cento) de entrada, ": "",
                   bold:true,
@@ -442,7 +437,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                   }
               ]),
 
-              space, space,
+              space,
               this.gerarParagrafo(
                 [{ text: parcelamentoInfo?.parcelas?.quantidade > 0 
                   ? `` 
@@ -451,7 +446,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                   size:25, 
                   font: "Arial"
               }]),
-              space,  space,
+              space, space,space,
               this.gerarParagrafo(
               [{ text:"Cláusula 5ª - Da Forma de Pagamento", 
                 bold:true, 
@@ -599,7 +594,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
               }]),
               space, space,
               this.gerarParagrafo(
-              [{ text: formControls?.get('empresa')?.get('endereco')?.get('cidadeUf')?.value + " " + this.obterDataHoraAtual(),  
+              [{ text: formControls?.get('cartorio')?.get('cidadeUf')?.value + ", " + this.obterData(),  
                 bold:true, 
                 size:25, 
                 font: "Arial"
