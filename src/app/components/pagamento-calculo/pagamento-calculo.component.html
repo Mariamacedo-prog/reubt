@@ -27,17 +27,36 @@
         <form [formGroup]="formControls">
           <mat-card-content >
             <div >
-              <mat-form-field >
-                <mat-label>Tipo De Plano</mat-label>
-                <mat-select  (selectionChange)="changePlano($event)" formControlName="plano" >
-                  <mat-option *ngFor="let plano of planos;" [value]="plano.value" >
-                    {{ plano.viewValue }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+                <mat-form-field >
+                  <mat-label>Tipo De Plano</mat-label>
+                  <mat-select  (selectionChange)="changePlano($event)" formControlName="plano" >
+                    <mat-option *ngFor="let plano of planos;" [value]="plano.value" >
+                      {{ plano.viewValue }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+       
+                <mat-slide-toggle 
+                color="primary"
+                formControlName="isAvista"
+                (change)="pagamentoAvista($event)"
+                style="margin-bottom: 50px;"
+                >Pagamento à vista</mat-slide-toggle>
+
+                <div class="inputs-row-form" *ngIf="this.formControls?.get('isAvista')?.value ==true && this.formControls.get('plano')?.value > 0" style="flex-direction: column;"  formGroupName="entrada">
+                    <mat-form-field  >
+                      <mat-label>Valor à vista</mat-label>
+                      <input matInput [value]="(this.formControls.get('plano')?.value * 0.90).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })" />
+                    </mat-form-field>
+                    <mat-form-field *ngIf="this.formControls?.get('entrada')?.get('valor')?.value > 0">
+                      <mat-label>Data do Pagamento</mat-label>
+                      <input [min]="minDate"  matInput (dateChange)="calculateDataFinalEntrada()" [matDatepicker]="pickerPrimeiro" formControlName="dataPrimeiroPagamento"  placeholder="dd/mm/yyyy">
+                      <mat-datepicker-toggle matSuffix [for]="pickerPrimeiro"></mat-datepicker-toggle>
+                      <mat-datepicker #pickerPrimeiro ></mat-datepicker>
+                    </mat-form-field>
+                </div>
             
-            
-              <div *ngIf="this.formControls?.get('plano')?.value > 0" style="flex-direction: column;"  formGroupName="entrada">
+              <div *ngIf="this.formControls?.get('isAvista')?.value ==false && this.formControls?.get('plano')?.value > 0" style="flex-direction: column;"  formGroupName="entrada">
                 <mat-form-field  >
                   <mat-label>Entrada</mat-label>
                   <mat-select  (selectionChange)="changeEntrada($event)" formControlName="valor">
@@ -66,7 +85,7 @@
                 </div>
               </div>
     
-              <div *ngIf="this.formControls?.get('entrada')?.get('valor')?.value > 0"  formGroupName="parcelas">
+              <div *ngIf="this.formControls?.get('isAvista')?.value ==false && this.formControls?.get('entrada')?.get('valor')?.value > 0"  formGroupName="parcelas">
                 <mat-form-field  >
                   <mat-label>Parcelas</mat-label>
                   <mat-select (selectionChange)="changeParcela($event)" formControlName="valor">
@@ -96,13 +115,19 @@
          
               </div>
             </div>
+
+            <form [formGroup]="formControls">
+              <div>
+              </div>
+            </form>
+       
     
-              <div class="area-botao-form " *ngIf="!existeParcelamento">
-                <button [disabled]="!formularioValido()" (click)="gerarParcelamento()" mat-stroked-button color="primary" >Confirmar Parcelamento</button>
-              </div>
-              <div class="area-botao-form " *ngIf="existeParcelamento">
-                <button [disabled]="!formularioValido()" (click)="atualizarParcelamento()" mat-stroked-button color="primary" >Atualizar Parcelamento</button>
-              </div>
+            <div class="area-botao-form " *ngIf="!existeParcelamento">
+              <button [disabled]="!formularioValido()" (click)="gerarParcelamento()" mat-stroked-button color="primary" >Confirmar Parcelamento</button>
+            </div>
+            <div class="area-botao-form " *ngIf="existeParcelamento">
+              <button [disabled]="!formularioValido()" (click)="atualizarParcelamento()" mat-stroked-button color="primary" >Atualizar Parcelamento</button>
+            </div>
 
             </mat-card-content>
         </form>

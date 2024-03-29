@@ -8,7 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import {MatExpansionModule} from '@angular/material/expansion';
-
+import {MatRadioModule} from '@angular/material/radio';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 @NgModule({
   declarations: [PagamentoCalculoComponent],
   imports: [
@@ -20,7 +21,9 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatCardModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatRadioModule,
+    MatSlideToggleModule
   ],
   exports: [PagamentoCalculoComponent] 
 })

@@ -5,7 +5,7 @@
     <div class="inputs-row-form">
       <mat-form-field class="search-field-grid">
         <mat-label>Status da Entrega</mat-label>
-        <mat-select>
+        <mat-select disabled>
           <mat-option>entregue</mat-option>
           <mat-option>não entregue</mat-option>
         </mat-select>
@@ -13,7 +13,7 @@
 
       <mat-form-field class="search-field-grid">
         <mat-label>CRF entregue</mat-label>
-        <mat-select>
+        <mat-select disabled>
           <mat-option>entregue</mat-option>
           <mat-option>não entregue</mat-option>
         </mat-select>
@@ -23,25 +23,25 @@
     <div class="inputs-row-form"> 
       <mat-form-field class="search-field">
         <mat-label>Cidade</mat-label>
-        <mat-select>
+        <mat-select disabled>
           <mat-option>São Paulo</mat-option>
-          <mat-option>Ferraz de Vasconcelos</mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field class="search-field">
         <mat-label>Estado</mat-label>
-        <mat-select>
+        <mat-select disabled>
           <mat-option>São Paulo</mat-option>
-          <mat-option>Rio de Janeiro</mat-option>
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field class="search-field">
+      <mat-form-field class="search-field-grid">
         <mat-label>Cartórios</mat-label>
-        <mat-select>
-          <mat-option>Cartório São Paulo</mat-option>
-          <mat-option>Cartório Rio de Janeiro</mat-option>
+        <mat-select (selectionChange)="cartorioSelected($event)">
+          <mat-option value="">Escolha um cartorio</mat-option>
+          @for (cartorio of cartorios; track cartorio) {
+            <mat-option [value]="cartorio.cartorio.nome">{{cartorio.cartorio.nome}}</mat-option>
+          }
         </mat-select>
       </mat-form-field>
     </div>
@@ -52,8 +52,8 @@
         <mat-icon matPrefix>search</mat-icon>
       </mat-form-field>
       
-      <button mat-stroked-button color="primary" >Filtrar</button>
-      <button mat-raised-button color="primary" (click)="adicionarNovo()" >Novo Contrato</button>
+      <button style="margin-top:17px; margin-left: 20px; padding: 15px 40px;" (click)="procurar()" mat-stroked-button color="primary" >Filtrar</button>
+      <button style="margin-top:17px; margin-left: 20px;"  mat-raised-button color="primary" (click)="adicionarNovo()" >Novo Contrato</button>
     </div>
   </div>
 

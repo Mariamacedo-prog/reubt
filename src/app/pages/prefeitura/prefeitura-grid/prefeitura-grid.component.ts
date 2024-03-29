@@ -32,7 +32,7 @@ export class PrefeituraGridComponent {
   }
   
   procurar() {
-    this.dataSourceFilter = this.dataSource.filter((item: any) => item.prefeitura.nome.includes(this.searchTerm) || item.prefeitura.cnpj.includes(this.searchTerm));
+    this.dataSourceFilter = this.dataSource.filter((item: any) => item.prefeitura.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) || item.prefeitura.cnpj.includes(this.searchTerm));
     if(this.searchTerm.length == 0){
       this.dataSourceFilter = this.dataSource;
     }

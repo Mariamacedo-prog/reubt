@@ -12,6 +12,9 @@ export class ContratanteGridComponent {
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
+
+  cartorios: any = [];
+  cartorioSearch: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService) {}
   adicionarNovo() {
     this.router.navigate(["/contratante/novo"]);
@@ -25,15 +28,25 @@ export class ContratanteGridComponent {
           this.dataSource = JSON.parse(storedDb).contratantes;
           this.dataSourceFilter = JSON.parse(storedDb).contratantes;
         }
+        if(JSON.parse(storedDb).cartorios){
+          this.cartorios = JSON.parse(storedDb).cartorios;
+        }
       }
     }, 1000)
   }
 
   procurar() {
-    this.dataSourceFilter = this.dataSource.filter((contratante: any) => contratante.nome.includes(this.searchTerm) || contratante.cpf.includes(this.searchTerm));
+
     if(this.searchTerm.length == 0){
       this.dataSourceFilter = this.dataSource;
     }
+    
+    this.dataSourceFilter = this.dataSource.filter((contratante: any) => contratante.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) || contratante.cpf.includes(this.searchTerm));
+   
+    if(this.cartorioSearch != ''){
+      this.dataSourceFilter = this.dataSourceFilter.filter((contratante: any) => contratante.cartorio.nome.toLowerCase().includes(this.cartorioSearch.toLowerCase()));
+    }
+   
   }
 
   visualizarItem(element: any){
@@ -60,5 +73,10 @@ export class ContratanteGridComponent {
     localStorage.setItem('appDb', JSON.stringify(databaseInfo));
     this.dataSourceFilter = databaseInfo.contratantes;
     this.dataSource = databaseInfo.contratantes;
+  }
+
+  cartorioSelected(event: any){
+    const value = event?.value;
+    this.cartorioSearch = value;
   }
 }

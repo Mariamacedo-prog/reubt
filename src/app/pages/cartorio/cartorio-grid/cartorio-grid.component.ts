@@ -32,7 +32,7 @@ export class CartorioGridComponent {
   }
   
   procurar() {
-    this.dataSourceFilter = this.dataSource.filter((item: any) => item.cartorios.nome.includes(this.searchTerm) || item.cartorios.cnpj.includes(this.searchTerm));
+    this.dataSourceFilter = this.dataSource.filter((item: any) => item.cartorio.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) || item.cartorio.cnpj.includes(this.searchTerm));
     if(this.searchTerm.length == 0){
       this.dataSourceFilter = this.dataSource;
     }

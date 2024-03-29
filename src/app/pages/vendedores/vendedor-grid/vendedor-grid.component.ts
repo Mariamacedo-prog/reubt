@@ -32,7 +32,7 @@ export class VendedorGridComponent {
   }
   
   procurar() {
-    this.dataSourceFilter = this.dataSource.filter((vendedor: any) => vendedor.nome.includes(this.searchTerm) || vendedor.cpf.includes(this.searchTerm));
+    this.dataSourceFilter = this.dataSource.filter((vendedor: any) => vendedor.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) || vendedor.cpf.includes(this.searchTerm));
     if(this.searchTerm.length == 0){
       this.dataSourceFilter = this.dataSource;
     }

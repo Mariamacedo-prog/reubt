@@ -30,7 +30,7 @@ export class ImovelGridComponent {
   }
 
   procurar() {
-    this.dataSourceFilter = this.dataSource.filter((imovel: any) => imovel.contratante.nome.includes(this.searchTerm) || imovel.contratante.cpf.includes(this.searchTerm));
+    this.dataSourceFilter = this.dataSource.filter((imovel: any) => imovel.contratante.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) || imovel.contratante.cpf.includes(this.searchTerm));
     if(this.searchTerm.length == 0){
       this.dataSourceFilter = this.dataSource;
     }

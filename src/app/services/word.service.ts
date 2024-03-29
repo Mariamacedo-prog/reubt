@@ -74,7 +74,7 @@ export class WordService {
 
   transform(numero: number): string {
      const numerosPorExtenso = [
-        '', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove',
+        'zero', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove',
         'dez', 'onze', 'doze', 'treze', 'catorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove',
         'vinte', 'vinte e um', 'vinte e dois', 'vinte e três', 'vinte e quatro', 'vinte e cinco',
         'vinte e seis', 'vinte e sete', 'vinte e oito', 'vinte e nove', 'trinta'
@@ -316,7 +316,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                   size:25, 
                   font: "Arial"
                 },
-                { text:"[Número] ", 
+                { text:"120 ", 
                   bold:true, 
                   size:25, 
                   font: "Arial"
@@ -415,7 +415,9 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                   }
               ]),
               this.gerarParagrafo(
-                [{ text:`        • Quantidade de parcelas proposta pelo CONTRATANTE ${parcelamentoInfo?.parcelas?.quantidade} (${this.transform(parcelamentoInfo?.parcelas?.quantidade)});`,
+                [{ text:parcelamentoInfo?.parcelas?.quantidade > 0 
+                  ? `        • Quantidade de parcelas proposta pelo CONTRATANTE ${parcelamentoInfo?.parcelas?.quantidade} (${this.transform(parcelamentoInfo?.parcelas?.quantidade)});` 
+                  : `        • Quantidade proposta pelo CONTRATANTE, 1 (${this.transform(1)}) pagamento à vista de ${parcelamentoInfo?.valorAvista?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`,
                   bold:true,
                   size:25, 
                   font: "Arial"

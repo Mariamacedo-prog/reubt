@@ -12,6 +12,9 @@ export class ContratosGridComponent {
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
+
+  cartorios: any = [];
+  cartorioSearch: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService) {}
   adicionarNovo() {
     this.router.navigate(["/contrato/novo"]);
@@ -25,14 +28,22 @@ export class ContratosGridComponent {
           this.dataSource = JSON.parse(storedDb).contratos;
           this.dataSourceFilter = JSON.parse(storedDb).contratos;
         }
+        if(JSON.parse(storedDb).cartorios){
+          this.cartorios = JSON.parse(storedDb).cartorios;
+        }
       }
     }, 1000)
   }
 
   procurar() {
-    this.dataSourceFilter = this.dataSource.filter((contrato: any) => contrato.nome.includes(this.searchTerm) || contrato.cpf.includes(this.searchTerm));
     if(this.searchTerm.length == 0){
       this.dataSourceFilter = this.dataSource;
+    }
+
+    this.dataSourceFilter = this.dataSource.filter((contrato: any) => contrato.contratante.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) || contrato.contratante.cpf.includes(this.searchTerm));
+ 
+    if(this.cartorioSearch != ''){
+      this.dataSourceFilter = this.dataSourceFilter.filter((contrato: any) => contrato.cartorio.nome.toLowerCase().includes(this.cartorioSearch.toLowerCase()));
     }
   }
 
@@ -60,5 +71,10 @@ export class ContratosGridComponent {
     localStorage.setItem('appDb', JSON.stringify(databaseInfo));
     this.dataSourceFilter = databaseInfo.contratos;
     this.dataSource = databaseInfo.contratos;
+  }
+
+  cartorioSelected(event: any){
+    const value = event?.value;
+    this.cartorioSearch = value;
   }
 }

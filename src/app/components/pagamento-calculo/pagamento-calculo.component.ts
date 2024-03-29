@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToolboxService } from '../toolbox/toolbox.service';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 
 interface TypeSelectValue {
@@ -37,19 +38,19 @@ export class PagamentoCalculoComponent {
   }
 
   entradaFormControls = this.formBuilder.group({
-    quantidade: [0, Validators.required],
-    valor: [0, Validators.required],
-    dataPrimeiroPagamento: [null, Validators.required],
+    quantidade: [0, this.formControls?.get('isAvista')?.value == true ? null : Validators.required],
+    valor: [0, this.formControls?.get('isAvista')?.value == true? null : Validators.required],
+    dataPrimeiroPagamento: [null, this.formControls?.get('isAvista')?.value == true? null : Validators.required],
     dataUltimoPagamento: [null],
     valorTotal:[0]
   });
 
   parcelasFormControls = this.formBuilder.group({
-    quantidade: [0, Validators.required],
-    valor: [0, Validators.required],
-    dataPrimeiroPagamento: [0, Validators.required],
-    dataUltimoPagamento: [0],
-    valorTotal:[0, Validators.required]
+    quantidade: [0, this.formControls?.get('isAvista')?.value == true? null : Validators.required],
+    valor: [0, this.formControls?.get('isAvista')?.value == true ? null : Validators.required],
+    dataPrimeiroPagamento: [null, this.formControls?.get('isAvista')?.value == true ? null : Validators.required],
+    dataUltimoPagamento: [null],
+    valorTotal:[0, this.formControls?.get('isAvista')?.value == true ? null : Validators.required]
   });
   
   ngOnInit(): void {
@@ -166,6 +167,10 @@ export class PagamentoCalculoComponent {
     } else {
         this.formControls?.get('entrada')?.get('dataUltimoPagamento')?.setValue(null);
     }
+
+    if(this.formControls?.get('isAvista')?.value == true){
+      this.formControls?.get('parcelas')?.get('dataPrimeiroPagamento')?.setValue(dataPrimeiroPagamento);
+    }
   }
 
   listarValorParcela(){
@@ -212,6 +217,7 @@ export class PagamentoCalculoComponent {
   }
 
   formularioValido(): boolean {
+    console.log(this.formControls)
     return this.formControls.valid;
   }
 
@@ -233,9 +239,9 @@ export class PagamentoCalculoComponent {
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
 
       this.toolboxService.showTooltip('success', 'Parcelamento realizado com sucesso!', 'Sucesso!');
+      this.existeParcelamento = true;
+      this.dataEvent.emit(item);
     }
-
-    this.dataEvent.emit(item);
   }
 
   atualizarParcelamento(){
@@ -255,9 +261,8 @@ export class PagamentoCalculoComponent {
       localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
 
       this.toolboxService.showTooltip('success', 'Parcelamento realizado com sucesso!', 'Sucesso!');
+      this.dataEvent.emit(item);
     }
-
-    this.dataEvent.emit(item);
   }
 
   registarValores(){
@@ -292,5 +297,41 @@ export class PagamentoCalculoComponent {
          viewValue: `Em ${i} vez${i > 1 ? 'es' : ' '} de R$${valor.toFixed(2)}`
         });
      }
+  }
+
+
+  pagamentoAvista(event: MatSlideToggleChange) {
+    if (event.checked) {
+      this.formControls?.get('isAvista')?.setValue(true);
+      this.formControls?.get('valorAvista')?.setValue(this.formControls?.get('plano')?.value * 0.90);
+
+      this.formControls?.get('parcelas')?.get('quantidade')?.setValue(0);
+      this.formControls?.get('parcelas')?.get('valor')?.setValue(0);
+      this.formControls?.get('parcelas')?.get('dataPrimeiroPagamento')?.setValue(null);
+      this.formControls?.get('parcelas')?.get('dataUltimoPagamento')?.setValue(null);
+      this.formControls?.get('parcelas')?.get('valorTotal')?.setValue(0);
+      
+      this.formControls?.get('entrada')?.get('quantidade')?.setValue(1);
+      this.formControls?.get('entrada')?.get('valor')?.setValue(this.formControls?.get('plano')?.value * 0.90);
+      this.formControls?.get('entrada')?.get('dataPrimeiroPagamento')?.setValue(null);
+      this.formControls?.get('entrada')?.get('dataUltimoPagamento')?.setValue(null);
+      this.formControls?.get('entrada')?.get('valorTotal')?.setValue(this.formControls?.get('plano')?.value * 0.90);
+
+    } else {
+
+      this.formControls?.get('isAvista')?.setValue(false);
+      this.formControls?.get('parcelas')?.get('quantidade')?.setValue(0);
+      this.formControls?.get('parcelas')?.get('valor')?.setValue(0);
+      this.formControls?.get('parcelas')?.get('dataPrimeiroPagamento')?.setValue(null);
+      this.formControls?.get('parcelas')?.get('dataUltimoPagamento')?.setValue(null);
+      this.formControls?.get('parcelas')?.get('valorTotal')?.setValue(0);
+      
+      this.formControls?.get('entrada')?.get('quantidade')?.setValue(0);
+      this.formControls?.get('entrada')?.get('valor')?.setValue(0);
+      this.formControls?.get('entrada')?.get('dataPrimeiroPagamento')?.setValue(null);
+      this.formControls?.get('entrada')?.get('dataUltimoPagamento')?.setValue(null);
+      this.formControls?.get('entrada')?.get('valorTotal')?.setValue(0);
+    }
+    this.formularioValido();
   }
 }

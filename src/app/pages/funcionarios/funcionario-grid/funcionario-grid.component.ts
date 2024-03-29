@@ -32,7 +32,7 @@ export class FuncionarioGridComponent {
   }
   
   procurar() {
-    this.dataSourceFilter = this.dataSource.filter((funcionario: any) => funcionario.nome.includes(this.searchTerm) || funcionario.cpf.includes(this.searchTerm));
+    this.dataSourceFilter = this.dataSource.filter((funcionario: any) => funcionario.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) || funcionario.cpf.includes(this.searchTerm));
     if(this.searchTerm.length == 0){
       this.dataSourceFilter = this.dataSource;
     }

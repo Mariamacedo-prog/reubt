@@ -4,7 +4,7 @@
     <div class=" inputs-row-form">
       <mat-form-field class="search-field-grid">
         <mat-label>Situação do Pagamento</mat-label>
-        <mat-select>
+        <mat-select disabled>
           <!-- @for (food of foods; track food) {
             <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
           } -->
@@ -14,48 +14,45 @@
       </mat-form-field>
       <mat-form-field class="search-field-grid">
         <mat-label>Escolha uma Data</mat-label>
-        <input matInput [matDatepicker]="picker">
+        <input disabled matInput [matDatepicker]="picker">
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
-
       <mat-form-field class="search-field-grid">
-        <mat-label>Cartórios</mat-label>
-        <mat-select>
-          <mat-option > cartório São paulo</mat-option>
-          <mat-option >cartório Rio de Janeiro</mat-option>
+        <mat-label>Cidade</mat-label>
+        <mat-select disabled>
+          <mat-option >São paulo</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
 
     <div class=" inputs-row-form" > 
       <mat-form-field class="search-field-grid">
-        <mat-label>Cidade</mat-label>
-        <mat-select>
+        <mat-label>Estado</mat-label>
+        <mat-select disabled>
           <mat-option >São paulo</mat-option>
-          <mat-option >Ferraz de Vasconcelos</mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field class="search-field-grid">
-        <mat-label>Estado</mat-label>
-        <mat-select>
-          <mat-option >São paulo</mat-option>
-          <mat-option >Rio de Janeiro</mat-option>
+        <mat-label>Cartórios</mat-label>
+        <mat-select (selectionChange)="cartorioSelected($event)">
+          <mat-option value="">Escolha um cartorio</mat-option>
+          @for (cartorio of cartorios; track cartorio) {
+            <mat-option [value]="cartorio.cartorio.nome">{{cartorio.cartorio.nome}}</mat-option>
+          }
         </mat-select>
       </mat-form-field>
-    </div>
-
+     </div>
     <div class=" inputs-row-form">
       <mat-form-field class="search-field-grid">
         <input matInput placeholder="Pesquisar por Nome ou CPF" [(ngModel)]="searchTerm" (keyup)="procurar()" />
         <mat-icon matPrefix>search</mat-icon>
       </mat-form-field>
-      <button style="margin-top:17px; margin-left: 20px;" mat-stroked-button color="primary">Filtrar</button>
+      <button style="margin-top:17px; margin-left: 20px; padding: 15px 50px;" (click)="procurar()" mat-stroked-button color="primary">Filtrar</button>
       <button style="margin-top:17px; margin-left: 20px;" mat-raised-button color="primary"  (click)="adicionarNovo()">Novo Contratante</button>
-    </div>
- 
+     </div>
   </div>
 
 
