@@ -7,14 +7,19 @@
       <form [formGroup]="formControls">
         <mat-card-content >
           <mat-tab-group animationDuration="700ms" >
-            <mat-tab  formGroupName="cartorio" > 
+            <mat-tab   > 
               <ng-template mat-tab-label>
-                <span [ngClass]="formControls.get('cartorio')?.invalid ?'tab-invalid' : ''">Dados Cartório</span>
+                <span  [ngClass]="formControls.get('nome')?.invalid 
+                || formControls.get('cnpj')?.invalid 
+                || formControls.get('telefone')?.invalid 
+                || formControls.get('email')?.invalid 
+                || formControls.get('cns')?.invalid 
+                ?'tab-invalid' : ''">Dados Cartório</span>
               </ng-template>
               <mat-form-field>
                 <mat-label>Nome</mat-label>
                 <input [readonly]="visualizar"  matInput formControlName="nome" />
-                <mat-error *ngIf="formControls.get('cartorio.nome')?.hasError('required')">
+                <mat-error *ngIf="formControls.get('nome')?.hasError('required')">
                   Este campo é <strong>obrigatório</strong>
                 </mat-error>
               </mat-form-field>
@@ -23,28 +28,28 @@
                 <mat-form-field>
                   <mat-label>CNPJ</mat-label>
                   <input [readonly]="visualizar"  matInput formControlName="cnpj" />
-                  <mat-error *ngIf="formControls.get('cartorio.cnpj')?.hasError('required')">
+                  <mat-error *ngIf="formControls.get('cnpj')?.hasError('required')">
                     Este campo é <strong>obrigatório</strong>
                   </mat-error>
-                  <mat-error *ngIf="formControls.get('cartorio.cnpj')?.hasError('cnpjInvalido')">CNPJ inválido</mat-error>
+                  <mat-error *ngIf="formControls.get('cnpj')?.hasError('cnpjInvalido')">CNPJ inválido</mat-error>
                 </mat-form-field>
                 
                 <mat-form-field>
                   <mat-label>CNS</mat-label>
                   <input [readonly]="visualizar"  matInput formControlName="cns" />
-                  <mat-error *ngIf="formControls.get('cartorio.cns')?.hasError('required')">
+                  <mat-error *ngIf="formControls.get('cns')?.hasError('required')">
                     Este campo é <strong>obrigatório</strong>
                   </mat-error>
-                  <mat-error *ngIf="formControls.get('cartorio.cns')?.hasError('cnsInvalid')">CNS inválido</mat-error>
+                  <mat-error *ngIf="formControls.get('cns')?.hasError('cnsInvalid')">CNS inválido</mat-error>
                 </mat-form-field>
 
                 <mat-form-field>
                   <mat-label>Telefone</mat-label>
-                  <input [readonly]="visualizar"  matInput  formControlName="telefone" (input)="formatarTelefone()" />
-                  <mat-error *ngIf="formControls.get('cartorio.telefone')?.hasError('pattern')">
+                  <input [readonly]="visualizar"  matInput  formControlName="telefone" (input)="formatPhone()" />
+                  <mat-error *ngIf="formControls.get('telefone')?.hasError('pattern')">
                     Por favor digite um telefone válido.
                   </mat-error>
-                  <mat-error *ngIf="formControls.get('cartorio.telefone')?.hasError('required')">
+                  <mat-error *ngIf="formControls.get('telefone')?.hasError('required')">
                     Este campo é <strong>obrigatório</strong>
                   </mat-error>
                 </mat-form-field> 
@@ -53,10 +58,10 @@
               <mat-form-field>
                 <mat-label>Email</mat-label>
                 <input [readonly]="visualizar" type="email" matInput formControlName="email"  placeholder="Ex.pat@example.com" />
-                <mat-error *ngIf="formControls.get('cartorio.email')?.hasError('email') && !formControls.get('cartorio.email')?.hasError('required')">
+                <mat-error *ngIf="formControls.get('email')?.hasError('email') && !formControls.get('email')?.hasError('required')">
                   Please enter a valid email address
                 </mat-error>
-                <mat-error *ngIf="formControls.get('cartorio.email')?.hasError('required')" >
+                <mat-error *ngIf="formControls.get('email')?.hasError('required')" >
                   Este campo é <strong>obrigatório</strong>
                 </mat-error>
               </mat-form-field>
@@ -112,15 +117,6 @@
                       Este campo é <strong>obrigatório</strong>
                     </mat-error>
                   </mat-form-field> 
-                  <div>
-                    <mat-form-field class="search-field">
-                      <mat-label>Estado Civil</mat-label>
-                      <mat-select formControlName="estadoCivil">
-                        <mat-option *ngFor="let estado of estadoCivil" [value]="estado.label">{{estado.label}}</mat-option>
-                      </mat-select>
-                      <mat-error *ngIf="formControls.get('representante.estadoCivil')?.hasError('required')">Este campo é <strong>obrigatório</strong></mat-error>
-                    </mat-form-field>
-                  </div>
                 </div>
             </mat-tab>
   
@@ -132,7 +128,7 @@
              
               <mat-form-field>
                   <mat-label>CEP</mat-label>
-                  <input [readonly]="visualizar" (keyup)="buscarEndereco()" maxlength="8" type="text" matInput formControlName="cep"/>
+                  <input [readonly]="visualizar" (keyup)="findAddress()" maxlength="8" type="text" matInput formControlName="cep"/>
                   <mat-error *ngIf="formControls.get('endereco.cep')?.hasError('required')" >
                     Este campo é <strong>obrigatório</strong>
                   </mat-error>
@@ -183,13 +179,13 @@
     
     
     
-          <div class="area-botao-form " *ngIf="isLoggedIn && this.cartorioId === 0 || this.cartorioId === undefined">
-            <button mat-raised-button color="primary" (click)="cadastrar()" [disabled]="!formularioValido()">Cadastrar</button>
+          <div class="area-botao-form " *ngIf="isLoggedIn && this.cartorioId === ''|| this.cartorioId === undefined">
+            <button mat-raised-button color="primary" (click)="create()" [disabled]="!formValid()">Cadastrar</button>
             <button  mat-raised-button color="link" routerLink="/cartorio/lista">Voltar</button>
           </div>
   
-          <div class="area-botao-form " *ngIf="isLoggedIn && this.cartorioId !== 0 && this.cartorioId !== undefined">
-            <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizar()"  [disabled]="!formularioValido()"> Atualizar</button>
+          <div class="area-botao-form " *ngIf="isLoggedIn && this.cartorioId !== '' && this.cartorioId !== undefined">
+            <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="update()"  [disabled]="!formValid()"> Atualizar</button>
             <button mat-raised-button color="link" routerLink="/cartorio/lista">Voltar</button>
           </div>
         </mat-card-content>

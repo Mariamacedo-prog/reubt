@@ -96,7 +96,7 @@
             <div class="inputs-row-form">
               <mat-form-field>
                 <mat-label>Telefone</mat-label>
-                <input [readonly]="visualizar"  matInput formControlName="telefone" (input)="formatarTelefone()" />
+                <input [readonly]="visualizar"  matInput formControlName="telefone" (input)="formatPhone()" />
                 <mat-error *ngIf="formControls?.get('telefone')?.hasError('pattern')">
                   Por favor digite um telefone válido.
                 </mat-error>
@@ -107,7 +107,7 @@
               
               <mat-form-field>
                 <mat-label>Profissão</mat-label>
-                <input [readonly]="visualizar"  matInput formControlName="profissao"(input)="formatarTelefone()" />
+                <input [readonly]="visualizar"  matInput formControlName="profissao"  />
                 <mat-error *ngIf="formControls?.get('profissao')?.hasError('required')">
                   Este campo é <strong>obrigatório</strong>
                 </mat-error>
@@ -115,7 +115,7 @@
     
               <mat-form-field>
                 <mat-label>Nacionalidade</mat-label>
-                <input [readonly]="visualizar"  matInput formControlName="nacionalidade" (input)="formatarTelefone()" />
+                <input [readonly]="visualizar"  matInput formControlName="nacionalidade" />
                 <mat-error *ngIf="formControls?.get('nacionalidade')?.hasError('required')">
                   Este campo é <strong>obrigatório</strong>
                 </mat-error>
@@ -143,7 +143,7 @@
     
               <mat-form-field >
                 <mat-label>Nacionalidade Cônjuge</mat-label>
-                <input [readonly]="visualizar"  matInput  formControlName="nacionalidadeConjugue" (input)="formatarTelefone()" />
+                <input [readonly]="visualizar"  matInput  formControlName="nacionalidadeConjugue" />
                 <mat-error *ngIf="formControls?.get('nomeConjugue')?.hasError('required')">
                   Este campo é <strong>obrigatório</strong>
                 </mat-error>
@@ -192,12 +192,12 @@
 
         </mat-tab-group>
           <div class="area-botao-form " *ngIf="isLoggedIn && this.contratanteId === '' || this.contratanteId === undefined">
-            <button mat-raised-button color="primary" (click)="cadastrar()" [disabled]="!formularioValido()">Cadastrar</button>
+            <button mat-raised-button color="primary" (click)="create()" [disabled]="!formValid()">Cadastrar</button>
             <button  mat-raised-button color="link" routerLink="/contratante/lista">Voltar</button>
           </div>
   
           <div class="area-botao-form " *ngIf="isLoggedIn && this.contratanteId !== '' && this.contratanteId !== undefined">
-            <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizar()" [disabled]="!formularioValido()"> Atualizar</button>
+            <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="update()" [disabled]="!formValid()"> Atualizar</button>
             <button mat-raised-button color="link" routerLink="/contratante/lista">Voltar</button>
           </div>
       </mat-card-content>

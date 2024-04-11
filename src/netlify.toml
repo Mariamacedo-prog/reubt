@@ -1,14 +1,3 @@
 [build]
-  command = "ng build  --prod"
+  command = "ng build"
   publish = "dist/reurb/browser"
-  memory = 4096 
-
-[build.environment]
-NODE_VERSION = "14" # Specify Node.js version
-NPM_VERSION = "7"  # Specify npm version
-
-[context.production.environment]
-NODE_ENV = "production"
-
-[context.production.dependencies]
-- node_modules/

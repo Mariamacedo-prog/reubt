@@ -5,6 +5,7 @@ import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CepService } from '../../../services/utils/cep.service';
 import { ValidateService } from '../../../services/utils/validate.service';
+import { CartoriosService } from '../../../services/cartorios.service';
 
 @Component({
   selector: 'app-cartorio-form',
@@ -12,27 +13,18 @@ import { ValidateService } from '../../../services/utils/validate.service';
   styleUrl: './cartorio-form.component.css'
 })
 export class CartorioFormComponent {
-  cartorioId = 0;
+  cartorioId = "";
   isLoggedIn: boolean = false;
   databaseInfo: any = {};
   options: string[] = [];
   filteredOptions: Observable<string[]> = of([]);
   visualizar: boolean = false;
-  estadoCivil: any = {};
   formControls!: FormGroup; 
 
   constructor(private toolboxService: ToolboxService, private router: Router, 
     private route: ActivatedRoute, private cepService: CepService, private formBuilder: FormBuilder,
-    private validateService: ValidateService, 
+    private validateService: ValidateService, private cartoriosService: CartoriosService
     ) {}
-
-  cartorioFormControls = this.formBuilder.group({
-    nome: ['', Validators.required],
-    cnpj: ['', [Validators.required, this.validateService.validateCNPJ]],
-    telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
-    email: ['', [Validators.required, Validators.email]],
-    cns:['', [Validators.required, this.validateService.validateCNS]]
-  });
 
   enderecoFormControls = this.formBuilder.group({
     rua: ['', Validators.required],
@@ -45,7 +37,6 @@ export class CartorioFormComponent {
 
   representanteFormControls = this.formBuilder.group({
     nome: ['', Validators.required],
-    estadoCivil: ['', Validators.required],
     nacionalidade: ['', Validators.required],
     cpf: ['', [Validators.required, this.validateService.validateCPF]],
     rg: ['', [Validators.required, this.validateService.validateRG]],
@@ -57,7 +48,11 @@ export class CartorioFormComponent {
   ngOnInit(): void {
     this.formControls = this.formBuilder.group({
       id: [0, Validators.required],
-      cartorio: this.cartorioFormControls,
+      nome: ['', Validators.required],
+      cnpj: ['', [Validators.required, this.validateService.validateCNPJ]],
+      telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
+      email: ['', [Validators.required, Validators.email]],
+      cns:['', [Validators.required, this.validateService.validateCNS]],
       representante: this.representanteFormControls,
       endereco: this.enderecoFormControls,
     });
@@ -72,115 +67,56 @@ export class CartorioFormComponent {
 
     this.isAuthenticated();
 
-    const storedDb = localStorage.getItem('appDb');
-      if (storedDb) {
-        this.databaseInfo = JSON.parse(storedDb);
-        this.estadoCivil = this.databaseInfo.estadoCivil;
-      }
 
     if(this.cartorioId){
-      if(this.databaseInfo.cartorios){
-        const item = this.databaseInfo.cartorios.find((info: any) => info.id == this.cartorioId);
-        console.log(item);
-        if(item){
-          console.log("encontrou o item: ", item)
-          this.formControls.get('cartorio')?.get('nome')?.setValue(item.cartorio.nome);
-          this.formControls.get('cartorio')?.get('cnpj')?.setValue(item.cartorio.cnpj);
-          this.formControls.get('cartorio')?.get('telefone')?.setValue(item.cartorio.telefone);
-          this.formControls.get('cartorio')?.get('email')?.setValue(item.cartorio.email);
-          this.formControls.get('cartorio')?.get('cns')?.setValue(item.cartorio.cns);
+      this.cartoriosService.findById(this.cartorioId).subscribe(cartorio => {
+        this.formControls.get('nome')?.setValue(cartorio.nome);
+        this.formControls.get('cnpj')?.setValue(cartorio.cnpj);
+        this.formControls.get('telefone')?.setValue(cartorio.telefone);
+        this.formControls.get('email')?.setValue(cartorio.email);
+        this.formControls.get('cns')?.setValue(cartorio.cns);
 
-          this.formControls.get('representante')?.get('nome')?.setValue(item.representante.nome);
-          this.formControls.get('representante')?.get('estadoCivil')?.setValue(item.representante.estadoCivil);
-          this.formControls.get('representante')?.get('nacionalidade')?.setValue(item.representante.nacionalidade);
-          this.formControls.get('representante')?.get('cpf')?.setValue(item.representante.cpf);
-          this.formControls.get('representante')?.get('rg')?.setValue(item.representante.rg);
+        this.formControls.get('representante')?.get('nome')?.setValue(cartorio.representante.nome);
+        this.formControls.get('representante')?.get('nacionalidade')?.setValue(cartorio.representante.nacionalidade);
+        this.formControls.get('representante')?.get('cpf')?.setValue(cartorio.representante.cpf);
+        this.formControls.get('representante')?.get('rg')?.setValue(cartorio.representante.rg);
 
-          this.formControls.get('representante')?.get('cargo')?.setValue(item.representante.cargo);
+        this.formControls.get('representante')?.get('cargo')?.setValue(cartorio.representante.cargo);
 
-          this.formControls.get('endereco')?.get('rua')?.setValue(item.endereco.rua);
-          this.formControls.get('endereco')?.get('cep')?.setValue(item.endereco.cep);
-          this.formControls.get('endereco')?.get('bairro')?.setValue(item.endereco.bairro);
-          this.formControls.get('endereco')?.get('cidadeUf')?.setValue(item.endereco.cidadeUf);
-          this.formControls.get('endereco')?.get('complemento')?.setValue(item.endereco.complemento);
-          this.formControls.get('endereco')?.get('numero')?.setValue(item.endereco.numero);
+        this.formControls.get('endereco')?.get('rua')?.setValue(cartorio.endereco.rua);
+        this.formControls.get('endereco')?.get('cep')?.setValue(cartorio.endereco.cep);
+        this.formControls.get('endereco')?.get('bairro')?.setValue(cartorio.endereco.bairro);
+        this.formControls.get('endereco')?.get('cidadeUf')?.setValue(cartorio.endereco.cidadeUf);
+        this.formControls.get('endereco')?.get('complemento')?.setValue(cartorio.endereco.complemento);
+        this.formControls.get('endereco')?.get('numero')?.setValue(cartorio.endereco.numero);
+      })         
+    }
+  }
+
+  async create() {
+    const cnpj = this.formControls?.get('cnpj')?.getRawValue(); 
+
+    if (cnpj) {
+      try {
+        const cnpjExists = await this.cartoriosService.checkIfcnpjExists(cnpj).toPromise(); 
+  
+        if (!cnpjExists) {
+          await this.cartoriosService.save(this.formControls.getRawValue()); 
+          this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
+          this.router.navigate(['/cartorio/lista']);
+        } else {
+          this.toolboxService.showTooltip('error', 'CPF já cadastrado no banco de dados!', 'ERROR!');
         }
+      } catch (error) {
+
+        this.toolboxService.showTooltip('error', 'Ocorreu um erro ao cadastrar o contratante.', 'Erro!');
       }
     }
   }
 
-  cadastrar() {
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      this.databaseInfo = JSON.parse(storedDb);
-    }
-    if(this.databaseInfo.cartorios){
-      const cartorioPeloCnpj = this.databaseInfo.cartorios.find((item: any) => item.cartorio.cnpj == this.formControls.get('cartorio')?.get('cnpj')?.value);
-      if(cartorioPeloCnpj){
-        this.toolboxService.showTooltip('error', 'Cartorio com CNPJ já existe na base de dados!', 'ERRO CNPJ!');
-        return;
-      }
-
-      const cartorioPeloEmail = this.databaseInfo.cartorios.find((item: any) => item.cartorio.email == this.formControls.get('cartorio')?.get('email')?.value);
-      if(cartorioPeloEmail){
-        this.toolboxService.showTooltip('error', 'Cartorio com E-mail já existe na base de dados!', 'ERRO E-MAIL!');
-        return;
-      }
-
-      const cartorioPeloCns = this.databaseInfo.cartorios.find((item: any) => item.cartorio.cns == this.formControls.get('cartorio')?.get('cns')?.value);
-      if(cartorioPeloCns){
-        this.toolboxService.showTooltip('error', 'Cartorio com CNS já existe na base de dados!', 'ERRO CNS!');
-        return;
-      }
-
-      this.formControls.get('id')?.setValue(Math.floor(Math.random() * 100000));
-
-      this.databaseInfo.cartorios.push(
-        this.formControls.getRawValue()
-      )
-
-      localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
-      this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/cartorio/lista']);
-    }
-  }
-
-  atualizar(){
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      this.databaseInfo = JSON.parse(storedDb);
-    }
-    
-    console.log("cartorioos",this.databaseInfo.cartorios);
-    if(this.databaseInfo.cartorios){
-      const cartorioPeloCnpj = this.databaseInfo.cartorios.find((item: any) => item.cartorio.cnpj == this.formControls.get('cartorio')?.get('cnpj')?.value && item.id != this.cartorioId);
-      if(cartorioPeloCnpj){
-        this.toolboxService.showTooltip('error', 'cartorio com CNPJ já existe na base de dados!', 'ERRO CNPJ!');
-        return;
-      }
-
-      const cartorioPeloEmail = this.databaseInfo.cartorios.find((item: any) => item.cartorio.email == this.formControls.get('cartorio')?.get('email')?.value && item.id != this.cartorioId);
-      if(cartorioPeloEmail){
-        this.toolboxService.showTooltip('error', 'cartorio com E-mail já existe na base de dados!', 'ERRO E-mail!');
-        return;
-      }
-
-      const cartorioPeloCns = this.databaseInfo.cartorios.find((item: any) => item.cartorio.cns == this.formControls.get('cartorio')?.get('cns')?.value && item.id != this.cartorioId);
-      if(cartorioPeloCns){
-        this.toolboxService.showTooltip('error', 'cartorio com CNS já existe na base de dados!', 'ERRO CNS!');
-        return;
-      }
-
-      const index = this.databaseInfo.cartorios.findIndex((item: any) => item.id == this.cartorioId);
-
-      if (index !== -1) {
-        this.formControls.get('id')?.setValue(this.cartorioId);
-        this.databaseInfo.cartorios[index] = this.formControls.getRawValue();
-      }
-
-      localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
-      this.toolboxService.showTooltip('success', 'Cadastro atualizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/cartorio/lista']);
+  async update(){
+    if (this.formControls?.get('cnpj')?.getRawValue()) {
+      await this.cartoriosService.updateItem(this.cartorioId, this.formControls.getRawValue())
     }
   }
 
@@ -192,22 +128,24 @@ export class CartorioFormComponent {
     }
   }
 
-  formatarTelefone() {
-    if(this.formControls.get('cartorio')?.get('telefone')?.value){
-      let telefone = this.formControls.get('cartorio')?.get('telefone')?.value.replace(/\D/g, '');
+  formatPhone() {
+    if(this.formControls.get('telefone')?.value){
+      let telefone = this.formControls.get('telefone')?.value.replace(/\D/g, '');
 
       if (telefone.length === 11) {
-        this.formControls.get('cartorio')?.get('telefone')?.setValue(`(${telefone.substring(0, 2)}) ${telefone.substring(2, 7)}-${telefone.substring(7)}`);
+        this.formControls.get('telefone')?.setValue(`(${telefone.substring(0, 2)}) ${telefone.substring(2, 7)}-${telefone.substring(7)}`);
       } else if (telefone.length === 10) {
-        this.formControls.get('cartorio')?.get('telefone')?.setValue(`(${telefone.substring(0, 2)}) ${telefone.substring(2, 6)}-${telefone.substring(6)}`);
+        this.formControls.get('telefone')?.setValue(`(${telefone.substring(0, 2)}) ${telefone.substring(2, 6)}-${telefone.substring(6)}`);
       }
     }
   }
 
-  buscarEndereco() {
+
+
+  findAddress() {
     this.formControls.get('endereco')?.get('cep')?.value;
     if(  this.formControls.get('endereco')?.get('cep')?.value){
-      this.limparEndereco();
+      this.clearAddress();
       if (  this.formControls.get('endereco')?.get('cep')?.value.toString().length === 8) {
         this.cepService.getAddressByCep(  this.formControls.get('endereco')?.get('cep')?.value)
           .subscribe(
@@ -219,7 +157,7 @@ export class CartorioFormComponent {
                 this.formControls.get('endereco')?.get('cidadeUf')?.setValue(data.localidade + " / " + data.uf)
               }else{
                 this.toolboxService.showTooltip('error', 'Cep não localizado!', 'ERRO CEP!');
-                this.limparEndereco();
+                this.clearAddress();
               }
             },
             error => {
@@ -230,26 +168,25 @@ export class CartorioFormComponent {
     }
   }
 
-  limparEndereco(){
+  clearAddress(){
     this.formControls.get('endereco')?.get('rua')?.setValue("");
     this.formControls.get('endereco')?.get('bairro')?.setValue("");
     this.formControls.get('endereco')?.get('cidadeUf')?.setValue("")
   }
 
-  formularioValido(): boolean {
+  formValid(): boolean {
     return this.formControls.valid;
   }
   
   validarGrupo(formGroup: FormGroup): boolean {
     let isValid = true;
-  
     Object.keys(formGroup.controls).forEach(controlName => {
       const control = formGroup.get(controlName);
       if (control && !control.valid) {
         isValid = false;
       }
     });
-  
+
     return isValid;
   }
 }

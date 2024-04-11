@@ -19,8 +19,8 @@ export class CartoriosService {
   }
 
 
-  checkIfCPFExists(cpf: string): Observable<boolean> {
-    return this.firestore.collection('cartorios', ref => ref.where('cpf', '==', cpf))
+  checkIfcnpjExists(cnpj: string): Observable<boolean> {
+    return this.firestore.collection('cartorios', ref => ref.where('cnpj', '==', cnpj))
       .get()
       .pipe(
         map(querySnapshot => !querySnapshot.empty)
@@ -28,8 +28,8 @@ export class CartoriosService {
   }
 
 
-  saveUser(user: any): Promise<void> { 
-    return this.itemsCollection.add(user).then(() => undefined);
+  async save(user: any): Promise<void> { 
+    await this.itemsCollection.add(user);
   }
 
   findById(id: string): Observable<any> {
@@ -37,16 +37,16 @@ export class CartoriosService {
   }
 
   async updateItem(id: any, newData: any): Promise<void> {
-    const cpf = newData.cpf;
+    const cnpj = newData.cnpj;
   
     try {
-      const users = await firstValueFrom(this.firestore.collection('cartorios', ref => ref.where('cpf', '==', cpf)).valueChanges({ idField: 'id' }));
-      if (users.length > 0 && users[0].id !== id) {
+      const cartorios = await firstValueFrom(this.firestore.collection('cartorios', ref => ref.where('cnpj', '==', cnpj)).valueChanges({ idField: 'id' }));
+      if (cartorios.length > 0 && cartorios[0].id !== id) {
         this.toolboxService.showTooltip('error', 'CPF já cadastrado no banco de dados!', 'ERROR!');
         throw new Error('CPF já cadastrado no banco de dados!');
       } else {
         this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
-        this.router.navigate(['/usuario/lista']);
+        this.router.navigate(['/cartorio/lista']);
         await this.itemsCollection.doc(id).update(newData);
       }
     } catch (error) {

@@ -22,13 +22,7 @@ export class UsuarioGridComponent {
 
   ngOnInit(): void {
     setTimeout(() => {
-      this.usuariosService.getItems().subscribe(usuarios => {
-        if (usuarios.length > 0) {
-          this.dataSource = usuarios;
-          this.findAllUsers();
-          this.dataSourceFilter = usuarios;
-        }
-      });
+      this.findAllUsers();
     }, 1000)
   }
   
@@ -49,7 +43,7 @@ export class UsuarioGridComponent {
 
   findAllUsers(){
     this.usuariosService.getItems().subscribe(usuarios => {
-      if (usuarios.length > 0) {
+      if (usuarios.length >= 0) {
         this.dataSource = usuarios;
         this.dataSourceFilter = usuarios;
       }

@@ -27,7 +27,7 @@ export class ContratanteGridComponent {
   findAll(){
     this.contratantesService.getItems().subscribe(contratante => { 
       console.log(contratante)
-      if (contratante.length > 0) {
+      if (contratante.length >= 0) {
         this.dataSource = contratante;
         this.dataSourceFilter = contratante;
      
@@ -39,39 +39,38 @@ export class ContratanteGridComponent {
     this.findAll();
 
     this.cartoriosService.getItems().subscribe(cartorios => { 
-      if (cartorios.length > 0) {
+      if (cartorios.length >= 0) {
         this.cartorios  = cartorios;
-        console.log(cartorios)
       }
     });
   }
 
-  procurar() {
+  search() {
     if(this.searchTerm.length == 0){
       this.dataSourceFilter = this.dataSource;
     }
     
     this.dataSourceFilter = this.dataSource.filter((contratante: any) => contratante.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) || contratante.cpf.includes(this.searchTerm));
    
-  if(this.cartorioSearch !== '') {
-    this.dataSourceFilter = this.dataSourceFilter.filter((contratante: any) => {
-      if (contratante.cartorio && contratante.cartorio.nome) {
-        return contratante.cartorio.nome.toLowerCase().includes(this.cartorioSearch.toLowerCase());
-      }
-      return false; 
-    });
-  }
+    if(this.cartorioSearch !== '') {
+      this.dataSourceFilter = this.dataSourceFilter.filter((contratante: any) => {
+        if (contratante.cartorio && contratante.cartorio.nome) {
+          return contratante.cartorio.nome.toLowerCase().includes(this.cartorioSearch.toLowerCase());
+        }
+        return false; 
+      });
+    }
   }
 
-  visualizarItem(element: any){
+  viewItem(element: any){
     this.router.navigate(["/contratante/form/" + element.id + "/visualizar"]);
   }
 
-  editarItem(element: any){
+  editItem(element: any){
     this.router.navigate(["/contratante/form/" + element.id]);
   }
 
-  deletarItem(element: any){
+  deleteItem(element: any){
     this.contratantesService.deleteItem(element.id);
     this.findAll();
   }

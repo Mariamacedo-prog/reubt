@@ -126,9 +126,13 @@ export class ContratanteFormComponent {
     }
 
     this.estadoCivil = this.estadoCivilService.getEstadoCivil(); 
+    this.findAllCartorios();
 
+  }
+
+  findAllCartorios(){
     this.cartoriosService.getItems().subscribe(cartorios => { 
-      if (cartorios.length > 0) {
+      if (cartorios.length >= 0) {
         this.cartorios  = cartorios;
         this.filteredCartorios  = cartorios;
         console.log(cartorios)
@@ -136,15 +140,15 @@ export class ContratanteFormComponent {
     });
   }
 
-  async cadastrar() {
-    const cpf = this.formControls?.get('cpf')?.getRawValue(); // Obter o valor do CPF
+  async create() {
+    const cpf = this.formControls?.get('cpf')?.getRawValue(); 
 
     if (cpf) {
       try {
-        const cpfExists = await this.contratantesService.checkIfCPFExists(cpf).toPromise(); // Verificar se o CPF já existe
+        const cpfExists = await this.contratantesService.checkIfCPFExists(cpf).toPromise(); 
   
         if (!cpfExists) {
-          await this.contratantesService.save(this.formControls.getRawValue()); // Salvar o contratante
+          await this.contratantesService.save(this.formControls.getRawValue()); 
           this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
           this.router.navigate(['/contratante/lista']);
         } else {
@@ -157,7 +161,7 @@ export class ContratanteFormComponent {
     }
   }
 
-  async atualizar(){
+  async update(){
     if (this.formControls?.get('cpf')?.getRawValue()) {
       await this.contratantesService.updateItem(this.contratanteId, this.formControls.getRawValue())
     }
@@ -182,7 +186,7 @@ export class ContratanteFormComponent {
     this.formControls?.get('nacionalidadeConjugue')?.updateValueAndValidity();
   }
 
-  formularioValido(): boolean {
+  formValid(): boolean {
     return (
       this.formControls.valid
     );
@@ -196,7 +200,7 @@ export class ContratanteFormComponent {
     }
   }
   
-  formatarTelefone() {
+  formatPhone() {
     if(this.formControls?.get('telefone')?.value){
       let telefone = this.formControls?.get('telefone')?.value.replace(/\D/g, '');
 
@@ -226,7 +230,7 @@ export class ContratanteFormComponent {
     const nome = event.target.value.trim();
     if (nome.length >= 3) {
       this.timeoutId = setTimeout(() => {
-        this.buscarCartorios(nome);
+        this.findCartorios(nome);
       }, 2000); 
     } else {
 
@@ -234,7 +238,7 @@ export class ContratanteFormComponent {
     }
   }
   
-  buscarCartorios(nome: string) {
+ findCartorios(nome: string) {
     this.filteredCartorios = this.cartorios.filter((item: any) => {
       return item.nome?.toLowerCase().includes(nome.toLowerCase());
     });
