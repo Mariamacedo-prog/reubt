@@ -16,7 +16,9 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router, private toolboxService: ToolboxService) {}
   ngOnInit(): void {
-
+    if(localStorage.getItem('isLoggedIn') == 'true'){
+      this.router.navigate(['/usuario/lista']);
+    }
   }
 
   login(): void {

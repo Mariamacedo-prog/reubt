@@ -15,19 +15,11 @@ export class AuthService {
   private db: any = {usuarios: [], acessos: [],funcionarios: [], contratante: [], menu:[]};
   public usuarioLogado: any;
 
-  constructor(private router: Router,private http: HttpClient, private usuariosService: UsuariosService) {
+  constructor(private router: Router, private usuariosService: UsuariosService) {
   }
 
   ngOnDestroy(): void {
     this.logout();
-  }
-
-  private saveDb(): void {
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      this.db = JSON.parse(storedDb);
-    }
-    localStorage.setItem('appDb', JSON.stringify(this.db));
   }
 
   isUserLoggedIn(): boolean{
@@ -52,6 +44,9 @@ export class AuthService {
     this.usuarioLogado = null;
     localStorage.setItem('isLoggedIn', JSON.stringify(false));
     localStorage.setItem('usuario', JSON.stringify(null));
+
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('usuario');
     this.router.navigate(['/login']);
   }
 }

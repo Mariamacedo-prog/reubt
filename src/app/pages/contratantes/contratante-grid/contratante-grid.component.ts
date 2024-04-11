@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
+import { ContratantesService } from '../../../services/contratantes.service';
+import { CartoriosService } from '../../../services/cartorios.service';
+
 
 @Component({
   selector: 'app-contratante-grid',
@@ -15,38 +18,49 @@ export class ContratanteGridComponent {
 
   cartorios: any = [];
   cartorioSearch: string = '';
-  constructor(private router: Router, private toolboxService: ToolboxService) {}
+  constructor(private router: Router, private toolboxService: ToolboxService,
+    private contratantesService: ContratantesService, private cartoriosService: CartoriosService) {}
   adicionarNovo() {
     this.router.navigate(["/contratante/novo"]);
   }
 
-  ngOnInit(): void {
-    setTimeout(() => {
-      const storedDb = localStorage.getItem('appDb');
-      if (storedDb) {
-        if(JSON.parse(storedDb).contratantes){
-          this.dataSource = JSON.parse(storedDb).contratantes;
-          this.dataSourceFilter = JSON.parse(storedDb).contratantes;
-        }
-        if(JSON.parse(storedDb).cartorios){
-          this.cartorios = JSON.parse(storedDb).cartorios;
-        }
+  findAll(){
+    this.contratantesService.getItems().subscribe(contratante => { 
+      console.log(contratante)
+      if (contratante.length > 0) {
+        this.dataSource = contratante;
+        this.dataSourceFilter = contratante;
+     
       }
-    }, 1000)
+    });
+  }
+
+  ngOnInit(): void {
+    this.findAll();
+
+    this.cartoriosService.getItems().subscribe(cartorios => { 
+      if (cartorios.length > 0) {
+        this.cartorios  = cartorios;
+        console.log(cartorios)
+      }
+    });
   }
 
   procurar() {
-
     if(this.searchTerm.length == 0){
       this.dataSourceFilter = this.dataSource;
     }
     
     this.dataSourceFilter = this.dataSource.filter((contratante: any) => contratante.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) || contratante.cpf.includes(this.searchTerm));
    
-    if(this.cartorioSearch != ''){
-      this.dataSourceFilter = this.dataSourceFilter.filter((contratante: any) => contratante.cartorio.nome.toLowerCase().includes(this.cartorioSearch.toLowerCase()));
-    }
-   
+  if(this.cartorioSearch !== '') {
+    this.dataSourceFilter = this.dataSourceFilter.filter((contratante: any) => {
+      if (contratante.cartorio && contratante.cartorio.nome) {
+        return contratante.cartorio.nome.toLowerCase().includes(this.cartorioSearch.toLowerCase());
+      }
+      return false; 
+    });
+  }
   }
 
   visualizarItem(element: any){
@@ -58,21 +72,8 @@ export class ContratanteGridComponent {
   }
 
   deletarItem(element: any){
-    let databaseInfo: any = {};
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      databaseInfo = JSON.parse(storedDb);
-    }
-    const index = databaseInfo.contratantes.findIndex((item: any) => item.id == element.id);
-
-    if (index !== -1) {
-      databaseInfo.contratantes.splice(index, 1)
-      this.toolboxService.showTooltip('success', 'Contratante foi deletado com sucesso!', 'SUCESSO!');
-    }
-
-    localStorage.setItem('appDb', JSON.stringify(databaseInfo));
-    this.dataSourceFilter = databaseInfo.contratantes;
-    this.dataSource = databaseInfo.contratantes;
+    this.contratantesService.deleteItem(element.id);
+    this.findAll();
   }
 
   cartorioSelected(event: any){

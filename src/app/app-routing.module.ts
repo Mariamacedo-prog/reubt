@@ -1,27 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
-import { authGuard } from './auth/auth.guard';
-import { UsuarioFormComponent } from './pages/usuarios/usuario-form/usuario-form.component';
-import { UsuarioGridComponent } from './pages/usuarios/usuario-grid/usuario-grid.component';
-import { FuncionarioFormComponent } from './pages/funcionarios/funcionario-form/funcionario-form.component';
-import { FuncionarioGridComponent } from './pages/funcionarios/funcionario-grid/funcionario-grid.component';
-import { ContratanteGridComponent } from './pages/contratantes/contratante-grid/contratante-grid.component';
-import { ContratanteFormComponent } from './pages/contratantes/contratante-form/contratante-form.component';
-import { VendedorFormComponent } from './pages/vendedores/vendedor-form/vendedor-form.component';
-import { VendedorGridComponent } from './pages/vendedores/vendedor-grid/vendedor-grid.component';
-import { PrefeituraFormComponent } from './pages/prefeitura/prefeitura-form/prefeitura-form.component';
-import { PrefeituraGridComponent } from './pages/prefeitura/prefeitura-grid/prefeitura-grid.component';
-import { AcessoGridComponent } from './pages/acessos/acesso-grid/acesso-grid.component';
-import { AcessoFormComponent } from './pages/acessos/acesso-form/acesso-form.component';
-import { ContratosGridComponent } from './pages/contratos/contratos-grid/contratos-grid.component';
-import { ContratosFormComponent } from './pages/contratos/contratos-form/contratos-form.component';
-import { CartorioFormComponent } from './pages/cartorio/cartorio-form/cartorio-form.component';
-import { CartorioGridComponent } from './pages/cartorio/cartorio-grid/cartorio-grid.component';
-import { VendaPagamentoFormComponent } from './pages/vendas-pagamentos/venda-pagamento-form/venda-pagamento-form.component';
-import { VendaPagamentoGridComponent } from './pages/vendas-pagamentos/venda-pagamento-grid/venda-pagamento-grid.component';
-import { ImovelFormComponent } from './pages/imoveis/imovel-form/imovel-form.component';
-import { ImovelGridComponent } from './pages/imoveis/imovel-grid/imovel-grid.component';
+
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },

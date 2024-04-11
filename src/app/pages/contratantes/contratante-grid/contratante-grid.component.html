@@ -40,7 +40,7 @@
         <mat-select (selectionChange)="cartorioSelected($event)">
           <mat-option value="">Escolha um cartorio</mat-option>
           @for (cartorio of cartorios; track cartorio) {
-            <mat-option [value]="cartorio.cartorio.nome">{{cartorio.cartorio.nome}}</mat-option>
+            <mat-option [value]="cartorio.nome">{{cartorio.nome}}</mat-option>
           }
         </mat-select>
       </mat-form-field>

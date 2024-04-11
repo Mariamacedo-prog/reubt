@@ -1,32 +1,26 @@
-
 import { Injectable } from '@angular/core';
-import 'firebase/firestore';
-import { AngularFirestoreCollection } from '@angular/fire/compat/firestore';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { ToolboxService } from '../components/toolbox/toolbox.service';
 import { Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
-
+import { Observable, firstValueFrom, map } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root' 
+  providedIn: 'root'
 })
-export class UsuariosService {
+export class ContratantesService {
   private itemsCollection!: AngularFirestoreCollection<any>; 
 
   constructor(private firestore: AngularFirestore, private toolboxService: ToolboxService, private router: Router) {
-    this.itemsCollection = this.firestore.collection('usuarios');
+    this.itemsCollection = this.firestore.collection('contratantes');
   }
 
   getItems(): Observable<any[]> {
-    return this.firestore.collection('usuarios').valueChanges({ idField: 'id' });
+    return this.itemsCollection.valueChanges({ idField: 'id' });
   }
 
 
   checkIfCPFExists(cpf: string): Observable<boolean> {
-    return this.firestore.collection('usuarios', ref => ref.where('cpf', '==', cpf))
+    return this.firestore.collection('contratantes', ref => ref.where('cpf', '==', cpf))
       .get()
       .pipe(
         map(querySnapshot => !querySnapshot.empty)
@@ -34,30 +28,25 @@ export class UsuariosService {
   }
 
 
-  saveUser(user: any): Promise<void> { 
-    return this.firestore.collection('usuarios').add(user).then(() => undefined);
-  }
-
-  findByCpfSenha(cpf: string, senha: string): Observable<any[]> {
-    return this.firestore.collection('usuarios', 
-      ref => ref.where('cpf', '==', cpf).where('senha', '==', senha)).valueChanges();
+  async save(user: any): Promise<void> { 
+    await this.itemsCollection.add(user);
   }
 
   findById(id: string): Observable<any> {
-    return this.firestore.collection('usuarios').doc(id).valueChanges({ idField: 'id' });
+    return this.itemsCollection.doc(id).valueChanges({ idField: 'id' });
   }
 
   async updateItem(id: any, newData: any): Promise<void> {
     const cpf = newData.cpf;
   
     try {
-      const users = await firstValueFrom(this.firestore.collection('usuarios', ref => ref.where('cpf', '==', cpf)).valueChanges({ idField: 'id' }));
-      if (users.length > 0 && users[0].id !== id) {
+      const contratante = await firstValueFrom(this.firestore.collection('contratantes', ref => ref.where('cpf', '==', cpf)).valueChanges({ idField: 'id' }));
+      if (contratante.length > 0 && contratante[0].id !== id) {
         this.toolboxService.showTooltip('error', 'CPF já cadastrado no banco de dados!', 'ERROR!');
         throw new Error('CPF já cadastrado no banco de dados!');
       } else {
         this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
-        this.router.navigate(['/usuario/lista']);
+        this.router.navigate(['/contratante/lista']);
         await this.itemsCollection.doc(id).update(newData);
       }
     } catch (error) {

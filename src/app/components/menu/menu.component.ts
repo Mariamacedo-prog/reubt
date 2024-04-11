@@ -33,16 +33,8 @@ export class MenuComponent {
   }
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.menuService.getMenuItems().subscribe(menu => {
-        if (menu.length > 0) {
-          this.menuItens = menu;
-        }
-      });
-    }, 3000)
+    this.menuItens=this.menuService.getMenuItems();
   }
-
-
 
   isAuthenticated(): boolean | null{
     if(localStorage.getItem('isLoggedIn') == 'true'){
@@ -51,7 +43,6 @@ export class MenuComponent {
       return false;
     }
   }
-
 
   ngOnDestroy(): void {
     this.mobileQuery.removeEventListener('change', this._mobileQueryListener);

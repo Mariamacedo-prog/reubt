@@ -4,6 +4,10 @@ import { Observable, of } from 'rxjs';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ValidateService } from '../../../services/utils/validate.service';
+import { ContratantesService } from '../../../services/contratantes.service';
+import { EstadoCivilService } from '../../../services/estadoCivil.service';
+import { CartoriosService } from '../../../services/cartorios.service';
+
 
 @Component({
   selector: 'app-contratante-form',
@@ -11,7 +15,7 @@ import { ValidateService } from '../../../services/utils/validate.service';
   styleUrl: './contratante-form.component.css'
 })
 export class ContratanteFormComponent {
-  contratanteId = 0;
+  contratanteId = "";
   isMarried = false;
   isLoggedIn: boolean = false;
   databaseInfo: any = {};
@@ -20,14 +24,18 @@ export class ContratanteFormComponent {
   filteredOptions: Observable<string[]> = of([]);
   visualizar: boolean = false;
   formControls!: FormGroup;
-
+  showAnexos: boolean  = false;
   filteredCartorios: any[] = [];
+  cartorios: any[] = [];
   timeoutId: any;
 
   loadingCartorio: boolean = false;
   
   constructor(private toolboxService: ToolboxService, private router: Router, 
-    private route: ActivatedRoute, private validateService: ValidateService,private formBuilder: FormBuilder) {}
+    private route: ActivatedRoute, private validateService: ValidateService,
+    private formBuilder: FormBuilder, private contratantesService: ContratantesService,
+    private estadoCivilService: EstadoCivilService, private cartoriosService: CartoriosService
+  ) {}
 
   anexosFormControl = this.formBuilder.group({
     rgFile: [{base64: '',type: ''}, Validators.required],
@@ -46,6 +54,7 @@ export class ContratanteFormComponent {
 
 
   ngOnInit(): void {
+
     this.formControls = this.formBuilder.group({
       id: [0, Validators.required],
       nome: ['', Validators.required],
@@ -54,9 +63,11 @@ export class ContratanteFormComponent {
       email: ['', [Validators.required, Validators.email]],
       telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
       nacionalidade: ['', [Validators.required]],
+      orgaoExpedicao:['', [Validators.required]],
       profissao: ['', [Validators.required]],
       estadoCivil: ['', [Validators.required]],
       nomeConjugue: [''],
+      dataExpedicao:  [''],
       nacionalidadeConjugue: [''],
       cartorio: this.cartorioFormControls,
       anexos: this.anexosFormControl
@@ -72,105 +83,83 @@ export class ContratanteFormComponent {
 
     this.isAuthenticated();
 
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      this.databaseInfo = JSON.parse(storedDb);
-     
-      this.estadoCivil = this.databaseInfo.estadoCivil;
-        if(this.contratanteId){
-          if(this.databaseInfo.contratantes){
-            const contratantePeloCpf = this.databaseInfo.contratantes.find((contratante: any) => contratante.id == this.contratanteId);
-            if(contratantePeloCpf){
-              this.formControls?.get('id')?.setValue(contratantePeloCpf.id);
-              this.formControls?.get('nome')?.setValue(contratantePeloCpf.nome);
-              this.formControls?.get('cpf')?.setValue(contratantePeloCpf.cpf);
-              this.formControls?.get('rg')?.setValue(contratantePeloCpf.rg);
-              this.formControls?.get('email')?.setValue(contratantePeloCpf.email);
-              this.formControls?.get('telefone')?.setValue(contratantePeloCpf.telefone);
-              this.formControls?.get('nacionalidade')?.setValue(contratantePeloCpf.nacionalidade);
-              this.formControls?.get('profissao')?.setValue(contratantePeloCpf.profissao);
-              this.formControls?.get('estadoCivil')?.setValue(contratantePeloCpf.estadoCivil);
-              this.formControls?.get('nomeConjugue')?.setValue(contratantePeloCpf.nomeConjugue);
-              this.formControls?.get('nacionalidadeConjugue')?.setValue(contratantePeloCpf.nacionalidadeConjugue);
-
-              this.formControls.get('anexos')?.get('rgFile')?.setValue(contratantePeloCpf.anexos.rgFile);
-              this.formControls.get('anexos')?.get('cpfFile')?.setValue(contratantePeloCpf.anexos.cpfFile);
-              this.formControls.get('anexos')?.get('comprovanteAquisicaoImovelFile')?.setValue(contratantePeloCpf.anexos.comprovanteAquisicaoImovelFile);
-              this.formControls.get('anexos')?.get('comprovanteEnderecofile')?.setValue(contratantePeloCpf.anexos.comprovanteEnderecofile);
-              this.formControls.get('anexos')?.get('cetidaoCasamentoFile')?.setValue(contratantePeloCpf.anexos.cetidaoCasamentoFile);
-              this.formControls.get('anexos')?.get('rgConjugueFile')?.setValue(contratantePeloCpf.anexos.rgConjugueFile);
-              this.formControls.get('anexos')?.get('cpfConjugueFile')?.setValue(contratantePeloCpf.anexos.cpfConjugueFile);
-
-              this.formControls.get('cartorio')?.get('nome')?.setValue(contratantePeloCpf.cartorio.nome);
-              this.formControls.get('cartorio')?.get('cns')?.setValue(contratantePeloCpf.cartorio.cns);
-
-              if(contratantePeloCpf.estadoCivil == 'Casado' || contratantePeloCpf.estadoCivil == 'União Estável'){
-                this.isMarried = true;
-              }
-            }
-          }
+    if(this.contratanteId){
+      this.contratantesService.findById(this.contratanteId).subscribe(contratante => {
+        this.formControls?.get('id')?.setValue(contratante.id);
+        this.formControls?.get('nome')?.setValue(contratante.nome);
+        this.formControls?.get('cpf')?.setValue(contratante.cpf);
+        this.formControls?.get('rg')?.setValue(contratante.rg);
+        this.formControls?.get('email')?.setValue(contratante.email);
+        this.formControls?.get('telefone')?.setValue(contratante.telefone);
+        this.formControls?.get('nacionalidade')?.setValue(contratante.nacionalidade);
+        this.formControls?.get('profissao')?.setValue(contratante.profissao);
+        this.formControls?.get('estadoCivil')?.setValue(contratante.estadoCivil);
+        this.formControls?.get('nomeConjugue')?.setValue(contratante.nomeConjugue);
+        this.formControls?.get('nacionalidadeConjugue')?.setValue(contratante.nacionalidadeConjugue);
+        this.formControls?.get('orgaoExpedicao')?.setValue(contratante.orgaoExpedicao);
+  
+        if(contratante.dataExpedicao){
+          const dataEmMilliseconds = contratante.dataExpedicao.seconds * 1000 + Math.floor(contratante.dataExpedicao.nanoseconds / 1000000);
+            const data = new Date(dataEmMilliseconds);
+          this.formControls?.get('dataExpedicao')?.setValue(data);
         }
+
+
+        this.formControls.get('anexos')?.get('rgFile')?.setValue(contratante.anexos.rgFile);
+        this.formControls.get('anexos')?.get('cpfFile')?.setValue(contratante.anexos.cpfFile);
+        this.formControls.get('anexos')?.get('comprovanteAquisicaoImovelFile')?.setValue(contratante.anexos.comprovanteAquisicaoImovelFile);
+        this.formControls.get('anexos')?.get('comprovanteEnderecofile')?.setValue(contratante.anexos.comprovanteEnderecofile);
+        this.formControls.get('anexos')?.get('cetidaoCasamentoFile')?.setValue(contratante.anexos.cetidaoCasamentoFile);
+        this.formControls.get('anexos')?.get('rgConjugueFile')?.setValue(contratante.anexos.rgConjugueFile);
+        this.formControls.get('anexos')?.get('cpfConjugueFile')?.setValue(contratante.anexos.cpfConjugueFile);
+
+        this.formControls.get('cartorio')?.get('nome')?.setValue(contratante.cartorio.nome);
+        this.formControls.get('cartorio')?.get('cns')?.setValue(contratante.cartorio.cns);
+
+        if(contratante.estadoCivil == 'Casado' || contratante.estadoCivil == 'União Estável'){
+          this.isMarried = true;
+        }
+        this.showAnexos = true;
+      });        
+    }else{
+      this.showAnexos = true;
+    }
+
+    this.estadoCivil = this.estadoCivilService.getEstadoCivil(); 
+
+    this.cartoriosService.getItems().subscribe(cartorios => { 
+      if (cartorios.length > 0) {
+        this.cartorios  = cartorios;
+        this.filteredCartorios  = cartorios;
+        console.log(cartorios)
+      }
+    });
+  }
+
+  async cadastrar() {
+    const cpf = this.formControls?.get('cpf')?.getRawValue(); // Obter o valor do CPF
+
+    if (cpf) {
+      try {
+        const cpfExists = await this.contratantesService.checkIfCPFExists(cpf).toPromise(); // Verificar se o CPF já existe
+  
+        if (!cpfExists) {
+          await this.contratantesService.save(this.formControls.getRawValue()); // Salvar o contratante
+          this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
+          this.router.navigate(['/contratante/lista']);
+        } else {
+          this.toolboxService.showTooltip('error', 'CPF já cadastrado no banco de dados!', 'ERROR!');
+        }
+      } catch (error) {
+
+        this.toolboxService.showTooltip('error', 'Ocorreu um erro ao cadastrar o contratante.', 'Erro!');
+      }
     }
   }
 
-  cadastrar() {
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      this.databaseInfo = JSON.parse(storedDb);
-    }
-    if(this.databaseInfo.contratantes){
-      const contratantePeloCpf = this.databaseInfo.contratantes.find((contratante: any) => contratante.cpf == this.formControls?.get('cpf')?.value);
-      if(contratantePeloCpf){
-        this.toolboxService.showTooltip('error', 'contratante com CPF já existe na base de dados!', 'ERRO CPF!');
-        return;
-      }
-
-      const contratantePeloEmail = this.databaseInfo.contratantes.find((contratante: any) => contratante.email == this.formControls?.get('email')?.value);
-      if(contratantePeloEmail){
-        this.toolboxService.showTooltip('error', 'contratante com E-mail já existe na base de dados!', 'ERRO CPF!');
-        return;
-      }
-
-      this.formControls?.get('id')?.setValue(Math.floor(Math.random() * 100000));
-
-      this.databaseInfo.contratantes.push(
-       this.formControls.getRawValue()
-      )
-      localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
-
-      this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/contratante/lista']);
-    }
-  }
-
-  atualizar(){
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      this.databaseInfo = JSON.parse(storedDb);
-    }
-    
-    if(this.databaseInfo.contratantes){
-      const contratantePeloCpf = this.databaseInfo.contratantes.find((contratante: any) => contratante.cpf == this.formControls?.get('cpf')?.value && contratante.id != this.contratanteId);
-      if(contratantePeloCpf){
-        this.toolboxService.showTooltip('error', 'contratante com CPF já existe na base de dados!', 'ERRO CPF!');
-        return;
-      }
-
-      const contratantePeloEmail = this.databaseInfo.contratantes.find((contratante: any) => contratante.email == this.formControls?.get('email')?.value && contratante.id != this.contratanteId);
-      if(contratantePeloEmail){
-        this.toolboxService.showTooltip('error', 'contratante com E-mail já existe na base de dados!', 'ERRO CPF!');
-        return;
-      }
-
-      const index = this.databaseInfo.contratantes.findIndex((item: any) => item.id == this.contratanteId);
-      if (index !== -1) {
-        this.databaseInfo.contratantes[index] = this.formControls.getRawValue();
-      }
-
-      localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
-
-      this.toolboxService.showTooltip('success', 'Cadastro atualizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/contratante/lista']);
+  async atualizar(){
+    if (this.formControls?.get('cpf')?.getRawValue()) {
+      await this.contratantesService.updateItem(this.contratanteId, this.formControls.getRawValue())
     }
   }
 
@@ -246,21 +235,21 @@ export class ContratanteFormComponent {
   }
   
   buscarCartorios(nome: string) {
-    this.filteredCartorios = this.databaseInfo.cartorios.filter((item: any) => {
-      return item.cartorio.nome?.toLowerCase().includes(nome.toLowerCase());
+    this.filteredCartorios = this.cartorios.filter((item: any) => {
+      return item.nome?.toLowerCase().includes(nome.toLowerCase());
     });
     this.loadingCartorio = false;
   }
 
   selectedCartorio(item: any){
-    console.log(item.cartorio)
+    console.log(item)
     this.loadingCartorio = false;
-    if(item.cartorio){
-      if(item.cartorio.nome){
-        this.formControls.get('cartorio')?.get('nome')?.setValue(item.cartorio.nome);
+    if(item){
+      if(item.nome){
+        this.formControls.get('cartorio')?.get('nome')?.setValue(item.nome);
       }
-      if(item.cartorio.cns){
-        this.formControls.get('cartorio')?.get('cns')?.setValue(item.cartorio.cns);
+      if(item.cns){
+        this.formControls.get('cartorio')?.get('cns')?.setValue(item.cns);
       }
     }
   }

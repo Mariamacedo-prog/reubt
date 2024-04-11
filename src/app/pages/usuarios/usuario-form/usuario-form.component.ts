@@ -42,16 +42,14 @@ export class UsuarioFormComponent {
     this.isAuthenticated();
 
     if(this.userId){
-      if(this.userId){
-        this.usuariosService.findById(this.userId).subscribe(user => {
-          this.emailFormControl.setValue(user.email);
-          this.nomeFormControl.setValue(user.nome);
-          this.telefoneFormControl.setValue(user.telefone);
-          this.loginCpfFormControl.setValue(user.cpf);
-          this.senhaFormControl.setValue(user.senha);
-          this.confirmSenhaFormControl.setValue(user.senha);
-        });
-      }
+      this.usuariosService.findById(this.userId).subscribe(user => {
+        this.emailFormControl.setValue(user.email);
+        this.nomeFormControl.setValue(user.nome);
+        this.telefoneFormControl.setValue(user.telefone);
+        this.loginCpfFormControl.setValue(user.cpf);
+        this.senhaFormControl.setValue(user.senha);
+        this.confirmSenhaFormControl.setValue(user.senha);
+      });
     }
   }
 

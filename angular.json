@@ -38,7 +38,12 @@
               "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "rxjs-compat",
+              "buffer",
+              "docx"
+           ]
           },
           "configurations": {
             "production": {

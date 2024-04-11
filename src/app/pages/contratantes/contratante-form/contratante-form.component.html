@@ -21,8 +21,8 @@
                        [matAutocomplete]="auto"
                        (keyup)="handleKeyUp($event)">
                 <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                    <mat-option *ngFor="let option of filteredCartorios" [value]="option.cartorio.nome" (onSelectionChange)="selectedCartorio(option)">
-                      {{option.cartorio.nome + " - CNS: " + option.cartorio.cns}}
+                    <mat-option *ngFor="let option of filteredCartorios" [value]="option.nome" (onSelectionChange)="selectedCartorio(option)">
+                      {{option.nome + " - CNS: " + option.cns}}
                     </mat-option>
                 </mat-autocomplete>
                 <mat-progress-bar *ngIf="loadingCartorio" mode="indeterminate"></mat-progress-bar>
@@ -47,22 +47,40 @@
                 <mat-label>CPF</mat-label>
                 <input [readonly]="visualizar"  matInput formControlName="cpf" />
                 <mat-error *ngIf="formControls?.get('cpf')?.hasError('cpfInvalido')">CPF inválido</mat-error>
-                <mat-error *ngIf="formControls?.get('cpf')?.hasError('required')">CPF inválido</mat-error>
               </mat-form-field>
             </div>
       
+
             <div class="inputs-row-form">
               <mat-form-field>
-                <mat-label>RG</mat-label>
+                <mat-label>Documento de Identificação</mat-label>
                 <input [readonly]="visualizar"  matInput formControlName="rg"  />
                 <mat-error *ngIf="formControls?.get('rg')?.hasError('required')">
                   Este campo é <strong>obrigatório</strong>
                 </mat-error>
                 <mat-error *ngIf="formControls?.get('rg')?.hasError('rgInvalid')">
-                  Número do RG inválido.
+                  Número do Documento de Identificação inválido.
                 </mat-error>
               </mat-form-field> 
-    
+                <mat-form-field>
+                <mat-label>Órgão de expedição</mat-label>
+                <input [readonly]="visualizar"  matInput formControlName="orgaoExpedicao"  />
+                <mat-error *ngIf="formControls?.get('orgaoExpedicao')?.hasError('required')">
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+                <mat-error *ngIf="formControls?.get('orgaoExpedicao')?.hasError('rgInvalid')">
+                  Órgão de expedição inválido.
+                </mat-error>
+              </mat-form-field> 
+              <mat-form-field>
+                <mat-label>Data de Expedição</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="dataExpedicao">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <div class="inputs-row-form"> 
               <mat-form-field>
                 <mat-label>Email</mat-label>
                 <input [readonly]="visualizar"  type="email" matInput formControlName="email" placeholder="Ex.pat@example.com" />
@@ -73,7 +91,9 @@
                   Este campo é <strong>obrigatório</strong>
                 </mat-error>
               </mat-form-field>
-        
+            </div>
+   
+            <div class="inputs-row-form">
               <mat-form-field>
                 <mat-label>Telefone</mat-label>
                 <input [readonly]="visualizar"  matInput formControlName="telefone" (input)="formatarTelefone()" />
@@ -83,10 +103,8 @@
                 <mat-error *ngIf="formControls?.get('telefone')?.hasError('required')">
                   Este campo é <strong>obrigatório</strong>
                 </mat-error>
-              </mat-form-field>  
-            </div>
-   
-            <div class="inputs-row-form">
+              </mat-form-field> 
+              
               <mat-form-field>
                 <mat-label>Profissão</mat-label>
                 <input [readonly]="visualizar"  matInput formControlName="profissao"(input)="formatarTelefone()" />
@@ -133,9 +151,9 @@
             </div>
           </mat-tab>
   
-          <mat-tab label="Anexar Documentos" class="tab-2" > 
+          <mat-tab label="Anexar Documentos" class="tab-2" *ngIf="showAnexos"> 
            <div class="input-file-row">
-            <app-file-input [nome]="'RG*'" 
+            <app-file-input [nome]="'Documento de Identificação*'" 
                 [fileInput]="this.formControls.get('anexos')?.get('rgFile')?.value"
                (fileOutput)="saveFileBase64($event, 'rgFile')" 
               (fileSelected)="onFileSelected($event)"></app-file-input>
@@ -160,7 +178,7 @@
              [fileInput]="this.formControls.get('cetidaoCasamentoFile')?.get('cpfFile')?.value"  
              (fileOutput)="saveFileBase64($event, 'cetidaoCasamentoFile')" 
               (fileSelected)="onFileSelected($event)"></app-file-input>
-            <app-file-input [nome]="'RG do Cônjuge*'" 
+            <app-file-input [nome]="'Documento de Identificação do Cônjuge*'" 
             [fileInput]="this.formControls.get('rgConjugueFile')?.get('cpfFile')?.value" 
              (fileOutput)="saveFileBase64($event, 'rgConjugueFile')"  
              (fileSelected)="onFileSelected($event)"></app-file-input>
@@ -173,15 +191,12 @@
           </mat-tab>
 
         </mat-tab-group>
-  
-  
-  
-          <div class="area-botao-form " *ngIf="isLoggedIn && this.contratanteId === 0 || this.contratanteId === undefined">
+          <div class="area-botao-form " *ngIf="isLoggedIn && this.contratanteId === '' || this.contratanteId === undefined">
             <button mat-raised-button color="primary" (click)="cadastrar()" [disabled]="!formularioValido()">Cadastrar</button>
             <button  mat-raised-button color="link" routerLink="/contratante/lista">Voltar</button>
           </div>
   
-          <div class="area-botao-form " *ngIf="isLoggedIn && this.contratanteId !== 0 && this.contratanteId !== undefined">
+          <div class="area-botao-form " *ngIf="isLoggedIn && this.contratanteId !== '' && this.contratanteId !== undefined">
             <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizar()" [disabled]="!formularioValido()"> Atualizar</button>
             <button mat-raised-button color="link" routerLink="/contratante/lista">Voltar</button>
           </div>
