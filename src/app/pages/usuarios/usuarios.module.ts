@@ -10,6 +10,7 @@ import { UsuarioFormComponent } from './usuario-form/usuario-form.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { authGuard } from '../../auth/auth.guard';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 const routes: Routes = [
   { path: 'novo/cadastro', component: UsuarioFormComponent},
@@ -30,6 +31,7 @@ const routes: Routes = [
     MatTableModule,
     MatIconModule,
     MatCardModule,
+    MatPaginatorModule,
     RouterModule.forChild(routes)
   ]
 })

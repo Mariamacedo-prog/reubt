@@ -1,4 +1,3 @@
 [build]
-  command = "npm cache clean --force && npm install --force && ng build --prod"
+  command = "ng build"
   publish = "dist/reurb/browser"
-  base = "."

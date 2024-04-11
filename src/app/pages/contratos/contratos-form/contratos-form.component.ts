@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { WordService } from '../../../services/word.service';
+import { WordService } from '../../../services/utils/word.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ActivatedRoute, Router } from '@angular/router';

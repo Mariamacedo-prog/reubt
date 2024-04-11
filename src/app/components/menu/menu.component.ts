@@ -1,6 +1,8 @@
 import { AuthService } from './../../auth/auth.service';
 import {Component, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { MenuService } from '../../services/menu.service';
 interface MenuItem {
   icon: string;
   label: string;
@@ -20,19 +22,7 @@ export class MenuComponent {
 
   private _mobileQueryListener: () => void;
 
-  ngOnInit(): void {
-    setTimeout(() => {
-      const storedDb = localStorage.getItem('appDb');
-       if (storedDb) {
-        const parsedDb = JSON.parse(storedDb);
-        if (parsedDb.menu) {
-          this.menuItens = parsedDb.menu;
-        }
-      }
-    }, 3000)
-  }
-
-  constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher, private authService: AuthService) {
+  constructor(private changeDetectorRef: ChangeDetectorRef,private menuService: MenuService, private media: MediaMatcher, private authService: AuthService) {
     this.mobileQuery = media.matchMedia('(max-width: 1200px)');
     this._mobileQueryListener = () => {
       this.isMenuOpen = !this.mobileQuery.matches;
@@ -41,6 +31,18 @@ export class MenuComponent {
     };
     this.mobileQuery.addEventListener('change', this._mobileQueryListener);
   }
+
+  ngOnInit(): void {
+    setTimeout(() => {
+      this.menuService.getMenuItems().subscribe(menu => {
+        if (menu.length > 0) {
+          this.menuItens = menu;
+        }
+      });
+    }, 3000)
+  }
+
+
 
   isAuthenticated(): boolean | null{
     if(localStorage.getItem('isLoggedIn') == 'true'){

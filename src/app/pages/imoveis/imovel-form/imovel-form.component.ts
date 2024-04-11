@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ValidateService } from '../../../services/validate.service';
-import { CepService } from '../../../services/cep.service';
+import { ValidateService } from '../../../services/utils/validate.service';
+import { CepService } from '../../../services/utils/cep.service';
 
 @Component({
   selector: 'app-imovel-form',

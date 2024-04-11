@@ -1,6 +1,7 @@
+
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { firebaseapp } from "../Firebase";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MenuComponent } from './components/menu/menu.component';
@@ -15,9 +16,9 @@ import {MatButtonModule} from '@angular/material/button';
 import { AuthService } from './auth/auth.service';
 import { ToolboxComponent } from './components/toolbox/toolbox.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
-import { ImovelModule } from './pages/imoveis/imovel.module';
-import { PagamentoCalculoComponent } from './components/pagamento-calculo/pagamento-calculo.component';
-
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,7 +37,10 @@ import { PagamentoCalculoComponent } from './components/pagamento-calculo/pagame
     MatIconModule,
     FormsModule,
     HttpClientModule,
-    MatButtonModule
+    MatButtonModule,  
+    AngularFireModule.initializeApp(firebaseapp),
+    AngularFirestoreModule.enablePersistence(),
+    AngularFireStorageModule,
   ],
   providers: [
     AuthService
