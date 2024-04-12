@@ -134,6 +134,7 @@ export class ContratosFormComponent {
   findEmpresa(){
     this.empresaService.getItems().subscribe((empresas: any)=>{
       let empresa = empresas[0];
+
       this.formControls?.get('empresa')?.get('nome')?.setValue(empresa.nome);
       this.formControls?.get('empresa')?.get('cnpj')?.setValue(empresa.cnpj);
       this.formControls?.get('empresa')?.get('endereco')?.get('rua')?.setValue(empresa.endereco.rua);
