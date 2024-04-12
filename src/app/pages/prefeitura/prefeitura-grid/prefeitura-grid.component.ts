@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
+import { PrefeiturasService } from '../../../services/prefeituras.service';
 
 @Component({
   selector: 'app-prefeitura-grid',
@@ -12,55 +13,42 @@ export class PrefeituraGridComponent {
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
-  constructor(private router: Router, private toolboxService: ToolboxService) {}
+  constructor(private router: Router, private toolboxService: ToolboxService, private prefeiturasService: PrefeiturasService ) {}
   adicionarNovaPrefeitura() {
     this.router.navigate(["/prefeitura/nova"]);
   }
  
   ngOnInit(): void {
-    setTimeout(() => {
-      const storedDb = localStorage.getItem('appDb');
-
-      console.log(storedDb)
-      if (storedDb) {
-        if(JSON.parse(storedDb).prefeituras){
-          this.dataSource = JSON.parse(storedDb).prefeituras;
-          this.dataSourceFilter = JSON.parse(storedDb).prefeituras;
-        }
-      }
-    }, 1000)
+    this.findAll();
   }
+
+  findAll(){
+    this.prefeiturasService.getItems().subscribe(prefeituras => {
+      if (prefeituras.length >= 0) {
+        this.dataSource = prefeituras;
+        this.dataSourceFilter = prefeituras;
+      }
+    });
+  }
+
   
-  procurar() {
+  search() {
     this.dataSourceFilter = this.dataSource.filter((item: any) => item.prefeitura.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) || item.prefeitura.cnpj.includes(this.searchTerm));
     if(this.searchTerm.length == 0){
       this.dataSourceFilter = this.dataSource;
     }
   }
 
-  visualizarItem(element: any){
+  viewItem(element: any){
     this.router.navigate(["/prefeitura/form/" + element.id + "/visualizar"]);
   }
 
-  editarItem(element: any){
+  editItem(element: any){
     this.router.navigate(["/prefeitura/form/" + element.id]);
   }
 
-  deletarItem(element: any){
-    let databaseInfo: any = {};
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      databaseInfo = JSON.parse(storedDb);
-    }
-    const index = databaseInfo.prefeituras.findIndex((item: any) => item.id == element.id);
-
-    if (index !== -1) {
-      databaseInfo.prefeituras.splice(index, 1)
-      this.toolboxService.showTooltip('success', 'Prefeitura foi deletada com sucesso!', 'SUCESSO!');
-    }
-
-    localStorage.setItem('appDb', JSON.stringify(databaseInfo));
-    this.dataSourceFilter = databaseInfo.prefeituras;
-    this.dataSource = databaseInfo.prefeituras;
+  deleteItem(element: any){
+    this.prefeiturasService.deleteItem(element.id);
+    this.findAll();
   }
 }

@@ -49,7 +49,8 @@ export class ContratanteFormComponent {
 
   cartorioFormControls = this.formBuilder.group({
     nome: ['', Validators.required],
-    cns: ['', [Validators.required, this.validateService.validateCNS]]
+    cns: ['', [Validators.required, this.validateService.validateCNS]],
+    cidadeUf:  ['', Validators.required]
   });
 
 
@@ -115,6 +116,8 @@ export class ContratanteFormComponent {
 
         this.formControls.get('cartorio')?.get('nome')?.setValue(contratante.cartorio.nome);
         this.formControls.get('cartorio')?.get('cns')?.setValue(contratante.cartorio.cns);
+        this.formControls.get('cartorio')?.get('cidadeUf')?.setValue(contratante.cartorio.cidadeUf);
+        
 
         if(contratante.estadoCivil == 'Casado' || contratante.estadoCivil == 'União Estável'){
           this.isMarried = true;
@@ -254,6 +257,10 @@ export class ContratanteFormComponent {
       }
       if(item.cns){
         this.formControls.get('cartorio')?.get('cns')?.setValue(item.cns);
+      }
+
+      if(item.endereco.cidadeUf){
+        this.formControls.get('cartorio')?.get('cidadeUf')?.setValue(item.endereco.cidadeUf);
       }
     }
   }

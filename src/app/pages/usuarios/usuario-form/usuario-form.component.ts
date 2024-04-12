@@ -133,10 +133,7 @@ export class UsuarioFormComponent {
     if(item.cpf){
       this.usuariosService.updateItem(this.userId, item)
 
-    } else {
-     
     }
-
   }
 
   validForm(): boolean {

@@ -5,6 +5,8 @@ import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ValidateService } from '../../../services/utils/validate.service';
 import { CepService } from '../../../services/utils/cep.service';
+import { ImoveisService } from '../../../services/imoveis.service';
+import { ContratantesService } from '../../../services/contratantes.service';
 
 @Component({
   selector: 'app-imovel-form',
@@ -12,7 +14,7 @@ import { CepService } from '../../../services/utils/cep.service';
   styleUrl: './imovel-form.component.css'
 })
 export class ImovelFormComponent {
-  imovelId = 0;
+  imovelId = '';
   isLoggedIn: boolean = false;
   databaseInfo: any = {};
   options: string[] = [];
@@ -21,31 +23,32 @@ export class ImovelFormComponent {
   estadoCivil: any = {};
   formControls!: FormGroup; 
 
+  contratantes: any[] = [];
   timeoutId: any;
   filteredCpf: any[] = [];
   loadingCpf: boolean = false;
   constructor(private toolboxService: ToolboxService, private router: Router, 
-    private route: ActivatedRoute, private cepService: CepService, private formBuilder: FormBuilder,
-    private validateService: ValidateService, 
+    private route: ActivatedRoute, private cepService: CepService, private formBuilder: FormBuilder, 
+    private imoveisService: ImoveisService, private contratantesService: ContratantesService
     ) {}
 
-    contratante = this.formBuilder.group({
-      nome: ['', Validators.required],
-      cpf: ['', Validators.required],
-      id: [0]
-    });
+  contratante = this.formBuilder.group({
+    nome: ['', Validators.required],
+    cpf: ['', Validators.required],
+    id: [0]
+  });
 
-    enderecoPorta = this.formBuilder.group({
-      rua: ['', Validators.required],
-      numero: ['', Validators.required],
-      bairro: ['', Validators.required],
-      complemento: [''],
-      nucleoInformal: ['', Validators.required],
-      cidadeUf: ['', Validators.required],
-      cep: [''],
-      iptu:[''],
-      fotos: ['']
-    });
+  enderecoPorta = this.formBuilder.group({
+    rua: ['', Validators.required],
+    numero: ['', Validators.required],
+    bairro: ['', Validators.required],
+    complemento: [''],
+    nucleoInformal: ['', Validators.required],
+    cidadeUf: ['', Validators.required],
+    cep: [''],
+    iptu:[''],
+    fotos: ['']
+  });
 
   enderecoProjeto = this.formBuilder.group({
     rua: [''],
@@ -70,9 +73,6 @@ export class ImovelFormComponent {
     matricula: ['']
   });
 
-
-
-
   ngOnInit(): void {
     this.formControls = this.formBuilder.group({
       id: [0, Validators.required],
@@ -91,101 +91,57 @@ export class ImovelFormComponent {
     });
 
     this.isAuthenticated();
-
-    const storedDb = localStorage.getItem('appDb');
-      if (storedDb) {
-        this.databaseInfo = JSON.parse(storedDb);
-        this.estadoCivil = this.databaseInfo.estadoCivil;
-      }
-
+    this.findContratante();
     if(this.imovelId){
-      if(this.databaseInfo.imoveis){
-        const item = this.databaseInfo.imoveis.find((imovel: any) => imovel.id == this.imovelId);
-        console.log(item);
-        if(item){
+      this.imoveisService.findById(this.imovelId).subscribe(imovel => {
+        this.formControls.get('contratante')?.get('nome')?.setValue(imovel.contratante.nome);
+        this.formControls.get('contratante')?.get('cpf')?.setValue(imovel.contratante.cpf);
+        this.formControls.get('contratante')?.get('id')?.setValue(imovel.contratante.id);
+        
 
-          this.formControls.get('contratante')?.get('nome')?.setValue(item.contratante.nome);
-          this.formControls.get('contratante')?.get('cpf')?.setValue(item.contratante.cpf);
-          this.formControls.get('contratante')?.get('id')?.setValue(item.contratante.id);
-          
-          this.formControls.get('enderecoPorta')?.get('rua')?.setValue(item.enderecoPorta.rua);
-          this.formControls.get('enderecoPorta')?.get('cep')?.setValue(item.enderecoPorta.cep);
-          this.formControls.get('enderecoPorta')?.get('bairro')?.setValue(item.enderecoPorta.bairro);
-          this.formControls.get('enderecoPorta')?.get('cidadeUf')?.setValue(item.enderecoPorta.cidadeUf);
-          this.formControls.get('enderecoPorta')?.get('complemento')?.setValue(item.enderecoPorta.complemento);
-          this.formControls.get('enderecoPorta')?.get('numero')?.setValue(item.enderecoPorta.numero);
-          this.formControls.get('enderecoPorta')?.get('iptu')?.setValue(item.enderecoPorta.iptu);
-          this.formControls.get('enderecoPorta')?.get('nucleoInformal')?.setValue(item.enderecoPorta.nucleoInformal);
-          this.formControls.get('enderecoPorta')?.get('fotos')?.setValue(item.enderecoPorta.fotos);
+        this.formControls.get('enderecoPorta')?.get('rua')?.setValue(imovel.enderecoPorta.rua);
+        this.formControls.get('enderecoPorta')?.get('cep')?.setValue(imovel.enderecoPorta.cep);
+        this.formControls.get('enderecoPorta')?.get('bairro')?.setValue(imovel.enderecoPorta.bairro);
+        this.formControls.get('enderecoPorta')?.get('cidadeUf')?.setValue(imovel.enderecoPorta.cidadeUf);
+        this.formControls.get('enderecoPorta')?.get('complemento')?.setValue(imovel.enderecoPorta.complemento);
+        this.formControls.get('enderecoPorta')?.get('numero')?.setValue(imovel.enderecoPorta.numero);
+        this.formControls.get('enderecoPorta')?.get('iptu')?.setValue(imovel.enderecoPorta.iptu);
+        this.formControls.get('enderecoPorta')?.get('nucleoInformal')?.setValue(imovel.enderecoPorta.nucleoInformal);
+        this.formControls.get('enderecoPorta')?.get('fotos')?.setValue(imovel.enderecoPorta.fotos);
 
 
-          this.formControls.get('enderecoDefinitivo')?.get('rua')?.setValue(item.enderecoDefinitivo.rua);
-          this.formControls.get('enderecoDefinitivo')?.get('cep')?.setValue(item.enderecoDefinitivo.cep);
-          this.formControls.get('enderecoDefinitivo')?.get('bairro')?.setValue(item.enderecoDefinitivo.bairro);
-          this.formControls.get('enderecoDefinitivo')?.get('cidadeUf')?.setValue(item.enderecoDefinitivo.cidadeUf);
-          this.formControls.get('enderecoDefinitivo')?.get('complemento')?.setValue(item.enderecoDefinitivo.complemento);
-          this.formControls.get('enderecoDefinitivo')?.get('numero')?.setValue(item.enderecoDefinitivo.numero);
-          this.formControls.get('enderecoDefinitivo')?.get('nucleoInformalDefinitivo')?.setValue(item.enderecoDefinitivo.nucleoInformalDefinitivo);
-          this.formControls.get('enderecoDefinitivo')?.get('matricula')?.setValue(item.enderecoDefinitivo.matricula);
+        this.formControls.get('enderecoDefinitivo')?.get('rua')?.setValue(imovel.enderecoDefinitivo.rua);
+        this.formControls.get('enderecoDefinitivo')?.get('cep')?.setValue(imovel.enderecoDefinitivo.cep);
+        this.formControls.get('enderecoDefinitivo')?.get('bairro')?.setValue(imovel.enderecoDefinitivo.bairro);
+        this.formControls.get('enderecoDefinitivo')?.get('cidadeUf')?.setValue(imovel.enderecoDefinitivo.cidadeUf);
+        this.formControls.get('enderecoDefinitivo')?.get('complemento')?.setValue(imovel.enderecoDefinitivo.complemento);
+        this.formControls.get('enderecoDefinitivo')?.get('numero')?.setValue(imovel.enderecoDefinitivo.numero);
+        this.formControls.get('enderecoDefinitivo')?.get('nucleoInformalDefinitivo')?.setValue(imovel.enderecoDefinitivo.nucleoInformalDefinitivo);
+        this.formControls.get('enderecoDefinitivo')?.get('matricula')?.setValue(imovel.enderecoDefinitivo.matricula);
 
-          this.formControls.get('enderecoProjeto')?.get('rua')?.setValue(item.enderecoProjeto.rua);
-          this.formControls.get('enderecoProjeto')?.get('cep')?.setValue(item.enderecoProjeto.cep);
-          this.formControls.get('enderecoProjeto')?.get('bairro')?.setValue(item.enderecoProjeto.bairro);
-          this.formControls.get('enderecoProjeto')?.get('cidadeUf')?.setValue(item.enderecoProjeto.cidadeUf);
-          this.formControls.get('enderecoProjeto')?.get('nucleoInformalProjeto')?.setValue(item.enderecoProjeto.nucleoInformalProjeto);
-          this.formControls.get('enderecoProjeto')?.get('quadra')?.setValue(item.enderecoProjeto.quadra);
-          this.formControls.get('enderecoProjeto')?.get('lote')?.setValue(item.enderecoProjeto.lote);
-          this.formControls.get('enderecoProjeto')?.get('complemento')?.setValue(item.enderecoProjeto.complemento);
-          this.formControls.get('enderecoProjeto')?.get('numero')?.setValue(item.enderecoProjeto.numero);
-     
-        }
-      }
+
+        this.formControls.get('enderecoProjeto')?.get('rua')?.setValue(imovel.enderecoProjeto.rua);
+        this.formControls.get('enderecoProjeto')?.get('cep')?.setValue(imovel.enderecoProjeto.cep);
+        this.formControls.get('enderecoProjeto')?.get('bairro')?.setValue(imovel.enderecoProjeto.bairro);
+        this.formControls.get('enderecoProjeto')?.get('cidadeUf')?.setValue(imovel.enderecoProjeto.cidadeUf);
+        this.formControls.get('enderecoProjeto')?.get('nucleoInformalProjeto')?.setValue(imovel.enderecoProjeto.nucleoInformalProjeto);
+        this.formControls.get('enderecoProjeto')?.get('quadra')?.setValue(imovel.enderecoProjeto.quadra);
+        this.formControls.get('enderecoProjeto')?.get('lote')?.setValue(imovel.enderecoProjeto.lote);
+        this.formControls.get('enderecoProjeto')?.get('complemento')?.setValue(imovel.enderecoProjeto.complemento);
+        this.formControls.get('enderecoProjeto')?.get('numero')?.setValue(imovel.enderecoProjeto.numero);
+      });
     }
   }
 
-  cadastrar() {
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      this.databaseInfo = JSON.parse(storedDb);
-    }
-    if(this.databaseInfo.imoveis){
-      this.formControls.get('id')?.setValue(Math.floor(Math.random() * 100000));
-
-      this.databaseInfo.imoveis.push(
-        this.formControls.getRawValue()
-      )
-
-      localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
+  create() {
+    this.imoveisService.save(this.formControls.getRawValue());
       this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
       this.router.navigate(['/imovel/lista']);
-    }
   }
 
-  atualizar(){
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      this.databaseInfo = JSON.parse(storedDb);
-    }
-    
-    console.log("imoveis",this.databaseInfo.imoveis);
-    if(this.databaseInfo.imoveis){
-
-      const prefeituraPeloEmail = this.databaseInfo.prefeituras.find((item: any) => item.prefeitura.email == this.formControls.get('prefeitura')?.get('email')?.value && item.id != this.imovelId);
-      if(prefeituraPeloEmail){
-        this.toolboxService.showTooltip('error', 'Prefeitura com E-mail já existe na base de dados!', 'ERRO CPF!');
-        return;
-      }
-
-      const index = this.databaseInfo.imoveis.findIndex((item: any) => item.id == this.imovelId);
-
-      if (index !== -1) {
-        this.formControls.get('id')?.setValue(this.imovelId);
-        this.databaseInfo.imoveis[index] = this.formControls.getRawValue();
-      }
-
-      localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
-      this.toolboxService.showTooltip('success', 'Cadastro atualizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/imovel/lista']);
+  update(){
+    if(this.formControls.get('contratante')?.get('cpf')?.getRawValue()){
+      this.imoveisService.updateItem(this.imovelId, this.formControls.getRawValue())
     }
   }
 
@@ -196,7 +152,6 @@ export class ImovelFormComponent {
       this.isLoggedIn = false;
     }
   }
-
 
   buscarEnderecoDefinitivo() {
     console.log(this.formControls)
@@ -298,7 +253,7 @@ export class ImovelFormComponent {
     }
   }
 
-  formularioValido(): boolean {
+  formValid(): boolean {
     return this.formControls.valid;
   }
 
@@ -315,15 +270,12 @@ export class ImovelFormComponent {
     }
   }
 
-  localizaContrante(){
-    const contratanteByCpf = this.databaseInfo.contratantes.find((item: any) => item.cpf == this.formControls.get('contratante')?.get('cpf')?.value);
-    if(contratanteByCpf){
-      this.formControls.get('contratante')?.get('nome')?.setValue(contratanteByCpf.nome);
-      this.formControls.get('contratante')?.get('id')?.setValue(contratanteByCpf.id);
-      this.formControls.get('id')?.setValue(Math.floor(Math.random() * 100000));
-    }else{
-      this.toolboxService.showTooltip('error', 'Contratante não encontrado na base de dados!', 'ERRO CPF!');
-    }
+  findContratante(){
+    this.contratantesService.getItems().subscribe(contratantes => {
+      if (contratantes.length >= 0) {
+        this.contratantes = contratantes;
+      }
+    });
   }
 
   
@@ -333,7 +285,7 @@ export class ImovelFormComponent {
     const cpf = event.target.value.trim();
     if (cpf.length >= 3) {
       this.timeoutId = setTimeout(() => {
-        this.buscarCpf(cpf);
+        this.searchCpf(cpf);
       }, 2000); 
     } else {
 
@@ -341,8 +293,8 @@ export class ImovelFormComponent {
     }
   }
 
-  buscarCpf(cpf: string) {
-    this.filteredCpf = this.databaseInfo.contratantes.filter((item: any) => {
+  searchCpf(cpf: string) {
+    this.filteredCpf = this.contratantes.filter((item: any) => {
       return item.cpf?.includes(cpf);
     });
     this.loadingCpf = false;

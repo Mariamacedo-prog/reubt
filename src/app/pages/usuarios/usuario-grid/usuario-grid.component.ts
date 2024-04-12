@@ -21,9 +21,7 @@ export class UsuarioGridComponent {
 
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.findAllUsers();
-    }, 1000)
+    this.findAllUsers();
   }
   
   findUser() {

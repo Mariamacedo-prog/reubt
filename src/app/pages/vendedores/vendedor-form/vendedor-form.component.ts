@@ -5,6 +5,7 @@ import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CepService } from '../../../services/utils/cep.service';
 import { ValidateService } from '../../../services/utils/validate.service';
+import { VendedoresService } from '../../../services/vendedores.service';
 
 @Component({
   selector: 'app-vendedor-form',
@@ -14,9 +15,10 @@ import { ValidateService } from '../../../services/utils/validate.service';
 export class VendedorFormComponent {
 
   constructor(private toolboxService: ToolboxService, private router: Router, 
-    private route: ActivatedRoute, private cepService: CepService, private validateService: ValidateService) {}
+    private route: ActivatedRoute, private cepService: CepService, private validateService: ValidateService,
+    private vendedoresService: VendedoresService) {}
 
-  vendedorId = 0;
+  vendedorId = "";
   isLoggedIn: boolean = false;
   databaseInfo: any = {};
   options: string[] = [];
@@ -50,95 +52,57 @@ export class VendedorFormComponent {
     this.isAuthenticated();
 
     if(this.vendedorId){
-      const storedDb = localStorage.getItem('appDb');
-      if (storedDb) {
-        this.databaseInfo = JSON.parse(storedDb);
-        if(this.databaseInfo.vendedores ){
-          const vendedorPeloCpf = this.databaseInfo.vendedores.find((vendedor: any) => vendedor.id == this.vendedorId);
-          if(vendedorPeloCpf){
-            this.nomeFormControl.setValue(vendedorPeloCpf.nome);
-            this.cpfFormControl.setValue(vendedorPeloCpf.cpf);
-            this.emailFormControl.setValue(vendedorPeloCpf.email);
-            this.telefoneFormControl.setValue(vendedorPeloCpf.telefone);
-            this.rgFormControl.setValue(vendedorPeloCpf.rg);
-            this.ruaFormControl.setValue(vendedorPeloCpf.rua);
-            this.numeroFormControl.setValue(vendedorPeloCpf.numero);
-            this.bairroFormControl.setValue(vendedorPeloCpf.bairro);
-            this.complementoFormControl.setValue(vendedorPeloCpf.complemento);
-            this.cidadeUfFormControl.setValue(vendedorPeloCpf.cidadeUf);
-            this.cepFormControl.setValue(vendedorPeloCpf.cep);
-            this.fotoFormControl.patchValue(vendedorPeloCpf.foto);
-          }
-        }
-      }
+      this.vendedoresService.findById(this.vendedorId).subscribe(vendedor => {
+        this.nomeFormControl.setValue(vendedor.nome);
+            this.cpfFormControl.setValue(vendedor.cpf);
+            this.emailFormControl.setValue(vendedor.email);
+            this.telefoneFormControl.setValue(vendedor.telefone);
+            this.rgFormControl.setValue(vendedor.rg);
+            this.ruaFormControl.setValue(vendedor.rua);
+            this.numeroFormControl.setValue(vendedor.numero);
+            this.bairroFormControl.setValue(vendedor.bairro);
+            this.complementoFormControl.setValue(vendedor.complemento);
+            this.cidadeUfFormControl.setValue(vendedor.cidadeUf);
+            this.cepFormControl.setValue(vendedor.cep);
+            this.fotoFormControl.patchValue(vendedor.foto);
+      });
     }
   }
 
-  cadastrar() {
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      this.databaseInfo = JSON.parse(storedDb);
-    }
-    if(this.databaseInfo.vendedores){
-      const vendedorPeloCpf = this.databaseInfo.vendedores.find((vendedor: any) => vendedor.cpf == this.cpfFormControl.value);
-      if(vendedorPeloCpf){
-        this.toolboxService.showTooltip('error', 'Vendedor(a) com CPF já existe na base de dados!', 'ERRO CPF!');
-        return;
-      }
-
-      const vendedorPeloEmail = this.databaseInfo.vendedores.find((vendedor: any) => vendedor.email == this.emailFormControl.value);
-      if(vendedorPeloEmail){
-        this.toolboxService.showTooltip('error', 'Vendedor(a) com E-mail já existe na base de dados!', 'ERRO CPF!');
-        return;
-      }
-
-      this.databaseInfo.vendedores.push(
-        {
-          "id": Math.floor(Math.random() * 100000),
-          "nome":this.nomeFormControl.value,
-          "cpf":this.cpfFormControl.value,
-          "rua": this.ruaFormControl.value,
-          "numero": this.numeroFormControl.value,
-          "bairro": this.bairroFormControl.value,
-          "complemento": this.complementoFormControl.value,
-          "cidadeUf": this.cidadeUfFormControl.value,
-          "rg":this.rgFormControl.value,
-          "email": this.emailFormControl.value,
-          "telefone":this.telefoneFormControl.value,
-          "cep": this.cepFormControl.value,
-          "foto": this.fotoFormControl.value
+  create() {
+    const item =  {
+      "nome":this.nomeFormControl.value,
+      "cpf":this.cpfFormControl.value,
+      "rua": this.ruaFormControl.value,
+      "numero": this.numeroFormControl.value,
+      "bairro": this.bairroFormControl.value,
+      "complemento": this.complementoFormControl.value,
+      "cidadeUf": this.cidadeUfFormControl.value,
+      "rg":this.rgFormControl.value,
+      "email": this.emailFormControl.value,
+      "telefone":this.telefoneFormControl.value,
+      "cep": this.cepFormControl.value,
+      "foto": this.fotoFormControl.value
+    };
+ 
+    if(item.cpf){
+      this.vendedoresService.checkIfCPFExists(item.cpf).toPromise().then(cpfExists => {
+        if (!cpfExists) {
+          this.vendedoresService.save(item);
+          this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
+  
+          this.router.navigate(['/vendedor/lista']);
+          return Promise.resolve();
+        } else {
+            this.toolboxService.showTooltip('error', 'CPF já cadastrado no banco de dados!', 'ERROR!');
+            return Promise.resolve();
         }
-      )
-      localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
-
-      this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
-
-      this.router.navigate(['/vendedor/lista']);
+      });
     }
   }
 
-  atualizar(){
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      this.databaseInfo = JSON.parse(storedDb);
-    }
-    
-    if(this.databaseInfo.vendedores){
-      const vendedorPeloCpf = this.databaseInfo.vendedores.find((vendedor: any) => vendedor.cpf == this.cpfFormControl.value && vendedor.id != this.vendedorId);
-      if(vendedorPeloCpf){
-        this.toolboxService.showTooltip('error', 'Funcionario com CPF já existe na base de dados!', 'ERRO CPF!');
-        return;
-      }
-
-      const vendedorPeloEmail = this.databaseInfo.funcionarios.find((vendedor: any) => vendedor.email == this.emailFormControl.value && vendedor.id != this.vendedorId);
-      if(vendedorPeloEmail){
-        this.toolboxService.showTooltip('error', 'Funcionario com E-mail já existe na base de dados!', 'ERRO CPF!');
-        return;
-      }
-
-      const index = this.databaseInfo.vendedores.findIndex((item: any) => item.id == this.vendedorId);
-      if (index !== -1) {
-        this.databaseInfo.vendedores[index] = {
+  update() {
+   const item = {
           "id": this.vendedorId,
           "nome":this.nomeFormControl.value,
           "cpf":this.cpfFormControl.value,
@@ -153,16 +117,12 @@ export class VendedorFormComponent {
           "cep": this.cepFormControl.value,
           "foto": this.fotoFormControl.value
         };
-      }
-
-      localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
-
-      this.toolboxService.showTooltip('success', 'Cadastro atualizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/vendedor/lista']);
+    if(item.cpf){
+      this.vendedoresService.updateItem(this.vendedorId, item)
     }
   }
 
-  formularioValido(): boolean {
+  formValid(): boolean {
     return (
         this.nomeFormControl.valid &&
         this.cpfFormControl.valid &&
@@ -175,7 +135,7 @@ export class VendedorFormComponent {
     );
   }
 
-  isAuthenticated(){
+  isAuthenticated() {
     if(localStorage.getItem('isLoggedIn') == 'true'){
       this.isLoggedIn = true;
     }else{
@@ -184,7 +144,7 @@ export class VendedorFormComponent {
 
   }
 
-  formatarTelefone() {
+  formatPhone() {
     if(this.telefoneFormControl.value){
       let telefone = this.telefoneFormControl.value.replace(/\D/g, '');
 
@@ -196,9 +156,9 @@ export class VendedorFormComponent {
     }
   }
 
-  buscarEndereco() {
+  findAddress() {
     if(this.cepFormControl.value){
-      this.limparEndereco();
+      this.cleanAddress();
 
       if (this.cepFormControl.value.toString().length === 8) {
         this.cepService.getAddressByCep(this.cepFormControl.value)
@@ -211,7 +171,7 @@ export class VendedorFormComponent {
                 this.cidadeUfFormControl.setValue(data.localidade + " / " + data.uf)
               }else{
                 this.toolboxService.showTooltip('error', 'Cep não localizado!', 'ERRO CEP!');
-                this.limparEndereco();
+                this.cleanAddress();
               }
             },
             error => {
@@ -223,13 +183,12 @@ export class VendedorFormComponent {
     
   }
 
-  limparEndereco(){
+  cleanAddress() {
     this.ruaFormControl.setValue('');
     this.bairroFormControl.setValue('');
     this.cidadeUfFormControl.setValue('');
   }
 
-  
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
@@ -238,7 +197,7 @@ export class VendedorFormComponent {
     }
   }
 
-  saveFileBase64(event: { base64: string, type: string }){
+  saveFileBase64(event: { base64: string, type: string }) {
     this.fotoFormControl?.patchValue(event);
   }
 }

@@ -30,7 +30,6 @@ export class ContratanteGridComponent {
       if (contratante.length >= 0) {
         this.dataSource = contratante;
         this.dataSourceFilter = contratante;
-     
       }
     });
   }

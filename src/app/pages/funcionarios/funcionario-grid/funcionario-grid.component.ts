@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
+import { FuncionariosService } from '../../../services/funcionarios.service';
 
 @Component({
   selector: 'app-funcionario-grid',
@@ -12,55 +13,42 @@ export class FuncionarioGridComponent {
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
-  constructor(private router: Router, private toolboxService: ToolboxService) {}
-  adicionarNovoFuncionario() {
+  constructor(private router: Router, private toolboxService: ToolboxService, private funcionariosService: FuncionariosService) {}
+
+  ngOnInit(): void {
+    this.findAll();
+  }
+
+  findAll(){
+    this.funcionariosService.getItems().subscribe(funcionarios => {
+      if (funcionarios.length >= 0) {
+        this.dataSource = funcionarios;
+        this.dataSourceFilter = funcionarios;
+      }
+    });
+  }
+
+  addNewFuncionario() {
     this.router.navigate(["/funcionario/novo"]);
   }
- 
-  ngOnInit(): void {
-    setTimeout(() => {
-      const storedDb = localStorage.getItem('appDb');
-
-      console.log(storedDb)
-      if (storedDb) {
-        if(JSON.parse(storedDb).funcionarios){
-          this.dataSource = JSON.parse(storedDb).funcionarios;
-          this.dataSourceFilter = JSON.parse(storedDb).funcionarios;
-        }
-      }
-    }, 1000)
-  }
   
-  procurar() {
+  search() {
     this.dataSourceFilter = this.dataSource.filter((funcionario: any) => funcionario.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) || funcionario.cpf.includes(this.searchTerm));
     if(this.searchTerm.length == 0){
       this.dataSourceFilter = this.dataSource;
     }
   }
 
-  visualizarItem(element: any){
+  viewItem(element: any){
     this.router.navigate(["/funcionario/form/" + element.id + "/visualizar"]);
   }
 
-  editarItem(element: any){
+  editItem(element: any){
     this.router.navigate(["/funcionario/form/" + element.id]);
   }
 
-  deletarItem(element: any){
-    let databaseInfo: any = {};
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      databaseInfo = JSON.parse(storedDb);
-    }
-    const index = databaseInfo.funcionarios.findIndex((item: any) => item.id == element.id);
-
-    if (index !== -1) {
-      databaseInfo.funcionarios.splice(index, 1)
-      this.toolboxService.showTooltip('success', 'Funcionario foi deletado com sucesso!', 'SUCESSO!');
-    }
-
-    localStorage.setItem('appDb', JSON.stringify(databaseInfo));
-    this.dataSourceFilter = databaseInfo.funcionarios;
-    this.dataSource = databaseInfo.funcionarios;
+  deleteItem(element: any){
+    this.funcionariosService.deleteItem(element.id);
+    this.findAll();
   }
 }

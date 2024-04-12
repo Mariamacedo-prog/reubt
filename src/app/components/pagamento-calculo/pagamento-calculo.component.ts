@@ -4,6 +4,8 @@ import { ToolboxService } from '../toolbox/toolbox.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import {DateAdapter } from '@angular/material/core';
+import { VendasPagamentosService } from '../../services/vendasPagamentos.service';
+import { map } from 'rxjs';
 
 
 
@@ -35,8 +37,10 @@ interface TypeSelectValue {
   ],
 })
 export class PagamentoCalculoComponent {
+  idParcelamento = 0;
   planos: TypeSelectValue[] = [
     {value: 6000, quant: 1, viewValue: 'Valor: R$6.000,00 - Por imóvel de habitação'},
+    {value: 6000, quant: 1, viewValue: 'Valor: R$6.000,00 – Loteamento Lagos de San José'},
     {value: 10000, quant: 1 ,viewValue: 'Valor: R$10.000,00 - Comercio'},
     {value: 12000, quant: 1 ,viewValue: 'Valor: R$12.000,00 - Indústria'},
   ];
@@ -51,7 +55,8 @@ export class PagamentoCalculoComponent {
 
   @Output() dataEvent = new EventEmitter<any>();
 
-  constructor(private toolboxService: ToolboxService, private formBuilder: FormBuilder, private adapter: DateAdapter<any>) {}
+  constructor(private toolboxService: ToolboxService, private formBuilder: FormBuilder, 
+   private vendasPagamentosService: VendasPagamentosService) {}
 
 
   entradaFormControls = this.formBuilder.group({
@@ -71,51 +76,74 @@ export class PagamentoCalculoComponent {
   });
   
 
-  ngOnInit(): void {
-    
+  ngOnInit(): void {   
     this.formControls = this.formBuilder.group({
-      id:[0],
+      id: [0],
       plano: [null, Validators.required],
       entrada: this.entradaFormControls,
       parcelas: this.parcelasFormControls,
       isAvista: false,
       valorAvista: [null, Validators.required],
     });
-
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      this.databaseInfo = JSON.parse(storedDb);
-    }
-
-    let existByContratante = this.databaseInfo.vendasPagamentos.find((item: any) => item.contratante.id == this.dataContratanteInfo.id);
     
-    if(this.databaseInfo && this.databaseInfo.vendasPagamentos && existByContratante){
-      this.formControls?.get('plano')?.setValue(existByContratante.plano);
-      this.registarValores();
-      this.formControls?.get('id')?.setValue(existByContratante.id);
-      this.formControls?.get('isAvista')?.setValue(existByContratante.isAvista);
 
-      this.formControls?.get('valorAvista')?.setValue(existByContratante.valorAvista);
+    this.verificarContratante();
 
-
-      this.formControls?.get('parcelas')?.get('quantidade')?.setValue(existByContratante?.parcelas?.quantidade);
-      this.formControls?.get('parcelas')?.get('valor')?.setValue(existByContratante?.parcelas?.valor);
-      this.formControls?.get('parcelas')?.get('dataPrimeiroPagamento')?.setValue(existByContratante?.parcelas?.dataPrimeiroPagamento);
-      this.formControls?.get('parcelas')?.get('dataUltimoPagamento')?.setValue(existByContratante?.parcelas?.dataUltimoPagamento);
-      this.formControls?.get('parcelas')?.get('valorTotal')?.setValue(existByContratante?.parcelas?.valorTotal);
-      
-      this.formControls?.get('entrada')?.get('quantidade')?.setValue(existByContratante?.entrada?.quantidade);
-      this.formControls?.get('entrada')?.get('valor')?.setValue(existByContratante?.entrada?.valor);
-      this.formControls?.get('entrada')?.get('dataPrimeiroPagamento')?.setValue(existByContratante?.entrada?.dataPrimeiroPagamento);
-      this.formControls?.get('entrada')?.get('dataUltimoPagamento')?.setValue(existByContratante?.entrada?.dataUltimoPagamento);
-      this.formControls?.get('entrada')?.get('valorTotal')?.setValue(existByContratante?.entrada?.valorTotal);
-     
-
-      this.dataEvent.emit(this.formControls.getRawValue());
-      this.existeParcelamento = true;
-    }
     this.calculateDataFinalEntrada();
   }
+
+   verificarContratante() {
+    this.vendasPagamentosService.getItems().subscribe((vendas)=>{
+      if(vendas.length >= 0){
+        console.log(vendas)
+        for(let venda of vendas){
+          console.log("venda",venda)
+          if(venda.contratante.id == this.dataContratanteInfo.id) {
+            this.formControls?.get('plano')?.setValue(venda.plano);
+            this.registarValores();
+            this.formControls?.get('id')?.setValue(venda.id);
+            this.formControls?.get('isAvista')?.setValue(venda.isAvista);
+            this.formControls?.get('valorAvista')?.setValue(venda.valorAvista);
+    
+            this.formControls?.get('parcelas')?.get('quantidade')?.setValue(venda?.parcelas?.quantidade);
+            this.formControls?.get('parcelas')?.get('valor')?.setValue(venda?.parcelas?.valor);
+            this.formControls?.get('parcelas')?.get('valorTotal')?.setValue(venda?.parcelas?.valorTotal);
+            if(venda?.parcelas?.dataPrimeiroPagamento){
+              const dataEmMilliseconds =venda?.parcelas?.dataPrimeiroPagamento.seconds * 1000 + Math.floor(venda?.parcelas?.dataPrimeiroPagamento.nanoseconds / 1000000);
+              const data = new Date(dataEmMilliseconds);
+              this.formControls?.get('parcelas')?.get('dataPrimeiroPagamento')?.setValue(data);
+            }
+            if(venda?.parcelas?.dataUltimoPagamento){
+              const dataEmMilliseconds =venda?.parcelas?.dataUltimoPagamento.seconds * 1000 + Math.floor(venda?.parcelas?.dataUltimoPagamento.nanoseconds / 1000000);
+              const data = new Date(dataEmMilliseconds);
+              this.formControls?.get('parcelas')?.get('dataUltimoPagamento')?.setValue(data);
+            }
+
+            
+            if(venda?.entrada?.dataPrimeiroPagamento){
+              const dataEmMilliseconds =venda?.entrada?.dataPrimeiroPagamento.seconds * 1000 + Math.floor(venda?.entrada?.dataPrimeiroPagamento.nanoseconds / 1000000);
+              const data = new Date(dataEmMilliseconds);
+              this.formControls?.get('entrada')?.get('dataPrimeiroPagamento')?.setValue(data);
+            }
+            if(venda?.entrada?.dataUltimoPagamento){
+              const dataEmMilliseconds =venda?.entrada?.dataUltimoPagamento.seconds * 1000 + Math.floor(venda?.entrada?.dataUltimoPagamento.nanoseconds / 1000000);
+              const data = new Date(dataEmMilliseconds);
+              this.formControls?.get('entrada')?.get('dataUltimoPagamento')?.setValue(data);
+            }
+            this.formControls?.get('entrada')?.get('quantidade')?.setValue(venda?.entrada?.quantidade);
+            this.formControls?.get('entrada')?.get('valor')?.setValue(venda?.entrada?.valor);
+            this.formControls?.get('entrada')?.get('valorTotal')?.setValue(venda?.entrada?.valorTotal);
+    
+            this.dataEvent.emit(this.formControls.getRawValue());
+            this.existeParcelamento = true;  
+          }
+         }
+      }
+    })
+  
+    
+         
+  };
 
   changePlano(event: any) {
     this.listarValorEntrada();
@@ -123,7 +151,7 @@ export class PagamentoCalculoComponent {
     if(value){
       this.optionsEntrada = [];
       this.formControls?.get('plano')?.setValue(value);
-      const valorAvista = value - (value * 0.10);
+      const valorAvista = value;
   
       this.formControls?.get('valorAvista')?.setValue(valorAvista);
       this.listarValorEntrada();
@@ -205,7 +233,6 @@ export class PagamentoCalculoComponent {
     }
   }
 
- 
   listarValorParcela(){
     this.optionsParcelas = [];
     const totalParcela = this.formControls?.get('plano')?.value * 0.90;
@@ -237,64 +264,66 @@ export class PagamentoCalculoComponent {
     }
   }
 
-  // calculateDataFinalParcela() {
-  //   const quantidadeParcelas = this.formControls?.get('parcelas')?.get('quantidade')?.value;
-  //   const dataPrimeiroPagamento = this.formControls?.get('parcelas')?.get('dataPrimeiroPagamento')?.value;
-  //   if (quantidadeParcelas > 1 && dataPrimeiroPagamento) {
-  //       const dataUltimoPagamento = new Date(dataPrimeiroPagamento);
-  //       dataUltimoPagamento.setMonth(dataUltimoPagamento.getMonth() + (this.formControls?.get('parcelas')?.get('quantidade')?.value - 1));
-  //       this.formControls?.get('parcelas')?.get('dataUltimoPagamento')?.setValue(dataUltimoPagamento);
-  //   } else {
-  //       this.formControls?.get('parcelas')?.get('dataUltimoPagamento')?.setValue(null);
-  //   }
-  // }
-
   formularioValido(): boolean {
-    console.log(this.formControls)
     return this.formControls.valid;
   }
 
-  gerarParcelamento(){
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      this.databaseInfo = JSON.parse(storedDb);
-    }
-
-    let existByContratante = this.databaseInfo.vendasPagamentos.filter((item: any) => item.contratante.id == this.dataContratanteInfo.id);
-    this.formControls?.get('id')?.setValue(Math.floor(Math.random() * 100000));
+  async gerarParcelamento(){
     let item =  this.formControls.getRawValue();
     item.contratante = this.dataContratanteInfo;
+    console.log(item);
+    if(item){
+      try {
+        if(this.dataContratanteInfo.id){
+     
+         await this.vendasPagamentosService.checkIfIdContratanteExists(this.dataContratanteInfo.id)
+          .then(contratanteExists => {
+            console.log("contratanteExists 1",contratanteExists)
+            if (!contratanteExists) {
 
-    if(existByContratante.length == 0){
-      this.databaseInfo.vendasPagamentos.push(
-       item
-      )
-      localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
+              this.vendasPagamentosService.save(item);
 
-      this.toolboxService.showTooltip('success', 'Parcelamento realizado com sucesso!', 'Sucesso!');
-      this.existeParcelamento = true;
-      this.dataEvent.emit(item);
+              this.dataEvent.emit(this.formControls.getRawValue());
+              this.toolboxService.showTooltip('success', 'Parcelamento realizado com sucesso!', 'Sucesso!');
+              this.existeParcelamento = true;
+            } 
+          }) 
+          .catch(error => {
+              console.error("Erro ao verificar a existência do contratante:", error);
+              this.toolboxService.showTooltip('error', 'Ocorreu um erro ao verificar a existência do contratante!', 'Erro!');
+          });
+        }
+      } catch (error) {
+        this.toolboxService.showTooltip('error', 'Ocorreu um erro!', 'Erro!');
+      }
     }
   }
 
-  atualizarParcelamento(){
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      this.databaseInfo = JSON.parse(storedDb);
-    }
-
+  async atualizarParcelamento(){
     let item =  this.formControls.getRawValue();
     item.contratante = this.dataContratanteInfo;
-
-    const index = this.databaseInfo.vendasPagamentos.findIndex((item: any) => item.id ==  this.formControls.get('id')?.value);
-
-    console.log( item, index)
-    if (index !== -1) {
-      this.databaseInfo.vendasPagamentos[index] = item;
-      localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
-
-      this.toolboxService.showTooltip('success', 'Parcelamento realizado com sucesso!', 'Sucesso!');
-      this.dataEvent.emit(item);
+    console.log(item)
+    if(item.id){
+      try {
+        await this.vendasPagamentosService.checkIfIdContratanteExists(this.dataContratanteInfo.id)
+          .then(contratanteExists => {
+            if (contratanteExists) {
+              this.vendasPagamentosService.updateItem(item.id, this.formControls.getRawValue());
+              this.dataEvent.emit(this.formControls.getRawValue());
+              this.toolboxService.showTooltip('success', 'Parcelamento atualizado com sucesso!', 'Sucesso!');
+              this.existeParcelamento = true;
+            } else {
+              this.toolboxService.showTooltip('error', 'Contratante não localizado no banco de dados!', 'ERROR!');
+            }
+          })
+          .catch(error => {
+            console.error("Erro ao verificar a existência do contratante:", error);
+            this.toolboxService.showTooltip('error', 'Ocorreu um erro ao verificar a existência do contratante!', 'Erro!');
+          });
+      } catch (error) {
+        console.error("Ocorreu um erro:", error);
+        this.toolboxService.showTooltip('error', 'Ocorreu um erro!', 'Erro!');
+      }
     }
   }
 
@@ -332,11 +361,10 @@ export class PagamentoCalculoComponent {
      }
   }
 
-
   pagamentoAvista(event: MatSlideToggleChange) {
     if (event.checked) {
       this.formControls?.get('isAvista')?.setValue(true);
-      this.formControls?.get('valorAvista')?.setValue(this.formControls?.get('plano')?.value * 0.90);
+      this.formControls?.get('valorAvista')?.setValue(this.formControls?.get('plano')?.value);
 
       this.formControls?.get('parcelas')?.get('quantidade')?.setValue(0);
       this.formControls?.get('parcelas')?.get('valor')?.setValue(0);
@@ -345,13 +373,11 @@ export class PagamentoCalculoComponent {
       this.formControls?.get('parcelas')?.get('valorTotal')?.setValue(0);
       
       this.formControls?.get('entrada')?.get('quantidade')?.setValue(1);
-      this.formControls?.get('entrada')?.get('valor')?.setValue(this.formControls?.get('plano')?.value * 0.90);
+      this.formControls?.get('entrada')?.get('valor')?.setValue(this.formControls?.get('plano')?.value);
       this.formControls?.get('entrada')?.get('dataPrimeiroPagamento')?.setValue(null);
       this.formControls?.get('entrada')?.get('dataUltimoPagamento')?.setValue(null);
-      this.formControls?.get('entrada')?.get('valorTotal')?.setValue(this.formControls?.get('plano')?.value * 0.90);
-
+      this.formControls?.get('entrada')?.get('valorTotal')?.setValue(this.formControls?.get('plano')?.value);
     } else {
-
       this.formControls?.get('isAvista')?.setValue(false);
       this.formControls?.get('parcelas')?.get('quantidade')?.setValue(0);
       this.formControls?.get('parcelas')?.get('valor')?.setValue(0);

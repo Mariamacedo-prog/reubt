@@ -9,7 +9,7 @@
       <mat-card-content >
         <div formGroupName="contratante">
 
-          <button (click)="gerarMatricula()" style="margin-left: 10px;" *ngIf="formControls.get('crf.numerocrf')?.value == 0" mat-stroked-button color="accent">Adicionar Matricula</button>
+          <button (click)="generateMatricula()" style="margin-left: 10px;" *ngIf="formControls.get('crf.numerocrf')?.value == 0" mat-stroked-button color="accent">Adicionar Matricula</button>
           <mat-form-field>
             <mat-label>CRF</mat-label>
             <input disabled [readonly]="visualizar" matInput [value]="formControls.get('crf.numerocrf')?.value"/>
@@ -34,7 +34,7 @@
           <div class="inputs-row-form">
             <mat-form-field>
               <mat-label>Nome</mat-label>
-              <input disabled [readonly]="visualizar" matInput [value]="formControls.get('contratante.nome')?.value"/>
+              <input disabled [readonly]="visualizar"  matInput [value]="formControls.get('contratante.nome')?.value"/>
             </mat-form-field>
 
             <mat-form-field>
@@ -85,21 +85,21 @@
 
         <app-pagamento-calculo *ngIf="contratoId" [dataContratanteInfo]="formControls.get('contratante')?.getRawValue()" (dataEvent)="receiveDataFromChild($event)"></app-pagamento-calculo>
 
-          <div class="area-botao-form " *ngIf="isLoggedIn && this.contratoId === 0 || this.contratoId === undefined">
-            <button mat-raised-button color="primary" (click)="cadastrar()" [disabled]="!formularioValido()">Cadastrar</button>
+          <div class="area-botao-form " *ngIf="isLoggedIn && this.contratoId === '' || this.contratoId === undefined">
+            <button mat-raised-button color="primary" (click)="create()" [disabled]="!formValid()">Cadastrar</button>
             <button  mat-raised-button color="link" routerLink="/contrato/lista">Voltar</button>
           </div>
   
-          <div class="area-botao-form " *ngIf="isLoggedIn && this.contratoId !== 0 && this.contratoId !== undefined">
+          <div class="area-botao-form " *ngIf="isLoggedIn && this.contratoId !== '' && this.contratoId !== undefined">
      
-            <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizar()" [disabled]="!formularioValido()"> Atualizar</button>
+            <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="update()" [disabled]="!formValid()"> Atualizar</button>
             <button mat-raised-button color="link" routerLink="/contrato/lista">Voltar</button>
           </div>
       </mat-card-content>
     </form>
 
 
-    <button *ngIf="contratoId" [disabled]="!formularioValido() || !showDowloadContrato || !parcelamentoInfo.id" mat-stroked-button  color="primary" (click)="generateWordFile()">
+    <button *ngIf="contratoId" [disabled]="!formValid() || !showDownloadContrato || !parcelamentoInfo.id" mat-stroked-button  color="primary" (click)="generateWordFile()">
       <mat-icon>download</mat-icon>
       Download Contrato
     </button>

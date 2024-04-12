@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
+import { ContratosService } from '../../../services/contratos.service';
+import { CartoriosService } from '../../../services/cartorios.service';
+
 
 @Component({
   selector: 'app-contratos-grid',
@@ -15,27 +18,32 @@ export class ContratosGridComponent {
 
   cartorios: any = [];
   cartorioSearch: string = '';
-  constructor(private router: Router, private toolboxService: ToolboxService) {}
+  constructor(private router: Router, private toolboxService: ToolboxService,
+     private contratosService: ContratosService, private cartoriosService: CartoriosService) {}
   adicionarNovo() {
     this.router.navigate(["/contrato/novo"]);
   }
 
   ngOnInit(): void {
-    setTimeout(() => {
-      const storedDb = localStorage.getItem('appDb');
-      if (storedDb) {
-        if(JSON.parse(storedDb).contratos){
-          this.dataSource = JSON.parse(storedDb).contratos;
-          this.dataSourceFilter = JSON.parse(storedDb).contratos;
-        }
-        if(JSON.parse(storedDb).cartorios){
-          this.cartorios = JSON.parse(storedDb).cartorios;
-        }
+    this.findAll();
+
+    this.cartoriosService.getItems().subscribe(cartorios => { 
+      if (cartorios.length >= 0) {
+        this.cartorios  = cartorios;
       }
-    }, 1000)
+    });
+  }
+  
+  findAll(){
+    this.contratosService.getItems().subscribe(contratos => {
+      if (contratos.length >= 0) {
+        this.dataSource = contratos;
+        this.dataSourceFilter = contratos;
+      }
+    });
   }
 
-  procurar() {
+  search() {
     if(this.searchTerm.length == 0){
       this.dataSourceFilter = this.dataSource;
     }
@@ -47,30 +55,17 @@ export class ContratosGridComponent {
     }
   }
 
-  visualizarItem(element: any){
+  viewItem(element: any){
     this.router.navigate(["/contrato/form/" + element.id + "/visualizar"]);
   }
 
-  editarItem(element: any){
+  editItem(element: any){
     this.router.navigate(["/contrato/form/" + element.id]);
   }
 
-  deletarItem(element: any){
-    let databaseInfo: any = {};
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      databaseInfo = JSON.parse(storedDb);
-    }
-    const index = databaseInfo.contratos.findIndex((item: any) => item.id == element.id);
-
-    if (index !== -1) {
-      databaseInfo.contratos.splice(index, 1)
-      this.toolboxService.showTooltip('success', 'Contrato foi deletado com sucesso!', 'SUCESSO!');
-    }
-
-    localStorage.setItem('appDb', JSON.stringify(databaseInfo));
-    this.dataSourceFilter = databaseInfo.contratos;
-    this.dataSource = databaseInfo.contratos;
+  deleteItem(element: any){
+    this.contratosService.deleteItem(element.id);
+    this.findAll();
   }
 
   cartorioSelected(event: any){

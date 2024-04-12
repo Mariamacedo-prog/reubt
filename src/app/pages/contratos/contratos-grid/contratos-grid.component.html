@@ -40,7 +40,7 @@
         <mat-select (selectionChange)="cartorioSelected($event)">
           <mat-option value="">Escolha um cartorio</mat-option>
           @for (cartorio of cartorios; track cartorio) {
-            <mat-option [value]="cartorio.cartorio.nome">{{cartorio.cartorio.nome}}</mat-option>
+            <mat-option [value]="cartorio.nome">{{cartorio.nome}}</mat-option>
           }
         </mat-select>
       </mat-form-field>
@@ -48,11 +48,11 @@
 
     <div class="inputs-row-form">
       <mat-form-field class="search-field">
-        <input matInput placeholder="Pesquisar por Nome, CPF, CRF e Contatante" [(ngModel)]="searchTerm" (keyup)="procurar()" />
+        <input matInput placeholder="Pesquisar por Nome, CPF, CRF e Contatante" [(ngModel)]="searchTerm" (keyup)="search()" />
         <mat-icon matPrefix>search</mat-icon>
       </mat-form-field>
       
-      <button style="margin-top:17px; margin-left: 20px; padding: 15px 40px;" (click)="procurar()" mat-stroked-button color="primary" >Filtrar</button>
+      <button style="margin-top:17px; margin-left: 20px; padding: 15px 40px;" (click)="search()" mat-stroked-button color="primary" >Filtrar</button>
       <button style="margin-top:17px; margin-left: 20px;"  mat-raised-button color="primary" (click)="adicionarNovo()" >Novo Contrato</button>
     </div>
   </div>
@@ -93,13 +93,13 @@
     <ng-container matColumnDef="actions" class="">
       <th mat-header-cell *matHeaderCellDef > Ações </th>
       <td mat-cell *matCellDef="let element" >
-        <button class="icon-blue" mat-icon-button (click)="visualizarItem(element)">
+        <button class="icon-blue" mat-icon-button (click)="viewItem(element)">
           <mat-icon >visibility</mat-icon>
         </button>
-        <button class="icon-green" mat-icon-button (click)="editarItem(element)">
+        <button class="icon-green" mat-icon-button (click)="editItem(element)">
           <mat-icon >edit</mat-icon>
         </button>
-        <button class="icon-red" mat-icon-button  (click)="deletarItem(element)">
+        <button class="icon-red" mat-icon-button  (click)="deleteItem(element)">
           <mat-icon >delete</mat-icon>
         </button>
       </td>

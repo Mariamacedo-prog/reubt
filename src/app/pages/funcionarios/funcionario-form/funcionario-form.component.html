@@ -31,7 +31,7 @@
       
             <mat-form-field>
               <mat-label>Telefone</mat-label>
-              <input [readonly]="visualizar"  matInput [formControl]="telefoneFormControl" (input)="formatarTelefone()" />
+              <input [readonly]="visualizar"  matInput [formControl]="telefoneFormControl" (input)="formatPhone()" />
               <mat-error *ngIf="telefoneFormControl.hasError('pattern')">
                 Por favor digite um telefone válido.
               </mat-error>
@@ -78,7 +78,7 @@
           <div class="inputs-row-form">
             <mat-form-field>
               <mat-label>CEP</mat-label>
-              <input [readonly]="visualizar" (keyup)="buscarEndereco()" maxlength="8" type="text" matInput [formControl]="cepFormControl" />
+              <input [readonly]="visualizar" (keyup)="findAddress()" maxlength="8" type="text" matInput [formControl]="cepFormControl" />
               <mat-error *ngIf="cepFormControl.hasError('required')" >
                 Este campo é <strong>obrigatório</strong>
               </mat-error>
@@ -129,13 +129,13 @@
 
 
 
-        <div class="area-botao-form " *ngIf="isLoggedIn && this.funcionarioId === 0 || this.funcionarioId === undefined">
-          <button mat-raised-button color="primary" (click)="cadastrar()" [disabled]="!formularioValido()">Cadastrar</button>
+        <div class="area-botao-form " *ngIf="isLoggedIn && this.funcionarioId === '' || this.funcionarioId === undefined">
+          <button mat-raised-button color="primary" (click)="create()" [disabled]="!formValid()">Cadastrar</button>
           <button  mat-raised-button color="link" routerLink="/funcionario/lista">Voltar</button>
         </div>
 
-        <div class="area-botao-form " *ngIf="isLoggedIn && this.funcionarioId !== 0 && this.funcionarioId !== undefined">
-          <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="atualizar()" [disabled]="!formularioValido()"> Atualizar</button>
+        <div class="area-botao-form " *ngIf="isLoggedIn && this.funcionarioId !==  '' && this.funcionarioId !== undefined">
+          <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="update()" [disabled]="!formValid()"> Atualizar</button>
           <button mat-raised-button color="link" routerLink="/funcionario/lista">Voltar</button>
         </div>
     </mat-card-content>

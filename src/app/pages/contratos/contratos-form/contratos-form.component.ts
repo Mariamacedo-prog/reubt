@@ -3,6 +3,10 @@ import { WordService } from '../../../services/utils/word.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ContratosService } from '../../../services/contratos.service';
+import { ContratantesService } from '../../../services/contratantes.service';
+import { EmpresasService } from '../../../services/empresas.service';
+import { ImoveisService } from '../../../services/imoveis.service';
 
 @Component({
   selector: 'app-contratos-form',
@@ -10,21 +14,25 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './contratos-form.component.css'
 })
 export class ContratosFormComponent {
-  contratoId = 0;
+  contratoId = "";
   isLoggedIn: boolean = false;
   databaseInfo: any = {};
   visualizar: boolean = false;
   formControls!: FormGroup;
   timeoutId: any;
-
-  showDowloadContrato = false;
+ 
+  showDownloadContrato = false;
   parcelamentoInfo: any = {};
   imovelDoContratante: any = {};
   existeImovel:boolean = false;
 
+  contratantes: any[] = [];
   filteredContratantes: any[] = [];
   loadingCpf: boolean = false;
-  constructor(private toolboxService: ToolboxService, private router: Router, private route: ActivatedRoute,private formBuilder: FormBuilder, private wordService: WordService) {
+  constructor(private toolboxService: ToolboxService, private router: Router, private route: ActivatedRoute,
+    private formBuilder: FormBuilder, private wordService: WordService, private contratosService: ContratosService, 
+    private contratantesService: ContratantesService, private empresaService: EmpresasService, 
+    private imoveisService: ImoveisService) {
     }
 
   cartorioFormControls = this.formBuilder.group({
@@ -85,114 +93,96 @@ export class ContratosFormComponent {
 
     this.isAuthenticated();
 
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      this.databaseInfo = JSON.parse(storedDb);
+    this.findContratantes();
 
-      if(this.databaseInfo.empresa[0]){
-        const empresa = this.databaseInfo.empresa[0];
-        this.formControls?.get('empresa')?.get('nome')?.setValue(empresa.nome);
-        this.formControls?.get('empresa')?.get('cnpj')?.setValue(empresa.cnpj);
-        this.formControls?.get('empresa')?.get('endereco')?.get('rua')?.setValue(empresa.endereco.rua);
-        this.formControls?.get('empresa')?.get('endereco')?.get('numero')?.setValue(empresa.endereco.numero);
-        this.formControls?.get('empresa')?.get('endereco')?.get('bairro')?.setValue(empresa.endereco.bairro);
-        this.formControls?.get('empresa')?.get('endereco')?.get('complemento')?.setValue(empresa.endereco.complemento);
-        this.formControls?.get('empresa')?.get('endereco')?.get('cidadeUf')?.setValue(empresa.endereco.cidadeUf);
-      }
-  
-      if(this.contratoId){
-        const contratoPeloCpf = this.databaseInfo.contratos.find((contrato: any) => contrato.id == this.contratoId);
-        if(this.databaseInfo.contratos && contratoPeloCpf){
-          this.formControls?.get('crf')?.get('numerocrf')?.setValue(contratoPeloCpf.crf.numerocrf);
-          this.formControls?.get('crf')?.get('crfentregue')?.setValue(contratoPeloCpf.crf.crfentregue);
-          this.formControls?.get('crf')?.get('statusentrega')?.setValue(contratoPeloCpf.crf.statusentrega);
+    this.findEmpresa();
 
-          this.formControls?.get('cartorio')?.get('nome')?.setValue(contratoPeloCpf.cartorio.nome);
-          this.formControls?.get('cartorio')?.get('cns')?.setValue(contratoPeloCpf.cartorio.cns);
-          const cartorioPorCns = this.databaseInfo.cartorios.find((cartorio: any) => cartorio.cartorio.cns == contratoPeloCpf.cartorio.cns);
-          if(cartorioPorCns){
-            this.formControls?.get('cartorio')?.get('cidadeUf')?.setValue(cartorioPorCns.endereco.cidadeUf);
-          }
-          this.formControls?.get('contratante')?.get('id')?.setValue(contratoPeloCpf.contratante.id);
-          this.formControls?.get('contratante')?.get('nome')?.setValue(contratoPeloCpf.contratante.nome);
-          this.formControls?.get('contratante')?.get('cpf')?.setValue(contratoPeloCpf.contratante.cpf);
-          this.formControls?.get('contratante')?.get('rg')?.setValue(contratoPeloCpf.contratante.rg);
-          this.formControls?.get('contratante')?.get('email')?.setValue(contratoPeloCpf.contratante.email);
-          this.formControls?.get('contratante')?.get('telefone')?.setValue(contratoPeloCpf.contratante.telefone);
-          this.formControls?.get('contratante')?.get('nacionalidade')?.setValue(contratoPeloCpf.contratante.nacionalidade);
-          this.formControls?.get('contratante')?.get('profissao')?.setValue(contratoPeloCpf.contratante.profissao);
-          this.formControls?.get('contratante')?.get('estadoCivil')?.setValue(contratoPeloCpf.contratante.estadoCivil);
 
-          this.findImovel()
-        
+    if(this.contratoId){
+      this.contratosService.findById(this.contratoId).subscribe(contrato => {
+        this.formControls?.get('crf')?.get('numerocrf')?.setValue(contrato.crf.numerocrf);
+        this.formControls?.get('crf')?.get('crfentregue')?.setValue(contrato.crf.crfentregue);
+        this.formControls?.get('crf')?.get('statusentrega')?.setValue(contrato.crf.statusentrega);
+
+        this.formControls?.get('cartorio')?.get('nome')?.setValue(contrato.cartorio.nome);
+        this.formControls?.get('cartorio')?.get('cns')?.setValue(contrato.cartorio.cns);
+        if(contrato.cartorio.cidadeuf){
+          this.formControls?.get('cartorio')?.get('cidadeUf')?.setValue(contrato.cartorio.cidadeUf);
         }
-      }
+        this.formControls?.get('contratante')?.get('id')?.setValue(contrato.contratante.id);
+        this.formControls?.get('contratante')?.get('nome')?.setValue(contrato.contratante.nome);
+        this.formControls?.get('contratante')?.get('cpf')?.setValue(contrato.contratante.cpf);
+        this.formControls?.get('contratante')?.get('rg')?.setValue(contrato.contratante.rg);
+        this.formControls?.get('contratante')?.get('email')?.setValue(contrato.contratante.email);
+        this.formControls?.get('contratante')?.get('telefone')?.setValue(contrato.contratante.telefone);
+        this.formControls?.get('contratante')?.get('nacionalidade')?.setValue(contrato.contratante.nacionalidade);
+        this.formControls?.get('contratante')?.get('profissao')?.setValue(contrato.contratante.profissao);
+        this.formControls?.get('contratante')?.get('estadoCivil')?.setValue(contrato.contratante.estadoCivil);
+
+        this.findImovel();
+      });
+   
     }
+  }
+
+  findContratantes(){
+    this.contratantesService.getItems().subscribe((contratantes)=>{
+      this.contratantes = contratantes;
+    });
+  }
+
+  findEmpresa(){
+    this.empresaService.getItems().subscribe((empresas: any)=>{
+      let empresa = empresas[0];
+      this.formControls?.get('empresa')?.get('nome')?.setValue(empresa.nome);
+      this.formControls?.get('empresa')?.get('cnpj')?.setValue(empresa.cnpj);
+      this.formControls?.get('empresa')?.get('endereco')?.get('rua')?.setValue(empresa.endereco.rua);
+      this.formControls?.get('empresa')?.get('endereco')?.get('numero')?.setValue(empresa.endereco.numero);
+      this.formControls?.get('empresa')?.get('endereco')?.get('bairro')?.setValue(empresa.endereco.bairro);
+      this.formControls?.get('empresa')?.get('endereco')?.get('complemento')?.setValue(empresa.endereco.complemento);
+      this.formControls?.get('empresa')?.get('endereco')?.get('cidadeUf')?.setValue(empresa.endereco.cidadeUf);
+    });
   }
 
   findImovel(){
-    console.log()
-    const imovelPeloContratanteId = this.databaseInfo.imoveis.find((item: any) => item.contratante.id ==  this.formControls?.get('contratante')?.get('id')?.value);
-    if(this.databaseInfo.imoveis && imovelPeloContratanteId){
-      this.imovelDoContratante = imovelPeloContratanteId;
-      this.formControls?.get('contratante')?.get('imovelId')?.setValue(imovelPeloContratanteId.id);
-      this.showDowloadContrato = true;
-      console.log( this.imovelDoContratante);
-      this.existeImovel = true;
-    }else{
-      this.showDowloadContrato = false;
-      this.existeImovel = false;
-      this.toolboxService.showTooltip('error', 'Não foi localizado o imovel deste contratante, favor registrar na tela Imovel para dar continuidade com o Contrato!', 'ERRO IMOVEL!');
-    }
-  }
-
-  cadastrar() {
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      this.databaseInfo = JSON.parse(storedDb);
-    }
-    if(this.databaseInfo.contratos){
-      this.formControls?.get('id')?.setValue(Math.floor(Math.random() * 100000));
-
-      this.databaseInfo.contratos.push(
-       this.formControls.getRawValue()
-      )
-      localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
-
-      this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/contrato/lista']);
-    }
-  }
-
-  atualizar(){
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      this.databaseInfo = JSON.parse(storedDb);
-    }
-    
-    if(this.databaseInfo.contratos){
-      const index = this.databaseInfo.contratos.findIndex((item: any) => item.id == this.contratoId);
-      if (index !== -1) {
-        this.databaseInfo.contratos[index] = this.formControls.getRawValue();
+    this.imoveisService.checkByContratanteId(this.formControls?.get('contratante')?.get('id')?.value).subscribe((imoveis: any)=>{
+      console.log(imoveis)
+      if(imoveis.length >= 1){
+        this.imovelDoContratante = imoveis[0];
+        this.formControls?.get('contratante')?.get('imovelId')?.setValue(imoveis[0].id);
+        this.showDownloadContrato = true;
+        this.existeImovel = true;
+      }else{
+        this.showDownloadContrato = false;
+        this.existeImovel = false;
+        this.toolboxService.showTooltip('error', 'Não foi localizado o imovel deste contratante, favor registrar na tela Imovel para dar continuidade com o Contrato!', 'ERRO IMOVEL!');
       }
-
-      localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
-
-      this.toolboxService.showTooltip('success', 'Cadastro atualizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/contrato/lista']);
-    }
+    });
+   
   }
 
-  gerarMatricula(){
+  create() {
+    this.contratosService.save(this.formControls.getRawValue());
+    this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
+    this.router.navigate(['/contrato/lista']);
+  }
+
+  update(){
+    this.contratosService.updateItem(this.contratoId, this.formControls.getRawValue())
+  }
+
+  generateMatricula(){
     this.formControls?.get('crf')?.get('numerocrf')?.setValue(Math.floor(Math.random() * 10000000));
     this.formControls?.get('crf')?.get('crfentregue')?.setValue("Entregue");
     this.formControls?.get('crf')?.get('statusentrega')?.setValue("Finalizado");
   }
 
-  formularioValido(): boolean {
-    return (
-      this.formControls.valid
-    );
+  formValid(): boolean {
+    if (!this.formControls) {
+      return false;
+    }else{
+      return true;
+    }
   }
 
   isAuthenticated(){
@@ -209,16 +199,15 @@ export class ContratosFormComponent {
     const cpf = event.target.value.trim();
     if (cpf.length >= 3) {
       this.timeoutId = setTimeout(() => {
-        this.buscarContratantes(cpf);
+        this.searchContratantes(cpf);
       }, 2000); 
     } else {
-
       this.filteredContratantes = [];
     }
   }
   
-  buscarContratantes(cpf: string) {
-    this.databaseInfo.contratantes.filter((item: any) => {
+  searchContratantes(cpf: string) {
+    this.contratantes.filter((item: any) => {
       if(item.cpf?.includes(cpf)){
          this.filteredContratantes.push(item);
       }  
@@ -229,10 +218,7 @@ export class ContratosFormComponent {
   selectContratante(item: any){
     this.formControls?.get('cartorio')?.get('nome')?.setValue(item.cartorio.nome);
     this.formControls?.get('cartorio')?.get('cns')?.setValue(item.cartorio.cns);
-    const cartorioPorCns = this.databaseInfo.cartorios.find((cartorio: any) => cartorio.cartorio.cns == this.formControls?.get('cartorio')?.get('cns')?.value);
-    if(cartorioPorCns){
-      this.formControls?.get('cartorio')?.get('cidadeUf')?.setValue(cartorioPorCns.endereco.cidadeUf);
-    }
+    this.formControls?.get('cartorio')?.get('cidadeUf')?.setValue(item.cartorio.cidadeUf);
 
     this.formControls?.get('contratante')?.get('id')?.setValue(item.id);
     this.formControls?.get('contratante')?.get('nome')?.setValue(item.nome);
@@ -247,6 +233,8 @@ export class ContratosFormComponent {
     this.findImovel()
     this.filteredContratantes = [];
     this.loadingCpf = false;
+
+    console.log(this.formControls.valid);
   }
 
   receiveDataFromChild(data: any) {
