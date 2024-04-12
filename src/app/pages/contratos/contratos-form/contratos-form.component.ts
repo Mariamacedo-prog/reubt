@@ -106,9 +106,9 @@ export class ContratosFormComponent {
 
         this.formControls?.get('cartorio')?.get('nome')?.setValue(contrato.cartorio.nome);
         this.formControls?.get('cartorio')?.get('cns')?.setValue(contrato.cartorio.cns);
-        if(contrato.cartorio.cidadeuf){
+   
           this.formControls?.get('cartorio')?.get('cidadeUf')?.setValue(contrato.cartorio.cidadeUf);
-        }
+     
         this.formControls?.get('contratante')?.get('id')?.setValue(contrato.contratante.id);
         this.formControls?.get('contratante')?.get('nome')?.setValue(contrato.contratante.nome);
         this.formControls?.get('contratante')?.get('cpf')?.setValue(contrato.contratante.cpf);

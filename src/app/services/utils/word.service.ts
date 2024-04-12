@@ -7,6 +7,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class WordService {
   constructor() { }
+  prefeituraNome = "Prefeitura municipal de Mairinque";
   
   generateWord(doc: Document, nome: any): void {
     Packer.toBlob(doc).then(blob => {
@@ -272,7 +273,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                   size:25, 
                   font: "Arial"
                 },
-                { text:"os serviços de individualização da(s) unidade(s) de sua propriedade, situada(s) no " + this.gerarEnderecoPorta(imovelDoContratante) + ";"+" em conformidade com a Lei n° 13.465/2017 (REURB) ", 
+                { text:"os serviços de individualização da(s) unidade(s) de sua propriedade, situada(s) no " + this.gerarEnderecoPorta(imovelDoContratante) + ";"+" em conformidade com a Lei n° 13.465/2017 (REURB), com a implemento dos dados técnicos suficientes e indispensáveis para a emissão da CRF – Certidão de Regularização Fundiária por parte da " + this.prefeituraNome + ", para a aprovação e consequente encaminhamento ao " + formControls?.get('cartorio')?.get('nome')?.value, 
                   size:25, 
                   font: "Arial"
                 },
@@ -302,18 +303,18 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
               ]),
               space,  space,
               this.gerarParagrafo(
-                [{ text:"        • Elaboração de projeto técnico de individualização das unidades;", 
+                [{ text:`        • Organizar e apresentar todas as informações necessárias para a ${this.prefeituraNome} emitir a Certidão de Regularização Fundiária (CRF) da unidade autônoma do ${imovelDoContratante.enderecoPorta?.nucleoInformal};`, 
                   size:25, 
                   font: "Arial"
                 }]),
               this.gerarParagrafo(
-                [{ text:"        • Obtenção de todas as licenças e autorizações necessárias junto aos órgãos públicos competentes;", 
+                [{ text:`        • Encaminhar os trabalhos técnicos realizados à ${this.prefeituraNome}, através de protocolo conjunto do ${imovelDoContratante.enderecoPorta?.nucleoInformal};`, 
                   size:25, 
                   font: "Arial"
                 }
               ]),
               this.gerarParagrafo(
-                [{ text:"        • Execução das obras de individualização das unidades;", 
+                [{ text:`        • Execução do desmembramento das unidades individualizada do ${imovelDoContratante.enderecoPorta?.nucleoInformal};`, 
                   size:25, 
                   font: "Arial"
               }]),
@@ -322,9 +323,91 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                   size:25, 
                   font: "Arial"
               }]),
+              this.gerarParagrafo(
+                [{ text:"        • Entregar das plantas e memoriais, que servirão para locação das divisas a qualquer tempo.", 
+                  size:25, 
+                  font: "Arial"
+              }]),
+              this.gerarParagrafo(
+                [{ text:`        • Encaminhar a ${this.prefeituraNome} todos os documentos pessoais e da propriedade levantados e recebidos do CONTRATANTE para fazer parte de seu arquivo.`, 
+                  size:25, 
+                  font: "Arial"
+              }]),
               space, space,
               this.gerarParagrafo(
-              [{ text:"Cláusula 3ª - Do Prazo", 
+                [{ text:"Cláusula 3ª - Da responsabilidade da CONTRATADA:", 
+                  bold:true, 
+                  size:25, 
+                  font: "Arial"
+                }]),
+              space,  space,
+              this.gerarParagrafo(
+                [{ text:`        • A CONTRATADA se compromete a cumprir todas as exigências da ${this.prefeituraNome}, no sentido de terminar a REURB do ${imovelDoContratante.enderecoPorta?.nucleoInformal};`, 
+                  size:25, 
+                  font: "Arial"
+                }]
+              ),
+              this.gerarParagrafo(
+                [{ text:`        • A CONTRATADA se compromete a usar os dados do CONTRATANTE de forma responsável, única e exclusivamente para o propósito desse contrato;`, 
+                  size:25, 
+                  font: "Arial"
+                }]
+              ),
+              this.gerarParagrafo(
+                [{ text:`        •  A CONTRATADA encaminhará ao CONTRATANTE os instrumentos técnicos resultante dos trabalhos executados em sua propriedade;`, 
+                  size:25, 
+                  font: "Arial"
+                }]
+              ),
+              this.gerarParagrafo(
+                [{ text:`        •  A CONTRATADA realizara os levantamentos necessários a individualização do terreno do CONTRATANTE.`, 
+                  size:25, 
+                  font: "Arial"
+                }]
+              ),
+              space, space,
+              this.gerarParagrafo(
+                [{ text:"Cláusula 4ª - Da responsabilidade da CONTRATANTE:", 
+                  bold:true, 
+                  size:25, 
+                  font: "Arial"
+                }]),
+              space,  space,
+              this.gerarParagrafo(
+                [{ text:`        • A CONTRATANTE se compromete a apresentar os documentos de aquisição do terreno a ser regularizado, não tenha, apresentar declaração de que é posseiro e comprovar tempo de posse;`, 
+                  size:25, 
+                  font: "Arial"
+                }]
+              ),
+              this.gerarParagrafo(
+                [{ text:`        • A CONTRATANTE se responsabiliza pela veracidade dos documentos apresentados para a formação do projeto e processo de regularização do imóvel;`, 
+                  size:25, 
+                  font: "Arial"
+                }]
+              ),
+              this.gerarParagrafo(
+                [{ text:`        • A CONTRATANTE se obriga a apresentar seus documentos pessoais, no qual também servirão de parâmetros para a formalização desse contrato, bem como, para a emissão da CRF por parte da ${this.prefeituraNome} e consequentemente para a abertura de Matrícula junto ao ${formControls?.get('cartorio')?.get('nome')?.value};`, 
+                  size:25, 
+                  font: "Arial"
+                }]
+              ),
+              this.gerarParagrafo(
+                [{ text:`        • A CONTRATANTE se obriga a qualquer tempo apresentar novos documentos, quando solicitado pelo CONTRATADO;`, 
+                  size:25, 
+                  font: "Arial"
+                }]
+              ),
+              this.gerarParagrafo(
+                [{ text:`        • A CONTRATANTE se obriga a pagar os valores ajustados nesse contrato.`, 
+                  size:25, 
+                  font: "Arial"
+                }]
+              ),
+
+
+              space, space,
+              this.gerarParagrafo(
+              [{ text:"Cláusula 5ª - Do Prazo", 
                 bold:true, 
                 size:25, 
                 font: "Arial"
@@ -340,7 +423,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                   size:25, 
                   font: "Arial"
                 },
-                { text:"dias contados a partir da assinatura deste contrato.", 
+                { text:`dias, contados a partir da assinatura deste contrato, para a protocolização junto a ${this.prefeituraNome}`, 
                   size:25, 
                   font: "Arial"
                 }
@@ -348,7 +431,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
 
               space, space,
               this.gerarParagrafo(
-              [{ text:"Cláusula 4ª - Do Valor", 
+              [{ text:"Cláusula 6ª - Do Valor", 
                 bold:true, 
                 size:25, 
                 font: "Arial"
@@ -368,18 +451,26 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                   size:25, 
                   font: "Arial"
                 },
-                { text: `${parcelamentoInfo?.plano?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`, 
+                { text: `${parcelamentoInfo?.plano?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} (reais)`, 
                   bold:true, 
-                  size:25, 
-                  font: "Arial"
-                },
-                { text:" a ser pago da seguinte forma: ", 
                   size:25, 
                   font: "Arial"
                 }
               ]),
               space,
-               this.gerarParagrafo(
+             
+
+
+
+            
+              space, space,space,
+              this.gerarParagrafo(
+              [{ text:"Cláusula 7ª - Da Forma de Pagamento", 
+                bold:true, 
+                size:25, 
+                font: "Arial"
+              }]),
+              this.gerarParagrafo(
                 [{ text: parcelamentoInfo?.parcelas?.quantidade > 0 ?"        • 10% (dez por cento) de entrada, ": "",
                   bold:true,
                   size:25, 
@@ -404,99 +495,106 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                   font: "Arial"
                 }
               ]),
-
-
-
               this.gerarParagrafo(
                 [{ text: parcelamentoInfo?.parcelas?.quantidade > 0 ? "        • O restante, equivalente a 90% (noventa por cento), " : "",
                     bold:true,
                     size:25, 
                     font: "Arial"
                   },
-                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ? "será dividido em " : "", 
+                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ? "poderá será dividido em até " : "", 
                     size:25, 
                     font: "Arial"
                   },
-                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ? `${parcelamentoInfo?.parcelas?.quantidade} (${this.transform(parcelamentoInfo?.parcelas?.quantidade)}) `: "", 
+                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ? `30 (trinta) `: "", 
                     bold:true,
                     size:25, 
                     font: "Arial"
                   },
-                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ? "parcelas mensais e iguais, com vencimento no dia ": "",
+                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ? "parcelas mensais e iguais corrigidas pelo ": "",
                     size:25, 
                     font: "Arial"
                   },
-                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ?`${this.formatarData(parcelamentoInfo?.parcelas?.dataPrimeiroPagamento, true)} `: "",
+                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ? `IGP-M, `: "", 
                     bold:true,
                     size:25, 
                     font: "Arial"
                   },
-                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ? "de cada mês. ": "",
+                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ?`com vencimento da primeira parcela no dia ${this.formatarData(parcelamentoInfo?.parcelas?.dataPrimeiroPagamento, true)} `: "",
+                    bold:true,
+                    size:25, 
+                    font: "Arial"
+                  },
+                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ? "assim sucessivamente a cada mês. ": "",
                     size:25, 
                     font: "Arial"
                   }
               ]),
-
+             
               space,
               this.gerarParagrafo(
                 [{ text: parcelamentoInfo?.parcelas?.quantidade > 0 
                   ? `` 
-                  : `        • Pago em uma única vez, em moeda corrente, na assinatura do presente contrato com 10 % de desconto no valor de ${parcelamentoInfo?.valorAvista?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`,
+                  : `        • Pago em uma única vez, em moeda corrente, na assinatura do presente contrato no valor de ${parcelamentoInfo?.valorAvista?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} (reais)`,
                   bold:true,
                   size:25, 
                   font: "Arial"
               }]),
-              space, space,space,
+
               this.gerarParagrafo(
-              [{ text:"Cláusula 5ª - Da Forma de Pagamento", 
+                [
+                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 
+                    ? "        • Quantidade proposta pelo CONTRATANTE: À VISTA " 
+                    : `        • Quantidade de parcelas proposta pelo CONTRATANTE ${parcelamentoInfo?.parcelas?.quantidade}`,
+                  bold:true,
+                  size:25, 
+                  font: "Arial"
+                  }
+                ]
+              ),
+              space,  space,
+              this.gerarParagrafo(
+              [{ text:"O pagamento das parcelas poderá ser feito através de boleto bancário, cartão de crédito, débito ou PIX, o qual será enviado com antecedência por MSN, WhatsApp, e-mail ou outra forma de comunicação.",  
+                size:25, 
+                font: "Arial"
+              }]),
+              space,  space,
+              this.gerarParagrafo(
+              [{ text:"Cláusula 8ª - Dos Reajustes", 
                 bold:true, 
                 size:25, 
                 font: "Arial"
               }]),
               space,  space,
               this.gerarParagrafo(
-              [{ text:"O pagamento das parcelas poderá ser feito através de boleto bancário, cartão de crédito, débito ou PIX.",  
-                size:25, 
-                font: "Arial"
-              }]),
-              space,  space,
-              this.gerarParagrafo(
-              [{ text:"Cláusula 6ª - Dos Reajustes", 
-                bold:true, 
-                size:25, 
-                font: "Arial"
-              }]),
-              space,  space,
-              this.gerarParagrafo(
-              [{ text:"Os valores das parcelas mensais serão reajustados mensalmente, com a correção da variação do ",  
+              [{ text:"Os valores das parcelas mensais serão reajustados mensalmente, pela variação do ",  
                 size:25, 
                 font: "Arial"
               },{
-                text:"IPCA e juros de 0,5% (zero virgula cinco por cento). ",  
+                text:"IGP-M ",  
                 size:25, 
                 font: "Arial",
                 bold:true
               }]),
               space,  space,
               this.gerarParagrafo(
-              [{ text:"Cláusula 7ª - Da Inadimplência",  
+              [{ text:"Cláusula 9ª - Da Inadimplência",  
                 bold:true, 
                 size:25, 
                 font: "Arial"
               }]),
               space,  space,
               this.gerarParagrafo(
-              [{ text:"Em caso de inadimplência do ",  
+              [{ text:"Em caso de inadimplência dos pagamentos pactuados a ",  
                 size:25, 
                 font: "Arial"
               },{
-                text:"CONTRATANTE ",  
+                text:"CONTRATANTE, ",  
                 size:25, 
                 font: "Arial",
                 bold:true
               },
               {
-                text:"a ",  
+                text:"pagará a ",  
                 size:25, 
                 font: "Arial"
               },
@@ -507,42 +605,36 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                 bold:true
               },
               {
-                text:"poderá: ",  
+                text:"os juros de mora de ",  
                 size:25, 
                 font: "Arial"
-              }
+              },
+              {
+                text:"1% (um por cento) ",  
+                size:25, 
+                font: "Arial",
+                bold:true
+              }, 
+              {
+                text:"ao mês, se e somente se os serviços contratados ainda não estiverem terminados poderá a ",  
+                size:25, 
+                font: "Arial"
+              },
+              {
+                text:"CONTRATADA ",  
+                size:25, 
+                font: "Arial",
+                bold:true
+              },
+              {
+                text:"suspender a prestação dos serviços e consequentemente rescindir o contrato, caso a prestação de serviço esteja encerrada ou em andamento que impossibilite a paralização deste contrato opera-se a Cláusula de Pacto Adjeto, encontrando fundamento legal no Código Civil Brasileiro, como base legal principal, em seu Art. 395, nos Incisos I a IV, que conceitua o inadimplemento e suas consequências, como a mora do devedor e a possibilidade de exigir a resolução do contrato e o pagamento da dívida em atraso. ",  
+                size:25, 
+                font: "Arial"
+              },
               ]),
               space,  space,
               this.gerarParagrafo(
-                [{ text:"        • Cobrar juros de mora de ",
-                  bold:true,
-                  size:25, 
-                  font: "Arial"
-                },
-                { text:"1% (um por cento) ",
-                  size:25,
-                  bold:true,
-                  font: "Arial"
-                },
-                { text:"ao mês; ",
-                  size:25, 
-                  font: "Arial"
-                }
-              ]),
-              this.gerarParagrafo(
-                [{ text:"        • Suspender a prestação dos serviços; ",
-                    size:25, 
-                    font: "Arial"
-                  }
-              ]),
-              this.gerarParagrafo(
-                [{ text:"        • Rescindir o contrato.",
-                  size:25, 
-                  font: "Arial"
-              }]),
-              space,  space,
-              this.gerarParagrafo(
-              [{ text:"Cláusula 8ª - Da Rescisão",  
+              [{ text:"Cláusula 10ª - Da Rescisão",  
                 bold:true, 
                 size:25, 
                 font: "Arial"
@@ -559,14 +651,14 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                   size:25, 
                   font: "Arial"
                 },
-                { text:"dias.",  
+                { text:"dias, desde que qualquer das partes deixem de cumprir com suas obrigações. ",  
                   size:25, 
                   font: "Arial"
                 },
               ]),
               space,  space,
               this.gerarParagrafo(
-              [{ text:"Cláusula 9ª - Disposições Gerais",  
+              [{ text:"Cláusula 11ª - Disposições Gerais",  
                 bold:true, 
                 size:25, 
                 font: "Arial"
@@ -581,6 +673,12 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
               ]),
               this.gerarParagrafo(
                 [{ text:`        • As partes elegem o Foro da Comarca de ${formControls?.get('cartorio')?.get('cidadeUf')?.value} para dirimir qualquer litígio que possa surgir em decorrência deste contrato. `,
+                    size:25, 
+                    font: "Arial"
+                  }
+              ]),
+              this.gerarParagrafo(
+                [{ text:`        • Caso o CONTRATANTE venha fazer venda de sua propriedade objeto da regularização, esse se compromete a quitar todas as parcelas deste contrato, mesmo que não vencidas, bem como pagará ao CONTRATADO a quantia referente a 30% do valor contratado, para suprir os serviços de mudança de proprietário, no qual deverá fornecer os dados do adquirente antes do envio dos serviços à ${this.prefeituraNome} `,
                     size:25, 
                     font: "Arial"
                   }
