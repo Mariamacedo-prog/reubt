@@ -260,14 +260,9 @@ export class ImovelFormComponent {
   }
 
   saveFileBase64(event: any) {
-
     this.formControls.get('enderecoPorta')?.get('fotos')?.setValue([]);
-    
     const selectedFiles = event.target.files;
-    for(let i = 0; i < selectedFiles.length; i++) {
-        this.convertToBase64(selectedFiles[i]);
-    }
-
+    this.convertToBase64(selectedFiles[0]);
     console.log( this.formControls.get('enderecoPorta')?.get('fotos')?.value)
   }
 

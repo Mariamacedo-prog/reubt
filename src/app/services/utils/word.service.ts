@@ -558,7 +558,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                 [
                   { text:parcelamentoInfo?.parcelas?.quantidade == 0 
                     ? "        • Quantidade proposta pelo CONTRATANTE: À VISTA " 
-                    : `        • Quantidade de parcelas proposta pelo CONTRATANTE: ${parcelamentoInfo?.parcelas?.quantidade} de ${parcelamentoInfo?.parcelas?.valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}, sendo a entrada em ${parcelamentoInfo?.entrada?.quantidade} de ${parcelamentoInfo?.entrada?.valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}  `,
+                    : `        • Quantidade de parcelas proposta pelo CONTRATANTE: ${parcelamentoInfo?.parcelas?.quantidade} de ${parcelamentoInfo?.parcelas?.valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} + IGP-M, sendo a entrada em ${parcelamentoInfo?.entrada?.quantidade} de ${parcelamentoInfo?.entrada?.valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}  `,
                   bold:true,
                   size:25, 
                   font: "Arial"
