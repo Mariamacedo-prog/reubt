@@ -28,7 +28,6 @@ export class ToolboxComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscription = this.toolboxService.tooltip$.subscribe(
       (tooltip) => {
-        console.log(tooltip)
         this.tooltip.info.tipo = tooltip.tipo;
         this.tooltip.info.descricao = tooltip.descricao;
         this.tooltip.info.titulo = tooltip.titulo;

@@ -26,7 +26,6 @@ export class ContratanteGridComponent {
 
   findAll(){
     this.contratantesService.getItems().subscribe(contratante => { 
-      console.log(contratante)
       if (contratante.length >= 0) {
         this.dataSource = contratante;
         this.dataSourceFilter = contratante;

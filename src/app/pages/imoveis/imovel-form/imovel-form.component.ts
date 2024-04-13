@@ -7,6 +7,7 @@ import { ValidateService } from '../../../services/utils/validate.service';
 import { CepService } from '../../../services/utils/cep.service';
 import { ImoveisService } from '../../../services/imoveis.service';
 import { ContratantesService } from '../../../services/contratantes.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-imovel-form',
@@ -29,7 +30,8 @@ export class ImovelFormComponent {
   loadingCpf: boolean = false;
   constructor(private toolboxService: ToolboxService, private router: Router, 
     private route: ActivatedRoute, private cepService: CepService, private formBuilder: FormBuilder, 
-    private imoveisService: ImoveisService, private contratantesService: ContratantesService
+    private imoveisService: ImoveisService, private contratantesService: ContratantesService,
+    public sanitizer:DomSanitizer
     ) {}
 
   contratante = this.formBuilder.group({
@@ -47,7 +49,7 @@ export class ImovelFormComponent {
     cidadeUf: ['', Validators.required],
     cep: [''],
     iptu:[''],
-    fotos: ['']
+    fotos: [[]]
   });
 
   enderecoProjeto = this.formBuilder.group({
@@ -94,9 +96,9 @@ export class ImovelFormComponent {
     this.findContratante();
     if(this.imovelId){
       this.imoveisService.findById(this.imovelId).subscribe(imovel => {
-        this.formControls.get('contratante')?.get('nome')?.setValue(imovel.contratante.nome);
-        this.formControls.get('contratante')?.get('cpf')?.setValue(imovel.contratante.cpf);
-        this.formControls.get('contratante')?.get('id')?.setValue(imovel.contratante.id);
+        this.formControls.get('contratante')?.get('nome')?.setValue(imovel?.contratante?.nome);
+        this.formControls.get('contratante')?.get('cpf')?.setValue(imovel?.contratante?.cpf);
+        this.formControls.get('contratante')?.get('id')?.setValue(imovel?.contratante?.id);
         
 
         this.formControls.get('enderecoPorta')?.get('rua')?.setValue(imovel.enderecoPorta.rua);
@@ -154,9 +156,7 @@ export class ImovelFormComponent {
   }
 
   buscarEnderecoDefinitivo() {
-    console.log(this.formControls)
     this.formControls.get('enderecoDefinitivo')?.get('cep')?.value;
-    console.log( this.formControls.get('enderecoDefinitivo')?.get('cep')?.value);
     if(  this.formControls.get('enderecoDefinitivo')?.get('cep')?.value){
 
       this.formControls.get('enderecoDefinitivo')?.get('rua')?.setValue("");
@@ -167,7 +167,6 @@ export class ImovelFormComponent {
         this.cepService.getAddressByCep(  this.formControls.get('enderecoDefinitivo')?.get('cep')?.value)
           .subscribe(
             data => {
-              console.log(data)
               if(!data.erro){
                 this.formControls.get('enderecoDefinitivo')?.get('rua')?.setValue(data.logradouro);
                 this.formControls.get('enderecoDefinitivo')?.get('bairro')?.setValue(data.bairro);
@@ -188,9 +187,7 @@ export class ImovelFormComponent {
   }
 
   buscarEnderecoProjeto() {
-    console.log(this.formControls)
     this.formControls.get('enderecoProjeto')?.get('cep')?.value;
-    console.log( this.formControls.get('enderecoProjeto')?.get('cep')?.value);
     if(  this.formControls.get('enderecoProjeto')?.get('cep')?.value){
 
       this.formControls.get('enderecoProjeto')?.get('rua')?.setValue("");
@@ -201,7 +198,6 @@ export class ImovelFormComponent {
         this.cepService.getAddressByCep(  this.formControls.get('enderecoProjeto')?.get('cep')?.value)
           .subscribe(
             data => {
-              console.log(data)
               if(!data.erro){
                 this.formControls.get('enderecoProjeto')?.get('rua')?.setValue(data.logradouro);
                 this.formControls.get('enderecoProjeto')?.get('bairro')?.setValue(data.bairro);
@@ -222,8 +218,6 @@ export class ImovelFormComponent {
   }
 
   buscarEnderecoPorta() {
-    console.log(this.formControls)
-    console.log( this.formControls.get('enderecoPorta')?.get('cep')?.value);
     this.formControls.get('enderecoPorta')?.get('cep')?.value;
     if(  this.formControls.get('enderecoPorta')?.get('cep')?.value){
       this.formControls.get('enderecoPorta')?.get('rua')?.setValue("");
@@ -233,7 +227,7 @@ export class ImovelFormComponent {
         this.cepService.getAddressByCep(  this.formControls.get('enderecoPorta')?.get('cep')?.value)
         .subscribe(
           data => {
-            console.log(data)
+
             if(!data.erro){
               this.formControls.get('enderecoPorta')?.get('rua')?.setValue(data.logradouro);
               this.formControls.get('enderecoPorta')?.get('bairro')?.setValue(data.bairro);
@@ -257,19 +251,6 @@ export class ImovelFormComponent {
     return this.formControls.valid;
   }
 
-  onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    console.log(this.formControls, file)
-    if (file) {
-      console.log('Nome do arquivo:', file.name);
-      console.log('Tamanho do arquivo:', file.size);
-      this.formControls.get('enderecoPorta')?.get('fotos')?.setValue(file.name);
-
-      console.log(this.formControls)
-      // Faça o que precisar com o arquivo aqui, como enviá-lo para um servidor, etc.
-    }
-  }
-
   findContratante(){
     this.contratantesService.getItems().subscribe(contratantes => {
       if (contratantes.length >= 0) {
@@ -278,6 +259,45 @@ export class ImovelFormComponent {
     });
   }
 
+  saveFileBase64(event: any) {
+
+    this.formControls.get('enderecoPorta')?.get('fotos')?.setValue([]);
+    
+    const selectedFiles = event.target.files;
+    for(let i = 0; i < selectedFiles.length; i++) {
+        this.convertToBase64(selectedFiles[i]);
+    }
+
+    console.log( this.formControls.get('enderecoPorta')?.get('fotos')?.value)
+  }
+
+  convertToBase64(file: File) {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      if (reader.result) {
+        const base64String = (reader.result as string).split(',')[1];
+        if (file.type.startsWith('image/')) {
+          let anexo ='data:image/jpeg;base64,' + base64String;
+
+          let allFotos = this.formControls.get('enderecoPorta')?.get('fotos')?.value;
+          allFotos.push(anexo);
+          this.formControls.get('enderecoPorta')?.get('fotos')?.setValue(allFotos);
+        } else if (file.type === 'application/pdf') {
+          let anexo =base64String
+          let allFotos = this.formControls.get('enderecoPorta')?.get('fotos')?.value;
+          allFotos.push(anexo);
+          this.formControls.get('enderecoPorta')?.get('fotos')?.setValue(allFotos);
+        } else {
+        }
+      } else {
+        console.error('Error: reader.result is null.');
+      }
+    };
+    reader.onerror = error => {
+      console.error('Error converting to Base64:', error);
+    };
+  }
   
   handleKeyUp(event: any){
     this.loadingCpf = true;

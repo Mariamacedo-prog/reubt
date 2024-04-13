@@ -125,6 +125,19 @@ export class WordService {
     }
   }
 
+ async assinatura(base64: string){
+  const response = await fetch(base64);
+  const arrayBuffer = await response.arrayBuffer();
+
+  return new ImageRun({
+    data: arrayBuffer,
+    transformation: {
+      width: 300,
+      height: 120,
+    }
+  });
+  }
+
 async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: any, parcelamentoInfo: any) {
     console.log(formControls,  imovelDoContratante, parcelamentoInfo);
     const image = new ImageRun({
@@ -134,6 +147,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
             height: 70,
         }
     });
+
 
     const header = new Header({
       children: [new Paragraph({
@@ -542,9 +556,9 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
 
               this.gerarParagrafo(
                 [
-                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 
+                  { text:parcelamentoInfo?.parcelas?.quantidade == 0 
                     ? "        • Quantidade proposta pelo CONTRATANTE: À VISTA " 
-                    : `        • Quantidade de parcelas proposta pelo CONTRATANTE ${parcelamentoInfo?.parcelas?.quantidade}`,
+                    : `        • Quantidade de parcelas proposta pelo CONTRATANTE: ${parcelamentoInfo?.parcelas?.quantidade} de ${parcelamentoInfo?.parcelas?.valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}, sendo a entrada em ${parcelamentoInfo?.entrada?.quantidade} de ${parcelamentoInfo?.entrada?.valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}  `,
                   bold:true,
                   size:25, 
                   font: "Arial"
@@ -700,12 +714,21 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
               space, space,
 
               space, space,
+              formControls?.get('assinaturaContratante')?.value == '' || 
+              formControls?.get('assinaturaContratante')?.value == null ||
+              formControls?.get('assinaturaContratante')?.value == undefined 
+              ? space
+              : new Paragraph({
+                children: [await this.assinatura(formControls?.get('assinaturaContratante')?.value)],
+              }),
+
               this.gerarParagrafo(
-              [{ text:"_____________________________________________",  
-                bold:true, 
-                size:25, 
-                font: "Arial"
-              }]),
+                [{ text: "_____________________________________________"
+                 ,  
+                  bold:true, 
+                  size:25, 
+                  font: "Arial"
+                }]),
               space,
               this.gerarParagrafo(
               [{ text:"CONTRATANTE",  
@@ -715,13 +738,24 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
               }]),
               space, space,
               space, space,
-              space, space,
+              space, space, 
+              
+              formControls?.get('assinaturaContratada')?.value == '' || 
+              formControls?.get('assinaturaContratada')?.value == null ||
+              formControls?.get('assinaturaContratada')?.value == undefined 
+                ? space
+                :  new Paragraph({
+                  children: [await this.assinatura(formControls?.get('assinaturaContratada')?.value)],
+                }),
+
               this.gerarParagrafo(
-              [{ text:"_____________________________________________",  
+              [{ text: "_____________________________________________"
+               ,  
                 bold:true, 
                 size:25, 
                 font: "Arial"
-              }]),
+              }]) 
+              ,
               space,
               this.gerarParagrafo(
               [{ text:"CONTRATADA",  
@@ -738,19 +772,36 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                   font: "Arial"
                 }]),
                 space, space, space, space,
-              this.gerarParagrafo(
-              [{ text:"1.___________________________________________",  
-                bold:true, 
-                size:25, 
-                font: "Arial"
-              }]),
+                formControls?.get('assinaturaTesteminha1')?.value == '' || 
+                formControls?.get('assinaturaTesteminha1')?.value == null ||
+                formControls?.get('assinaturaTesteminha1')?.value == undefined 
+                ? space
+                : new Paragraph({
+                  children: [await this.assinatura(formControls?.get('assinaturaTesteminha1')?.value)],
+                }),
+                this.gerarParagrafo(
+                  [{ text: "1._____________________________________________"
+                   ,  
+                    bold:true, 
+                    size:25, 
+                    font: "Arial"
+                  }]),
+              
               space,    space,    space,  
+              formControls?.get('assinaturaTesteminha2')?.value == '' || 
+              formControls?.get('assinaturaTesteminha2')?.value == null ||
+              formControls?.get('assinaturaTesteminha2')?.value == undefined 
+              ?space
+              : new Paragraph({
+                children: [await this.assinatura(formControls?.get('assinaturaTesteminha2')?.value)],
+              }),
               this.gerarParagrafo(
-              [{ text:"2.___________________________________________",  
-                bold:true, 
-                size:25, 
-                font: "Arial"
-              }]),
+                [{ text: "2._____________________________________________"
+                 ,  
+                  bold:true, 
+                  size:25, 
+                  font: "Arial"
+                }]) ,
               space, space,
             ]
             

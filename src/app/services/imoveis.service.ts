@@ -40,6 +40,11 @@ export class ImoveisService {
 
   async updateItem(id: any, newData: any): Promise<void> {
     try {
+              
+      if (!newData.enderecoPorta) {
+          newData.enderecoPorta = {}; 
+      }
+      newData.enderecoPorta.fotos = []; 
       await this.itemsCollection.doc(id).update(newData);
       this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
       this.router.navigate(['/imovel/lista']);

@@ -15,6 +15,7 @@
     "@angular/common": "^17.2.0",
     "@angular/compiler": "^17.2.0",
     "@angular/core": "^17.2.0",
+    "@angular/fire": "^17.0.1",
     "@angular/flex-layout": "15.0.0-beta.42",
     "@angular/forms": "^17.2.0",
     "@angular/material": "17.3.2",
@@ -28,6 +29,7 @@
     "firebase": "^10.10.0",
     "ngx-doc-viewer": "^15.0.1",
     "rxjs": "~7.8.0",
+    "signature_pad": "^4.2.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },
@@ -36,6 +38,7 @@
     "@angular/cli": "^17.2.3",
     "@angular/compiler-cli": "^17.2.0",
     "@types/jasmine": "~5.1.0",
+    "@types/signature_pad": "^2.3.6",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",

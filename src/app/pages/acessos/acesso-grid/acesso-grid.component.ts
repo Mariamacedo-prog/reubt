@@ -29,7 +29,6 @@ export class AcessoGridComponent {
           this.dataSourceFilter = JSON.parse(storedDb).acessos;
           this.dataGrupoSource = JSON.parse(storedDb).gruposAcessos;
           this.dataGrupoSourceFilter = JSON.parse(storedDb).gruposAcessos;
-          console.log("filter",this.dataSourceFilter)
         }
       }
     }, 1000)

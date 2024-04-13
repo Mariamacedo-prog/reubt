@@ -106,7 +106,10 @@
             </div>
 
             <div class="inputs-row-form" *ngIf="!visualizar">
-              <app-file-input [nome]="'Fotos'" (fileSelected)="onFileSelected($event)"></app-file-input>
+              <input type='file' 
+              
+              (change)="saveFileBase64($event)" 
+              multiple>
             </div>
           </mat-tab>
 

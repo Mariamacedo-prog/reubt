@@ -18,6 +18,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from '../../auth/auth.guard';
 import { PagamentoCalculoModule } from '../../components/pagamento-calculo/pagamento-calculo.module';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { SignaturePadModule } from '../../components/signature-pad/signature-pad.module';
 
 
   const routes: Routes = [
@@ -46,6 +47,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     MatAutocompleteModule,
     InputfileModule ,
     PagamentoCalculoModule,
+    SignaturePadModule,
     MatProgressBarModule,
     RouterModule.forChild(routes)
   ],

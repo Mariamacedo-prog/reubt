@@ -95,9 +95,7 @@ export class PagamentoCalculoComponent {
    verificarContratante() {
     this.vendasPagamentosService.getItems().subscribe((vendas)=>{
       if(vendas.length >= 0){
-        console.log(vendas)
         for(let venda of vendas){
-          console.log("venda",venda)
           if(venda.contratante.id == this.dataContratanteInfo.id) {
             this.formControls?.get('plano')?.setValue(venda.plano);
             this.registarValores();
@@ -271,14 +269,12 @@ export class PagamentoCalculoComponent {
   async gerarParcelamento(){
     let item =  this.formControls.getRawValue();
     item.contratante = this.dataContratanteInfo;
-    console.log(item);
     if(item){
       try {
         if(this.dataContratanteInfo.id){
      
          await this.vendasPagamentosService.checkIfIdContratanteExists(this.dataContratanteInfo.id)
           .then(contratanteExists => {
-            console.log("contratanteExists 1",contratanteExists)
             if (!contratanteExists) {
 
               this.vendasPagamentosService.save(item);
@@ -302,7 +298,6 @@ export class PagamentoCalculoComponent {
   async atualizarParcelamento(){
     let item =  this.formControls.getRawValue();
     item.contratante = this.dataContratanteInfo;
-    console.log(item)
     if(item.id){
       try {
         await this.vendasPagamentosService.checkIfIdContratanteExists(this.dataContratanteInfo.id)

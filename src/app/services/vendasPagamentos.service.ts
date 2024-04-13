@@ -24,17 +24,12 @@ export class VendasPagamentosService {
   }
 
   async checkIfIdContratanteExists(id: string): Promise<boolean> {
-    console.log("chamou checkIfIdContratanteExists")
     try {
       const items = await firstValueFrom(this.itemsCollection.valueChanges({ idField: 'id' }));
-      console.log("items", items);
-  
       if (items) {
         const contratanteExists = items.some(item => item.contratante.id === id);
-        console.log("contratanteExists", contratanteExists);
         return contratanteExists;
       } else {
-        console.log("Não há itens retornados");
         return false;
       }
     } catch (error) {

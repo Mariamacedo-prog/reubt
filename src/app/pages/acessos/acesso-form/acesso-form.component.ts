@@ -123,7 +123,6 @@ export class AcessoFormComponent {
   }
 
   permissaoTela(tela: string, event: MatChipListboxChange) {
-    console.log(this.telasPermitidas);
     if (event.value !== 'Restrito' && event.value != undefined) {
       const index = this.telasPermitidas.findIndex((item: any) => item.tela === tela);
   
@@ -190,6 +189,5 @@ export class AcessoFormComponent {
         this.formControls.get('usuario')?.get('cpf')?.setValue(option.cpf);
       }
     }
-    console.log(this.formControls.getRawValue);
   }
 }

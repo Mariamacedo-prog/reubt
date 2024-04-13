@@ -150,7 +150,6 @@ export class CartorioFormComponent {
         this.cepService.getAddressByCep(  this.formControls.get('endereco')?.get('cep')?.value)
           .subscribe(
             data => {
-              console.log(data)
               if(!data.erro){
                 this.formControls.get('endereco')?.get('rua')?.setValue(data.logradouro);
                 this.formControls.get('endereco')?.get('bairro')?.setValue(data.bairro);

@@ -83,8 +83,6 @@
           />
         </mat-form-field>
 
-        <app-pagamento-calculo *ngIf="contratoId" [dataContratanteInfo]="formControls.get('contratante')?.getRawValue()" (dataEvent)="receiveDataFromChild($event)"></app-pagamento-calculo>
-
           <div class="area-botao-form " *ngIf="isLoggedIn && this.contratoId === '' || this.contratoId === undefined">
             <button mat-raised-button color="primary" (click)="create()" [disabled]="!formValid()">Cadastrar</button>
             <button  mat-raised-button color="link" routerLink="/contrato/lista">Voltar</button>
@@ -96,19 +94,53 @@
             <button mat-raised-button color="link" routerLink="/contrato/lista">Voltar</button>
           </div>
       </mat-card-content>
+      <br/> <br/> <br/>
+      <div *ngIf="contratoId" style="padding-right:20px;">
+        <app-pagamento-calculo  [dataContratanteInfo]="formControls.get('contratante')?.getRawValue()" (dataEvent)="receiveDataFromChild($event)"></app-pagamento-calculo>
+      </div>
     </form>
+
+
+
+   
+    <br/> <br/> <br/>
+    
+    <div *ngIf="showSignature" style="display: flex; align-items: center; justify-content: center;">
+      <app-signature-pad [active]="signButtomActive" (dataEvent)="receiveSignImage($event)" ></app-signature-pad>
+    </div>
+
+
+    <div style="display: flex; justify-content: space-between;" class="inputs-row-form">
+      <button [disabled]="formControls.get('assinaturaContratante')?.value != ''" 
+      mat-raised-button [color]="this.signButtomActive == 'assinaturaContratante' ? 'primary' : 'link'" 
+      (click)="generateSign('assinaturaContratante')" > Assinatura CONTRATANTE</button>
+      <br/>
+      <button [disabled]="formControls.get('assinaturaContratada')?.value != ''" 
+      mat-raised-button [color]="this.signButtomActive == 'assinaturaContratada' ? 'primary' : 'link'" 
+      (click)="generateSign('assinaturaContratada')" >Assinatura CONTRATADA</button>
+      <br/>
+      <button [disabled]="formControls.get('assinaturaTesteminha1')?.value != ''" 
+      mat-raised-button [color]="this.signButtomActive == 'assinaturaTesteminha1' ? 'primary' : 'link'"
+      (click)="generateSign('assinaturaTesteminha1')" >Assinatura Testemunhas 1</button>
+      <br/>
+      <button [disabled]="formControls.get('assinaturaTesteminha2')?.value != ''" 
+      mat-raised-button [color]="this.signButtomActive == 'assinaturaTesteminha2' ? 'primary' : 'link'" 
+      (click)="generateSign('assinaturaTesteminha2')" >Assinatura Testemunhas 2</button>
+    </div>
+    <br/>
+    <br/>
+    <br/>
 
 
     <button *ngIf="contratoId" [disabled]="!formValid() || !showDownloadContrato || !parcelamentoInfo.id" mat-stroked-button  color="primary" (click)="generateWordFile()">
       <mat-icon>download</mat-icon>
       Download Contrato
     </button>
-
-  
+    <br/>
+    <br/>
 
   </mat-card>
 </div>
-
 
 
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { WordService } from '../../../services/utils/word.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
@@ -20,6 +20,9 @@ export class ContratosFormComponent {
   visualizar: boolean = false;
   formControls!: FormGroup;
   timeoutId: any;
+
+  showSignature = false;
+  signButtomActive = "";
  
   showDownloadContrato = false;
   parcelamentoInfo: any = {};
@@ -77,6 +80,10 @@ export class ContratosFormComponent {
   ngOnInit(): void {
     this.formControls = this.formBuilder.group({
       id: [0, Validators.required],
+      assinaturaContratante: [''],
+      assinaturaContratada: [''],
+      assinaturaTesteminha1: [''],
+      assinaturaTesteminha2: [''],
       contratante: this.contratanteFormControls,
       crf: this.crfFormControls,
       cartorio: this.cartorioFormControls,
@@ -85,7 +92,6 @@ export class ContratosFormComponent {
    
     this.route.params.subscribe(params => {
        this.contratoId = params['id'];
-      console.log( this.contratoId);
        if(params['tela'] == 'visualizar'){
         this.visualizar = true;
        }
@@ -100,6 +106,12 @@ export class ContratosFormComponent {
 
     if(this.contratoId){
       this.contratosService.findById(this.contratoId).subscribe(contrato => {
+        this.formControls?.get('id')?.setValue(contrato.id);
+        this.formControls?.get('assinaturaContratante')?.setValue(contrato.assinaturaContratante);
+        this.formControls?.get('assinaturaContratada')?.setValue(contrato.assinaturaContratada);
+        this.formControls?.get('assinaturaTesteminha1')?.setValue(contrato.assinaturaTesteminha1);
+        this.formControls?.get('assinaturaTesteminha2')?.setValue(contrato.assinaturaTesteminha2);
+
         this.formControls?.get('crf')?.get('numerocrf')?.setValue(contrato.crf.numerocrf);
         this.formControls?.get('crf')?.get('crfentregue')?.setValue(contrato.crf.crfentregue);
         this.formControls?.get('crf')?.get('statusentrega')?.setValue(contrato.crf.statusentrega);
@@ -107,7 +119,7 @@ export class ContratosFormComponent {
         this.formControls?.get('cartorio')?.get('nome')?.setValue(contrato.cartorio.nome);
         this.formControls?.get('cartorio')?.get('cns')?.setValue(contrato.cartorio.cns);
    
-          this.formControls?.get('cartorio')?.get('cidadeUf')?.setValue(contrato.cartorio.cidadeUf);
+        this.formControls?.get('cartorio')?.get('cidadeUf')?.setValue(contrato.cartorio.cidadeUf);
      
         this.formControls?.get('contratante')?.get('id')?.setValue(contrato.contratante.id);
         this.formControls?.get('contratante')?.get('nome')?.setValue(contrato.contratante.nome);
@@ -147,7 +159,6 @@ export class ContratosFormComponent {
 
   findImovel(){
     this.imoveisService.checkByContratanteId(this.formControls?.get('contratante')?.get('id')?.value).subscribe((imoveis: any)=>{
-      console.log(imoveis)
       if(imoveis.length >= 1){
         this.imovelDoContratante = imoveis[0];
         this.formControls?.get('contratante')?.get('imovelId')?.setValue(imoveis[0].id);
@@ -234,16 +245,29 @@ export class ContratosFormComponent {
     this.findImovel()
     this.filteredContratantes = [];
     this.loadingCpf = false;
-
-    console.log(this.formControls.valid);
   }
 
   receiveDataFromChild(data: any) {
     this.parcelamentoInfo = data;
   }
 
+  receiveSignImage(data: any) {
+    if(data.nome){
+      this.toolboxService.showTooltip('success', 'Documento foi assinado com sucesso!', 'SUCESSO!');
+      this.formControls?.get(data.nome)?.setValue(data.base64);
+      this.showSignature = false;
+    }else{
+      this.toolboxService.showTooltip('error', 'Ocorreu algum erro!', 'ERRO!');
+    }
+  }
+
   async generateWordFile(){
     console.log(this.formControls, this.imovelDoContratante, this.parcelamentoInfo)
     await this.wordService.generateWordContratoFile(this.formControls, this.imovelDoContratante, this.parcelamentoInfo);
+  }
+
+  generateSign(nome: string){
+    this.showSignature =true;
+    this.signButtomActive = nome;
   }
 }

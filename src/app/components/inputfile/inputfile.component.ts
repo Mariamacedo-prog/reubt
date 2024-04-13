@@ -57,7 +57,6 @@ export class InputfileComponent {
           this.convertBase64ToPDF(base64String)
           this.fileOutput.emit({base64: base64String, type: 'pdf'});
         } else {
-          console.log('Unsupported file type:', file.type);
         }
       } else {
         console.error('Error: reader.result is null.');

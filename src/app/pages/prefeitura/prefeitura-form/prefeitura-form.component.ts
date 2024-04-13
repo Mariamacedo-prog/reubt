@@ -27,8 +27,8 @@ export class PrefeituraFormComponent {
     ) {}
 
   responsavelFormControls = this.formBuilder.group({
-    nome: ['', Validators.required],
-    cargo: ['', Validators.required]
+    nome: [''],
+    cargo: ['']
   });
 
   enderecoFormControls = this.formBuilder.group({
@@ -41,10 +41,10 @@ export class PrefeituraFormComponent {
   });
 
   representanteFormControls = this.formBuilder.group({
-    nome: ['', Validators.required],
-    nacionalidade: ['', Validators.required],
-    cpf: ['', [Validators.required, this.validateService.validateCPF]],
-    rg: ['', [Validators.required, this.validateService.validateRG]],
+    nome: [''],
+    nacionalidade: [''],
+    cpf: [''],
+    rg: [''],
   });
 
   ngOnInit(): void {

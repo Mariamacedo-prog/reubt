@@ -138,7 +138,6 @@ export class ContratanteFormComponent {
       if (cartorios.length >= 0) {
         this.cartorios  = cartorios;
         this.filteredCartorios  = cartorios;
-        console.log(cartorios)
       }
     });
   }
@@ -249,7 +248,6 @@ export class ContratanteFormComponent {
   }
 
   selectedCartorio(item: any){
-    console.log(item)
     this.loadingCartorio = false;
     if(item){
       if(item.nome){

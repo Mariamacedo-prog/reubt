@@ -190,7 +190,6 @@ export class FuncionarioFormComponent {
         this.cepService.getAddressByCep(this.cepFormControl.value)
           .subscribe(
             data => {
-              console.log(data)
               if(!data.erro){
                 this.ruaFormControl.setValue(data.logradouro);
                 this.bairroFormControl.setValue(data.bairro);

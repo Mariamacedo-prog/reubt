@@ -1,0 +1,10 @@
+<p style="font-weight: bold">{{active}}</p>
+<div class="flex-row" style="background-color: #fff;">
+  <div class="wrapper" style="background-color: #fff;">
+    <canvas #signaturePad width="400" height="200"></canvas>
+  </div>
+  <div class="clear-btn">
+    <button id="clear" (click)="clearSignature()">Clear</button>
+       <button id="confirmar" (click)="saveSignature()">Confirmar</button>
+  </div>
+</div>
