@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ContratanteGridComponent } from './contratante-grid/contratante-grid.component';
+import { ContratanteGridComponent, DialogDeleteContratante } from './contratante-grid/contratante-grid.component';
 import { ContratanteFormComponent } from './contratante-form/contratante-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -17,6 +17,8 @@ import { InputfileModule } from '../../components/inputfile/inputfile.module';
 import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from '../../auth/auth.guard';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {MatDialogModule} from '@angular/material/dialog';
 
 const routes: Routes = [
   { path: 'form/:id', component: ContratanteFormComponent, canActivate: [authGuard] },
@@ -27,7 +29,7 @@ const routes: Routes = [
 
 
 @NgModule({
-  declarations: [ ContratanteGridComponent, ContratanteFormComponent ],
+  declarations: [ ContratanteGridComponent, ContratanteFormComponent, DialogDeleteContratante ],
   imports: [
     CommonModule,
     FormsModule,
@@ -42,7 +44,9 @@ const routes: Routes = [
     MatDatepickerModule,
     MatNativeDateModule,
     MatAutocompleteModule,
-    InputfileModule ,
+    InputfileModule,
+    MatDialogModule,
+    MatSlideToggleModule,
     MatProgressBarModule,
     RouterModule.forChild(routes)
   ]

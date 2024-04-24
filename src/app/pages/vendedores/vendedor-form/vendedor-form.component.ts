@@ -33,7 +33,7 @@ export class VendedorFormComponent {
   bairroFormControl = new FormControl('', [Validators.required]);
   complementoFormControl = new FormControl('');
   cidadeUfFormControl = new FormControl('', [Validators.required]);
-  rgFormControl = new FormControl('',  Validators.pattern(/^\d{9}$/));
+  rgFormControl = new FormControl('');
   cepFormControl = new FormControl('', [Validators.required]);
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   telefoneFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]);

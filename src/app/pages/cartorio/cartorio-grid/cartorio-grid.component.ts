@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { CartoriosService } from '../../../services/cartorios.service';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-cartorio-grid',
@@ -13,7 +14,8 @@ export class CartorioGridComponent {
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
-  constructor(private router: Router, private toolboxService: ToolboxService,private cartoriosService: CartoriosService ) {}
+  constructor(private router: Router, private toolboxService: ToolboxService,
+    public dialog: MatDialog,private cartoriosService: CartoriosService ) {}
   newCartorio() {
     this.router.navigate(["/cartorio/novo"]);
   }
@@ -47,7 +49,34 @@ export class CartorioGridComponent {
   }
 
   deleteItem(element: any){
-    this.cartoriosService.deleteItem(element.id);
-    this.findAll();
+    const dialogRef = this.dialog.open(DialogDeleteCartorio, {
+      width: '300px',
+      data: element
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.cartoriosService.deleteItem(element.id);
+        this.findAll();
+      }
+    });
   }
+}
+
+
+@Component({
+  selector: 'dialog-delete',
+  templateUrl: 'dialog-delete.html'
+})
+export class DialogDeleteCartorio {
+  constructor(
+    public dialogRef: MatDialogRef<DialogDeleteCartorio>,
+    @Inject(MAT_DIALOG_DATA) public data: any) {}
+    onYesClick(): void {
+      this.dialogRef.close(true);
+    }
+
+    onCancelClick(): void {
+      this.dialogRef.close(false);
+    }
 }

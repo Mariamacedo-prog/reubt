@@ -58,7 +58,7 @@
       
             <mat-form-field>
               <mat-label>Documento de Identificação</mat-label>
-              <input maxlength="9" [readonly]="visualizar"  matInput [formControl]="rgFormControl" />
+              <input [readonly]="visualizar"  matInput [formControl]="rgFormControl" />
               <mat-error *ngIf="rgFormControl?.hasError('pattern')">
                 Número do RG inválido.
               </mat-error>

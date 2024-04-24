@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartorioFormComponent } from './cartorio-form/cartorio-form.component';
-import { CartorioGridComponent } from './cartorio-grid/cartorio-grid.component';
+import { CartorioGridComponent, DialogDeleteCartorio } from './cartorio-grid/cartorio-grid.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,6 +13,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import {MatSelectModule} from '@angular/material/select';
 import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from '../../auth/auth.guard';
+import {MatDialogModule} from '@angular/material/dialog';
 
 const routes: Routes = [
   { path: 'form/:id', component: CartorioFormComponent, canActivate: [authGuard] },
@@ -21,7 +22,7 @@ const routes: Routes = [
   { path: 'lista', component: CartorioGridComponent, canActivate: [authGuard] },
 ];
 @NgModule({
-  declarations: [CartorioFormComponent, CartorioGridComponent],
+  declarations: [CartorioFormComponent, CartorioGridComponent, DialogDeleteCartorio],
   imports: [
     CommonModule,
     FormsModule,
@@ -31,6 +32,7 @@ const routes: Routes = [
     MatTableModule,
     MatIconModule,
     MatTabsModule,
+    MatDialogModule,
     MatCardModule,
     MatAutocompleteModule,
     MatSelectModule,

@@ -59,9 +59,9 @@ export class ContratosFormComponent {
   });
 
   contratanteFormControls = this.formBuilder.group({
-    id: [0, Validators.required],
+    id: ['', Validators.required],
     nome: ['', Validators.required],
-    cpf: ['', [Validators.required]],
+    cpf: [{value: '', disabled: this.visualizar}, [Validators.required]],
     rg: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
     telefone: ['', [Validators.required]],
@@ -79,7 +79,7 @@ export class ContratosFormComponent {
 
   ngOnInit(): void {
     this.formControls = this.formBuilder.group({
-      id: [0, Validators.required],
+      id: ['', Validators.required],
       assinaturaContratante: [''],
       assinaturaContratada: [''],
       assinaturaTesteminha1: [''],
@@ -118,7 +118,6 @@ export class ContratosFormComponent {
 
         this.formControls?.get('cartorio')?.get('nome')?.setValue(contrato.cartorio.nome);
         this.formControls?.get('cartorio')?.get('cns')?.setValue(contrato.cartorio.cns);
-   
         this.formControls?.get('cartorio')?.get('cidadeUf')?.setValue(contrato.cartorio.cidadeUf);
      
         this.formControls?.get('contratante')?.get('id')?.setValue(contrato.contratante.id);
@@ -130,7 +129,6 @@ export class ContratosFormComponent {
         this.formControls?.get('contratante')?.get('nacionalidade')?.setValue(contrato.contratante.nacionalidade);
         this.formControls?.get('contratante')?.get('profissao')?.setValue(contrato.contratante.profissao);
         this.formControls?.get('contratante')?.get('estadoCivil')?.setValue(contrato.contratante.estadoCivil);
-
         this.findImovel();
       });
    

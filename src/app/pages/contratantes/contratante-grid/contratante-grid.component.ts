@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ContratantesService } from '../../../services/contratantes.service';
 import { CartoriosService } from '../../../services/cartorios.service';
-
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-contratante-grid',
@@ -15,10 +15,10 @@ export class ContratanteGridComponent {
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
-
   cartorios: any = [];
+
   cartorioSearch: string = '';
-  constructor(private router: Router, private toolboxService: ToolboxService,
+  constructor(private router: Router, private toolboxService: ToolboxService, public dialog: MatDialog,
     private contratantesService: ContratantesService, private cartoriosService: CartoriosService) {}
   adicionarNovo() {
     this.router.navigate(["/contratante/novo"]);
@@ -69,12 +69,41 @@ export class ContratanteGridComponent {
   }
 
   deleteItem(element: any){
-    this.contratantesService.deleteItem(element.id);
-    this.findAll();
+    const dialogRef = this.dialog.open(DialogDeleteContratante, {
+      width: '300px',
+      data: element
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.contratantesService.deleteItem(element.id);
+        this.findAll();
+      }
+    });
   }
 
   cartorioSelected(event: any){
     const value = event?.value;
     this.cartorioSearch = value;
+  }
+}
+
+
+
+@Component({
+  selector: 'dialog-delete-contratante',
+  templateUrl: 'dialog-delete-contratante.html',
+  styleUrl: './contratante-grid.component.css'
+})
+export class DialogDeleteContratante {
+  constructor(
+    public dialogRef: MatDialogRef<DialogDeleteContratante>,
+    @Inject(MAT_DIALOG_DATA) public data: any) {}
+  onYesClick(): void {
+    this.dialogRef.close(true);
+  }
+
+  onCancelClick(): void {
+    this.dialogRef.close(false);
   }
 }

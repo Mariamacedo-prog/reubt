@@ -39,7 +39,7 @@ export class CartorioFormComponent {
     nome: ['', Validators.required],
     nacionalidade: ['', Validators.required],
     cpf: ['', [Validators.required, this.validateService.validateCPF]],
-    rg: ['', [Validators.required, this.validateService.validateRG]],
+    rg: ['', [Validators.required]],
     cargo:['', [Validators.required]],
   });
 

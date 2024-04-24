@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { AuthService } from '../../../auth/auth.service';
 import { Router } from '@angular/router';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { UsuariosService } from '../../../services/usuarios.service';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-usuario-grid',
@@ -14,7 +15,8 @@ export class UsuarioGridComponent {
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
-  constructor(private router: Router, private toolboxService: ToolboxService, private usuariosService: UsuariosService) {}
+  constructor(private router: Router, private toolboxService: ToolboxService, private usuariosService: UsuariosService, 
+    public dialog: MatDialog) {}
   adicionarNovoUsuario() {
     this.router.navigate(["/usuario/novo"]);
   }
@@ -49,7 +51,36 @@ export class UsuarioGridComponent {
   }
 
   deleteItem(element: any){
-    this.usuariosService.deleteItem(element.id);
-    this.findAllUsers();
+    console.log(element)
+    const dialogRef = this.dialog.open(DialogDelete, {
+      width: '300px',
+      data: element
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.usuariosService.deleteItem(element.id);
+        this.findAllUsers();
+      }
+    });
   }
+}
+
+
+
+@Component({
+  selector: 'dialog-delete',
+  templateUrl: 'dialog-delete.html'
+})
+export class DialogDelete {
+  constructor(
+    public dialogRef: MatDialogRef<DialogDelete>,
+    @Inject(MAT_DIALOG_DATA) public data: any) {}
+    onYesClick(): void {
+      this.dialogRef.close(true);
+    }
+
+    onCancelClick(): void {
+      this.dialogRef.close(false);
+    }
 }

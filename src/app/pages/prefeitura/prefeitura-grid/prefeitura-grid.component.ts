@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { PrefeiturasService } from '../../../services/prefeituras.service';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-prefeitura-grid',
@@ -13,7 +14,7 @@ export class PrefeituraGridComponent {
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
-  constructor(private router: Router, private toolboxService: ToolboxService, private prefeiturasService: PrefeiturasService ) {}
+  constructor(private router: Router, private prefeiturasService: PrefeiturasService, public dialog: MatDialog ) {}
   adicionarNovaPrefeitura() {
     this.router.navigate(["/prefeitura/nova"]);
   }
@@ -48,7 +49,37 @@ export class PrefeituraGridComponent {
   }
 
   deleteItem(element: any){
-    this.prefeiturasService.deleteItem(element.id);
-    this.findAll();
+    console.log(element)
+    const dialogRef = this.dialog.open(DialogDelete, {
+      width: '300px',
+      data: element
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.prefeiturasService.deleteItem(element.id);
+        this.findAll();
+      }
+    });
   }
+}
+
+
+
+
+@Component({
+  selector: 'dialog-delete',
+  templateUrl: 'dialog-delete.html'
+})
+export class DialogDelete {
+  constructor(
+    public dialogRef: MatDialogRef<DialogDelete>,
+    @Inject(MAT_DIALOG_DATA) public data: any) {}
+    onYesClick(): void {
+      this.dialogRef.close(true);
+    }
+
+    onCancelClick(): void {
+      this.dialogRef.close(false);
+    }
 }

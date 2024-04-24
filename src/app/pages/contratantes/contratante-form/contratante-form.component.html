@@ -50,9 +50,17 @@
               </mat-form-field>
             </div>
       
+            <div class="inputs-row-form">
+              <mat-slide-toggle 
+              color="primary"
+              formControlName="estrangeiro"
+              (change)="isEstrangeiro($event)"
+              style="margin-bottom: 50px;"
+              >Cidadão Estrangeiro</mat-slide-toggle>
+            </div>
 
             <div class="inputs-row-form">
-              <mat-form-field>
+              <mat-form-field *ngIf="!formControls?.get('estrangeiro')?.value">
                 <mat-label>Documento de Identificação</mat-label>
                 <input [readonly]="visualizar"  matInput formControlName="rg"  />
                 <mat-error *ngIf="formControls?.get('rg')?.hasError('required')">
@@ -62,17 +70,23 @@
                   Número do Documento de Identificação inválido.
                 </mat-error>
               </mat-form-field> 
+
+              <mat-form-field *ngIf="formControls?.get('estrangeiro')?.value">
+                <mat-label>RNE</mat-label>
+                <input [readonly]="visualizar"  matInput formControlName="rne"  />
+                <mat-error *ngIf="formControls?.get('rne')?.hasError('required')">
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field> 
+
                 <mat-form-field>
                 <mat-label>Órgão de expedição</mat-label>
                 <input [readonly]="visualizar"  matInput formControlName="orgaoExpedicao"  />
                 <mat-error *ngIf="formControls?.get('orgaoExpedicao')?.hasError('required')">
                   Este campo é <strong>obrigatório</strong>
                 </mat-error>
-                <mat-error *ngIf="formControls?.get('orgaoExpedicao')?.hasError('rgInvalid')">
-                  Órgão de expedição inválido.
-                </mat-error>
               </mat-form-field> 
-              <mat-form-field>
+              <mat-form-field *ngIf="!formControls?.get('estrangeiro')?.value">
                 <mat-label>Data de Expedição</mat-label>
                 <input matInput [matDatepicker]="picker" formControlName="dataExpedicao">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>

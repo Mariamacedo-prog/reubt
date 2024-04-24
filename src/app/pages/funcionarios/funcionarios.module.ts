@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FuncionarioGridComponent } from './funcionario-grid/funcionario-grid.component';
+import { FuncionarioGridComponent, DialogDeleteFuncionario } from './funcionario-grid/funcionario-grid.component';
 import { FuncionarioFormComponent } from './funcionario-form/funcionario-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -13,7 +13,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from '../../auth/auth.guard';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-
+import { MatDialogModule } from '@angular/material/dialog';
 const routes: Routes = [
   { path: 'form/:id', component: FuncionarioFormComponent, canActivate: [authGuard] },
   { path: 'form/:id/:tela', component: FuncionarioFormComponent, canActivate: [authGuard] },
@@ -23,7 +23,7 @@ const routes: Routes = [
 
 
 @NgModule({
-  declarations: [FuncionarioGridComponent, FuncionarioFormComponent ],
+  declarations: [FuncionarioGridComponent, FuncionarioFormComponent,DialogDeleteFuncionario ],
   imports: [
     CommonModule,
     FormsModule,
@@ -35,6 +35,7 @@ const routes: Routes = [
     MatTabsModule,
     MatProgressBarModule,
     MatCardModule,
+    MatDialogModule,
     MatAutocompleteModule,
     RouterModule.forChild(routes)
   ]

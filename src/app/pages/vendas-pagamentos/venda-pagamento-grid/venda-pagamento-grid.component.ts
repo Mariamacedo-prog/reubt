@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-venda-pagamento-grid',
@@ -61,4 +62,23 @@ export class VendaPagamentoGridComponent {
     this.dataSourceFilter = databaseInfo.vendasPagamentos;
     this.dataSource = databaseInfo.vendasPagamentos;
   }
+}
+
+
+
+@Component({
+  selector: 'dialog-delete',
+  templateUrl: 'dialog-delete.html'
+})
+export class DialogDelete {
+  constructor(
+    public dialogRef: MatDialogRef<DialogDelete>,
+    @Inject(MAT_DIALOG_DATA) public data: any) {}
+    onYesClick(): void {
+      this.dialogRef.close(true);
+    }
+
+    onCancelClick(): void {
+      this.dialogRef.close(false);
+    }
 }

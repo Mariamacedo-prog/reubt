@@ -56,7 +56,7 @@
           </mat-form-field>
         </div>
 
-        <mat-form-field *ngIf="existeImovel && imovelDoContratante.enderecoPorta.rua != '' && imovelDoContratante.enderecoPorta">
+        <mat-form-field *ngIf="existeImovel && imovelDoContratante.enderecoPorta && imovelDoContratante.enderecoPorta.rua != '' ">
           <mat-label>Endereço Porta</mat-label>
           <input disabled [readonly]="visualizar" matInput 
           [value]="imovelDoContratante.enderecoPorta.rua + ', n '+ 
@@ -65,7 +65,7 @@
           />
         </mat-form-field>
 
-        <mat-form-field *ngIf="existeImovel && imovelDoContratante.enderecoDefinitivo.rua != '' && imovelDoContratante.enderecoDefinitivo">
+        <mat-form-field *ngIf="existeImovel && imovelDoContratante.enderecoDefinitivo && imovelDoContratante.enderecoDefinitivo.rua != ''">
           <mat-label>Endereço Definitivo</mat-label>
           <input disabled [readonly]="visualizar" matInput 
           [value]="imovelDoContratante.enderecoDefinitivo.rua + ', n '+ 
@@ -74,7 +74,7 @@
           />
         </mat-form-field>
 
-        <mat-form-field *ngIf="existeImovel && imovelDoContratante.enderecoProjeto.rua != '' && imovelDoContratante.enderecoProjeto">
+        <mat-form-field *ngIf="existeImovel && imovelDoContratante.enderecoProjeto && imovelDoContratante.enderecoProjeto.rua != ''">
           <mat-label>Endereço Projeto</mat-label>
           <input disabled [readonly]="visualizar" matInput 
           [value]="imovelDoContratante.enderecoProjeto.rua + ', n '+ 
@@ -133,7 +133,7 @@
 
 
     <button *ngIf="contratoId" [disabled]="!formValid() || !showDownloadContrato || !parcelamentoInfo.id" mat-stroked-button  color="primary" (click)="generateWordFile()">
-      <mat-icon>download</mat-icon>
+      <!-- <mat-icon>download</mat-icon> -->
       Download Contrato
     </button>
     <br/>

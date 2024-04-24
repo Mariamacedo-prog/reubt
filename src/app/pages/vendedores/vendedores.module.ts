@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VendedorFormComponent } from './vendedor-form/vendedor-form.component';
-import { VendedorGridComponent } from './vendedor-grid/vendedor-grid.component';
+import { VendedorGridComponent, DialogDelete } from './vendedor-grid/vendedor-grid.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,6 +13,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from '../../auth/auth.guard';
 import { InputfileModule } from '../../components/inputfile/inputfile.module';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const routes: Routes = [
   { path: 'form/:id', component: VendedorFormComponent, canActivate: [authGuard] },
@@ -22,7 +23,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [VendedorFormComponent, VendedorGridComponent],
+  declarations: [VendedorFormComponent, VendedorGridComponent, DialogDelete],
   imports: [
     CommonModule,
     FormsModule,
@@ -34,7 +35,8 @@ const routes: Routes = [
     MatTabsModule,
     MatCardModule,
     MatAutocompleteModule,
-    InputfileModule ,
+    InputfileModule,
+    MatDialogModule,
     RouterModule.forChild(routes)
   ]
 })

@@ -5,12 +5,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
-import { UsuarioGridComponent } from './usuario-grid/usuario-grid.component';
+import { UsuarioGridComponent, DialogDelete } from './usuario-grid/usuario-grid.component';
 import { UsuarioFormComponent } from './usuario-form/usuario-form.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { authGuard } from '../../auth/auth.guard';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const routes: Routes = [
   { path: 'novo/cadastro', component: UsuarioFormComponent},
@@ -21,7 +22,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [ UsuarioGridComponent, UsuarioFormComponent ],
+  declarations: [ UsuarioGridComponent, UsuarioFormComponent, DialogDelete ],
   imports: [
     CommonModule,
     FormsModule,
@@ -32,6 +33,7 @@ const routes: Routes = [
     MatIconModule,
     MatCardModule,
     MatPaginatorModule,
+    MatDialogModule,
     RouterModule.forChild(routes)
   ]
 })

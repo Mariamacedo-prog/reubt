@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ContratosService } from '../../../services/contratos.service';
 import { CartoriosService } from '../../../services/cartorios.service';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 
 @Component({
@@ -19,7 +20,8 @@ export class ContratosGridComponent {
   cartorios: any = [];
   cartorioSearch: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService,
-     private contratosService: ContratosService, private cartoriosService: CartoriosService) {}
+     private contratosService: ContratosService, private cartoriosService: CartoriosService,
+     public dialog: MatDialog) {}
   adicionarNovo() {
     this.router.navigate(["/contrato/novo"]);
   }
@@ -64,12 +66,43 @@ export class ContratosGridComponent {
   }
 
   deleteItem(element: any){
-    this.contratosService.deleteItem(element.id);
-    this.findAll();
+    console.log(element)
+    const dialogRef = this.dialog.open(DialogDeleteContrato, {
+      width: '300px',
+      data: element
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.contratosService.deleteItem(element.id);
+        this.findAll();
+      }
+    });
   }
 
   cartorioSelected(event: any){
     const value = event?.value;
     this.cartorioSearch = value;
   }
+}
+
+
+
+
+
+@Component({
+  selector: 'dialog-delete',
+  templateUrl: 'dialog-delete.html'
+})
+export class DialogDeleteContrato {
+  constructor(
+    public dialogRef: MatDialogRef<DialogDeleteContrato>,
+    @Inject(MAT_DIALOG_DATA) public data: any) {}
+    onYesClick(): void {
+      this.dialogRef.close(true);
+    }
+
+    onCancelClick(): void {
+      this.dialogRef.close(false);
+    }
 }

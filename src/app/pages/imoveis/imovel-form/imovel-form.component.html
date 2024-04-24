@@ -105,12 +105,7 @@
               </mat-form-field>
             </div>
 
-            <div class="inputs-row-form" *ngIf="!visualizar">
-              <input type='file' 
-              #fileInput
-              (change)="saveFileBase64($event)" 
-              multiple>
-            </div>
+
 
             <div class="input-file-area">
                 <input type='file' #fileInput (change)="saveFileBase64($event)">

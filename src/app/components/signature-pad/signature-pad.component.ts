@@ -15,9 +15,7 @@ export class SignaturePadComponent {
   @Output() dataEvent = new EventEmitter<any>();
 
   ngAfterViewInit(): void {
-    this.signaturePad = new SignaturePad(this.signaturePadElement.nativeElement, {
-      backgroundColor: 'rgb(250,250,250)'
-    });
+    this.signaturePad = new SignaturePad(this.signaturePadElement.nativeElement, {});
   }
 
   clearSignature(): void {

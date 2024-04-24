@@ -533,7 +533,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                     size:25, 
                     font: "Arial"
                   },
-                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ?`com vencimento da primeira parcela no dia ${this.formatarData(parcelamentoInfo?.parcelas?.dataPrimeiroPagamento, true)} `: "",
+                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ?`com vencimento da primeira parcela no dia ${this.formatarData(parcelamentoInfo?.parcelas?.dataPrimeiroPagamento)} `: "",
                     bold:true,
                     size:25, 
                     font: "Arial"

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VendaPagamentoGridComponent } from './venda-pagamento-grid/venda-pagamento-grid.component';
+import { VendaPagamentoGridComponent, DialogDelete } from './venda-pagamento-grid/venda-pagamento-grid.component';
 import { VendaPagamentoFormComponent } from './venda-pagamento-form/venda-pagamento-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -16,6 +16,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { InputfileModule } from '../../components/inputfile/inputfile.module';
 import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from '../../auth/auth.guard';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const routes: Routes = [
    { path: 'form/:id', component: VendaPagamentoFormComponent, canActivate: [authGuard] },
@@ -25,7 +26,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [ VendaPagamentoGridComponent, VendaPagamentoFormComponent ],
+  declarations: [ VendaPagamentoGridComponent, VendaPagamentoFormComponent, DialogDelete ],
   imports: [
     CommonModule,
     FormsModule,
@@ -41,6 +42,7 @@ const routes: Routes = [
     MatNativeDateModule,
     MatAutocompleteModule,
     InputfileModule,
+    MatDialogModule,
     RouterModule.forChild(routes) 
   ]
 })

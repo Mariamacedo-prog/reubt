@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ContratosGridComponent } from './contratos-grid/contratos-grid.component';
+import { ContratosGridComponent, DialogDeleteContrato } from './contratos-grid/contratos-grid.component';
 import { ContratosFormComponent } from './contratos-form/contratos-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -19,6 +19,7 @@ import { authGuard } from '../../auth/auth.guard';
 import { PagamentoCalculoModule } from '../../components/pagamento-calculo/pagamento-calculo.module';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { SignaturePadModule } from '../../components/signature-pad/signature-pad.module';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
   const routes: Routes = [
@@ -30,7 +31,7 @@ import { SignaturePadModule } from '../../components/signature-pad/signature-pad
   
 
 @NgModule({
-  declarations: [ ContratosGridComponent, ContratosFormComponent ],
+  declarations: [ ContratosGridComponent, ContratosFormComponent, DialogDeleteContrato ],
   imports: [
     CommonModule,
     FormsModule,
@@ -45,6 +46,7 @@ import { SignaturePadModule } from '../../components/signature-pad/signature-pad
     MatDatepickerModule,
     MatNativeDateModule,
     MatAutocompleteModule,
+    MatDialogModule,
     InputfileModule ,
     PagamentoCalculoModule,
     SignaturePadModule,

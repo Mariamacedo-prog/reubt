@@ -55,12 +55,11 @@ export class ContratanteFormComponent {
 
 
   ngOnInit(): void {
-
     this.formControls = this.formBuilder.group({
       id: [0, Validators.required],
       nome: ['', Validators.required],
       cpf: ['', [Validators.required, this.validateService.validateCPF]],
-      rg: ['', [Validators.required, this.validateService.validateRG]],
+      rg: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
       nacionalidade: ['', [Validators.required]],
@@ -70,6 +69,8 @@ export class ContratanteFormComponent {
       nomeConjugue: [''],
       dataExpedicao:  [''],
       nacionalidadeConjugue: [''],
+      estrangeiro: [false],
+      rne: [''],
       cartorio: this.cartorioFormControls,
       anexos: this.anexosFormControl
     });
@@ -98,7 +99,12 @@ export class ContratanteFormComponent {
         this.formControls?.get('nomeConjugue')?.setValue(contratante.nomeConjugue);
         this.formControls?.get('nacionalidadeConjugue')?.setValue(contratante.nacionalidadeConjugue);
         this.formControls?.get('orgaoExpedicao')?.setValue(contratante.orgaoExpedicao);
-  
+
+        if(contratante.estrangeiro){
+          this.formControls?.get('estrangeiro')?.setValue(contratante.estrangeiro);
+          this.formControls?.get('rne')?.setValue(contratante.rne);
+        }
+
         if(contratante.dataExpedicao){
           const dataEmMilliseconds = contratante.dataExpedicao.seconds * 1000 + Math.floor(contratante.dataExpedicao.nanoseconds / 1000000);
             const data = new Date(dataEmMilliseconds);
@@ -157,7 +163,6 @@ export class ContratanteFormComponent {
           this.toolboxService.showTooltip('error', 'CPF já cadastrado no banco de dados!', 'ERROR!');
         }
       } catch (error) {
-
         this.toolboxService.showTooltip('error', 'Ocorreu um erro ao cadastrar o contratante.', 'Erro!');
       }
     }
@@ -261,5 +266,31 @@ export class ContratanteFormComponent {
         this.formControls.get('cartorio')?.get('cidadeUf')?.setValue(item.endereco.cidadeUf);
       }
     }
+  }
+
+  isEstrangeiro(event: any){
+    if (event.checked) {
+      this.formControls?.get('estrangeiro')?.setValue(true);
+      this.formControls?.get('rg')?.setValue('');
+      this.formControls?.get('orgaoExpedicao')?.setValue('');
+      this.formControls?.get('dataExpedicao')?.setValue('');
+      this.formControls?.get('rg')?.clearValidators();
+      this.formControls?.get('orgaoExpedicao')?.clearValidators();
+
+      this.formControls?.get('rne')?.setValidators([Validators.required]);
+    } else {
+      this.formControls?.get('estrangeiro')?.setValue(false);
+      this.formControls?.get('rne')?.setValue('');
+      this.formControls?.get('orgaoExpedicao')?.setValue('');
+      this.formControls?.get('rne')?.clearValidators();
+
+      this.formControls?.get('rg')?.setValidators([Validators.required]);
+      this.formControls?.get('orgaoExpedicao')?.setValidators([Validators.required]);
+    }
+
+    
+    this.formControls?.get('rg')?.updateValueAndValidity();
+    this.formControls?.get('orgaoExpedicao')?.updateValueAndValidity();
+    this.formControls?.get('rne')?.updateValueAndValidity();
   }
 }
