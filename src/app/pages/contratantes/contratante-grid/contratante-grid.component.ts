@@ -1,9 +1,10 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ContratantesService } from '../../../services/contratantes.service';
 import { CartoriosService } from '../../../services/cartorios.service';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {  MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../../../components/dialog/dialog.component';
 
 @Component({
   selector: 'app-contratante-grid',
@@ -69,9 +70,11 @@ export class ContratanteGridComponent {
   }
 
   deleteItem(element: any){
-    const dialogRef = this.dialog.open(DialogDeleteContratante, {
+    const dialogRef = this.dialog.open(DialogComponent, {
       width: '300px',
-      data: element
+      data: {
+        text: `Tem certeza que deseja excluir Contratante "${element.nome}"?`,
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -85,25 +88,5 @@ export class ContratanteGridComponent {
   cartorioSelected(event: any){
     const value = event?.value;
     this.cartorioSearch = value;
-  }
-}
-
-
-
-@Component({
-  selector: 'dialog-delete-contratante',
-  templateUrl: 'dialog-delete-contratante.html',
-  styleUrl: './contratante-grid.component.css'
-})
-export class DialogDeleteContratante {
-  constructor(
-    public dialogRef: MatDialogRef<DialogDeleteContratante>,
-    @Inject(MAT_DIALOG_DATA) public data: any) {}
-  onYesClick(): void {
-    this.dialogRef.close(true);
-  }
-
-  onCancelClick(): void {
-    this.dialogRef.close(false);
   }
 }

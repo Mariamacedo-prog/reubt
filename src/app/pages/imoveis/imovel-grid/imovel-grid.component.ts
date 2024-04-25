@@ -1,8 +1,8 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ImoveisService } from '../../../services/imoveis.service';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../../../components/dialog/dialog.component';
 
 @Component({
   selector: 'app-imovel-grid',
@@ -49,9 +49,11 @@ export class ImovelGridComponent {
 
   deleteItem(element: any){
     console.log(element)
-    const dialogRef = this.dialog.open(DialogDelete, {
+    const dialogRef = this.dialog.open(DialogComponent, {
       width: '300px',
-      data: element
+      data: {
+        text: `Tem certeza que deseja excluir Imóvel do(a) Contratante "${element.contratante.nome}"?`,
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -61,23 +63,4 @@ export class ImovelGridComponent {
       }
     });
   }
-}
-
-
-
-@Component({
-  selector: 'dialog-delete',
-  templateUrl: 'dialog-delete.html'
-})
-export class DialogDelete {
-  constructor(
-    public dialogRef: MatDialogRef<DialogDelete>,
-    @Inject(MAT_DIALOG_DATA) public data: any) {}
-    onYesClick(): void {
-      this.dialogRef.close(true);
-    }
-
-    onCancelClick(): void {
-      this.dialogRef.close(false);
-    }
 }

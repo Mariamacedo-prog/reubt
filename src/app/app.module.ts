@@ -19,7 +19,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
-import { SignaturePadComponent } from './components/signature-pad/signature-pad.component';
 @NgModule({
   declarations: [
     AppComponent,

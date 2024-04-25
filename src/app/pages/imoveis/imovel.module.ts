@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ImovelGridComponent, DialogDelete } from './imovel-grid/imovel-grid.component';
+import { ImovelGridComponent } from './imovel-grid/imovel-grid.component';
 import { ImovelFormComponent } from './imovel-form/imovel-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -17,7 +17,7 @@ import { InputfileModule } from '../../components/inputfile/inputfile.module';
 import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from '../../auth/auth.guard';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-import { MatDialogModule } from '@angular/material/dialog';
+import { DialogModule } from '@angular/cdk/dialog';
 
 const routes: Routes = [
   { path: 'form/:id', component: ImovelFormComponent, canActivate: [authGuard] },
@@ -26,7 +26,7 @@ const routes: Routes = [
   { path: 'lista', component: ImovelGridComponent, canActivate: [authGuard] },
 ];  
 @NgModule({
-  declarations: [ImovelFormComponent, ImovelGridComponent, DialogDelete],
+  declarations: [ImovelFormComponent, ImovelGridComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -43,7 +43,7 @@ const routes: Routes = [
     MatAutocompleteModule,
     InputfileModule ,
     MatProgressBarModule,
-    MatDialogModule,
+    DialogModule,
     RouterModule.forChild(routes)
   ]
 })

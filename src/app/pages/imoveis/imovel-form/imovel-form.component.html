@@ -90,12 +90,18 @@
                 </mat-error>
               </mat-form-field>
             </div>
+            <div class="inputs-row-form"  *ngIf="showAnexos">
+              <app-file-input [nome]="'IPTU*'" 
+              [fileInput]="this.formControls.get('enderecoPorta')?.get('iptu')?.value"
+              (fileOutput)="saveFileBaseIptu64($event)" 
+              (fileSelected)="onFileSelected($event)"></app-file-input>
+            </div>
 
             <div class="inputs-row-form">
-              <mat-form-field>
+              <!-- <mat-form-field>
                 <mat-label>IPTU</mat-label>
                 <input [readonly]="visualizar"  type="text" matInput  formControlName="iptu" />
-              </mat-form-field>
+              </mat-form-field> -->
               <mat-form-field>
                 <mat-label>Núcleo Informal</mat-label>
                 <input [readonly]="visualizar" (keyup)="buscarEnderecoPorta()" type="text" matInput formControlName="nucleoInformal" required>

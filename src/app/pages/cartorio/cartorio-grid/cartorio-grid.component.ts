@@ -1,8 +1,9 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { CartoriosService } from '../../../services/cartorios.service';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../../../components/dialog/dialog.component';
 
 @Component({
   selector: 'app-cartorio-grid',
@@ -49,9 +50,11 @@ export class CartorioGridComponent {
   }
 
   deleteItem(element: any){
-    const dialogRef = this.dialog.open(DialogDeleteCartorio, {
+    const dialogRef = this.dialog.open(DialogComponent, {
       width: '300px',
-      data: element
+      data: {
+        text: `Tem certeza que deseja excluir Cartorio "${element.nome}"?`,
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -61,22 +64,4 @@ export class CartorioGridComponent {
       }
     });
   }
-}
-
-
-@Component({
-  selector: 'dialog-delete',
-  templateUrl: 'dialog-delete.html'
-})
-export class DialogDeleteCartorio {
-  constructor(
-    public dialogRef: MatDialogRef<DialogDeleteCartorio>,
-    @Inject(MAT_DIALOG_DATA) public data: any) {}
-    onYesClick(): void {
-      this.dialogRef.close(true);
-    }
-
-    onCancelClick(): void {
-      this.dialogRef.close(false);
-    }
 }

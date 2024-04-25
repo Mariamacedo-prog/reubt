@@ -16,6 +16,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class ImovelFormComponent {
   imovelId = '';
+  showAnexos: boolean  = false;
   isLoggedIn: boolean = false;
   databaseInfo: any = {};
   options: string[] = [];
@@ -48,7 +49,7 @@ export class ImovelFormComponent {
     nucleoInformal: ['', Validators.required],
     cidadeUf: ['', Validators.required],
     cep: [''],
-    iptu:[''],
+    iptu:[{base64: '', type: ''}],
     fotos: [[]]
   });
 
@@ -131,6 +132,8 @@ export class ImovelFormComponent {
         this.formControls.get('enderecoProjeto')?.get('lote')?.setValue(imovel.enderecoProjeto.lote);
         this.formControls.get('enderecoProjeto')?.get('complemento')?.setValue(imovel.enderecoProjeto.complemento);
         this.formControls.get('enderecoProjeto')?.get('numero')?.setValue(imovel.enderecoProjeto.numero);
+
+        this.showAnexos = true;
       });
     }
   }
@@ -294,6 +297,19 @@ export class ImovelFormComponent {
     };
   }
   
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      console.log('Nome do arquivo:', file.name);
+      console.log('Tamanho do arquivo:', file.size);
+    }
+  }
+
+  saveFileBaseIptu64(event: { base64: string, type: string }){
+    console.log(event)
+    this.formControls.get('enderecoPorta')?.get('iptu')?.patchValue(event);
+  }
+
   handleKeyUp(event: any){
     this.loadingCpf = true;
     clearTimeout(this.timeoutId); 
