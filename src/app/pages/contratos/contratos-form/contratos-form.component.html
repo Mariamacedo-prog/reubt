@@ -15,7 +15,7 @@
             <input disabled [readonly]="visualizar" matInput [value]="formControls.get('crf.numerocrf')?.value"/>
           </mat-form-field>
 
-          <mat-form-field class="example-full-width"> 
+          <mat-form-field > 
             <mat-label>CPF do Contratante</mat-label>
             <input type="text"
                   [readonly]="visualizar"
@@ -55,6 +55,15 @@
             <input  disabled matInput [value]="formControls.get('cartorio.cns')?.value"  />
           </mat-form-field>
         </div>
+
+        <mat-form-field *ngIf="imoveisList.length > 0 && (this.contratoId === '' || this.contratoId === undefined)">
+          <mat-label>Escolha o imovel</mat-label>
+          <mat-select (selectionChange)="changeImovel($event)">
+            @for (imovel of imoveisList; track imovel) {
+              <mat-option [value]="imovel">{{imovel.enderecoPorta.rua}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
         <mat-form-field *ngIf="existeImovel && imovelDoContratante.enderecoPorta && imovelDoContratante.enderecoPorta.rua != '' ">
           <mat-label>Endereço Porta</mat-label>
@@ -96,7 +105,7 @@
       </mat-card-content>
       <br/> <br/> <br/>
       <div *ngIf="contratoId" style="padding-right:20px;">
-        <app-pagamento-calculo  [dataContratanteInfo]="formControls.get('contratante')?.getRawValue()" (dataEvent)="receiveDataFromChild($event)"></app-pagamento-calculo>
+        <app-pagamento-calculo [dataImovelInfo]="this.formControls.get('imovelId')?.value"  [dataContratanteInfo]="formControls.get('contratante')?.getRawValue()" (dataEvent)="receiveDataFromChild($event)"></app-pagamento-calculo>
       </div>
     </form>
 

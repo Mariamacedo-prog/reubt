@@ -59,7 +59,7 @@ export class ContratanteFormComponent {
       id: [0, Validators.required],
       nome: ['', Validators.required],
       cpf: ['', [Validators.required, this.validateService.validateCPF]],
-      rg: ['', [Validators.required]],
+      rg: [''],
       email: ['', [Validators.required, Validators.email]],
       telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
       nacionalidade: ['', [Validators.required]],

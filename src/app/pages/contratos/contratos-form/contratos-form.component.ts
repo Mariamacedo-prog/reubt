@@ -20,10 +20,10 @@ export class ContratosFormComponent {
   visualizar: boolean = false;
   formControls!: FormGroup;
   timeoutId: any;
-
+  imoveisList: any = [];
   showSignature = false;
   signButtomActive = "";
- 
+  imovelSelecionado: string = ''; 
   showDownloadContrato = false;
   parcelamentoInfo: any = {};
   imovelDoContratante: any = {};
@@ -67,8 +67,7 @@ export class ContratosFormComponent {
     telefone: ['', [Validators.required]],
     nacionalidade: ['', [Validators.required]],
     profissao: ['', [Validators.required]],
-    estadoCivil: ['', [Validators.required]],
-    imovelId: [0]
+    estadoCivil: ['', [Validators.required]]
   });
 
   empresaFormControls = this.formBuilder.group({
@@ -84,6 +83,7 @@ export class ContratosFormComponent {
       assinaturaContratada: [''],
       assinaturaTesteminha1: [''],
       assinaturaTesteminha2: [''],
+      imovelId: [''],
       contratante: this.contratanteFormControls,
       crf: this.crfFormControls,
       cartorio: this.cartorioFormControls,
@@ -103,10 +103,10 @@ export class ContratosFormComponent {
 
     this.findEmpresa();
 
-
     if(this.contratoId){
       this.contratosService.findById(this.contratoId).subscribe(contrato => {
         this.formControls?.get('id')?.setValue(contrato.id);
+     
         this.formControls?.get('assinaturaContratante')?.setValue(contrato.assinaturaContratante);
         this.formControls?.get('assinaturaContratada')?.setValue(contrato.assinaturaContratada);
         this.formControls?.get('assinaturaTesteminha1')?.setValue(contrato.assinaturaTesteminha1);
@@ -129,10 +129,14 @@ export class ContratosFormComponent {
         this.formControls?.get('contratante')?.get('nacionalidade')?.setValue(contrato.contratante.nacionalidade);
         this.formControls?.get('contratante')?.get('profissao')?.setValue(contrato.contratante.profissao);
         this.formControls?.get('contratante')?.get('estadoCivil')?.setValue(contrato.contratante.estadoCivil);
+   
+        if(contrato.imovelId){
+          this.formControls?.get('imovelId')?.setValue(contrato.imovelId);
+        }
         this.findImovel();
       });
-   
     }
+
   }
 
   findContratantes(){
@@ -158,8 +162,7 @@ export class ContratosFormComponent {
   findImovel(){
     this.imoveisService.checkByContratanteId(this.formControls?.get('contratante')?.get('id')?.value).subscribe((imoveis: any)=>{
       if(imoveis.length >= 1){
-        this.imovelDoContratante = imoveis[0];
-        this.formControls?.get('contratante')?.get('imovelId')?.setValue(imoveis[0].id);
+        this.imoveisList = imoveis;
         this.showDownloadContrato = true;
         this.existeImovel = true;
       }else{
@@ -168,8 +171,23 @@ export class ContratosFormComponent {
         this.toolboxService.showTooltip('error', 'Não foi localizado o imovel deste contratante, favor registrar na tela Imovel para dar continuidade com o Contrato!', 'ERRO IMOVEL!');
       }
     });
-   
+
+    if(this.formControls?.get('imovelId')?.value){
+      this.imoveisService.findById(this.formControls?.get('imovelId')?.value).subscribe((imovel: any)=>{
+        if(imovel){
+          this.imovelDoContratante = imovel;
+          this.showDownloadContrato = true;
+          this.existeImovel = true;
+        }
+      });
+    }
   }
+
+  changeImovel(event: any){
+    this.imovelDoContratante = event.value;
+    this.formControls?.get('imovelId')?.setValue(event.value.id);
+  }
+
 
   create() {
     this.contratosService.save(this.formControls.getRawValue());
@@ -239,10 +257,9 @@ export class ContratosFormComponent {
     this.formControls?.get('contratante')?.get('nacionalidade')?.setValue(item.nacionalidade);
     this.formControls?.get('contratante')?.get('profissao')?.setValue(item.profissao);
     this.formControls?.get('contratante')?.get('estadoCivil')?.setValue(item.estadoCivil);
-
-    this.findImovel()
     this.filteredContratantes = [];
     this.loadingCpf = false;
+    this.findImovel();
   }
 
   receiveDataFromChild(data: any) {

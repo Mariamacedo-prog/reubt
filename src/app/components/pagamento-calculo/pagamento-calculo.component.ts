@@ -41,6 +41,7 @@ export class PagamentoCalculoComponent {
   planos: TypeSelectValue[] = [
     {value: 6000, quant: 1, viewValue: 'Valor: R$6.000,00 - Por imóvel de habitação'},
     {value: 6000, quant: 1, viewValue: 'Valor: R$6.000,00 – Loteamento Lagos de San José'},
+    {value: 6000, quant: 1, viewValue: 'Valor: R$6.000,00 –  Associação recreativa Canto dos Pássaros'},
     {value: 10000, quant: 1 ,viewValue: 'Valor: R$10.000,00 - Comercio'},
     {value: 12000, quant: 1 ,viewValue: 'Valor: R$12.000,00 - Indústria'},
   ];
@@ -52,6 +53,8 @@ export class PagamentoCalculoComponent {
   databaseInfo: any = {};
   existeParcelamento:boolean = false;
   @Input() dataContratanteInfo: any;
+
+  @Input() dataImovelInfo: any;
 
   @Output() dataEvent = new EventEmitter<any>();
 
@@ -79,6 +82,7 @@ export class PagamentoCalculoComponent {
   ngOnInit(): void {   
     this.formControls = this.formBuilder.group({
       id: [0],
+      idImovel: [''],
       plano: [null, Validators.required],
       entrada: this.entradaFormControls,
       parcelas: this.parcelasFormControls,
@@ -96,12 +100,14 @@ export class PagamentoCalculoComponent {
     this.vendasPagamentosService.getItems().subscribe((vendas)=>{
       if(vendas.length >= 0){
         for(let venda of vendas){
-          if(venda.contratante.id == this.dataContratanteInfo.id) {
+        
+          if(venda.contratante.id == this.dataContratanteInfo.id && venda.idImovel == this.dataImovelInfo) {
             this.formControls?.get('plano')?.setValue(venda.plano);
             this.registarValores();
             this.formControls?.get('id')?.setValue(venda.id);
             this.formControls?.get('isAvista')?.setValue(venda.isAvista);
             this.formControls?.get('valorAvista')?.setValue(venda.valorAvista);
+            this.formControls?.get('idImovel')?.setValue(venda.idImovel);
     
             this.formControls?.get('parcelas')?.get('quantidade')?.setValue(venda?.parcelas?.quantidade);
             this.formControls?.get('parcelas')?.get('valor')?.setValue(venda?.parcelas?.valor);
@@ -116,7 +122,6 @@ export class PagamentoCalculoComponent {
               const data = new Date(dataEmMilliseconds);
               this.formControls?.get('parcelas')?.get('dataUltimoPagamento')?.setValue(data);
             }
-
             
             if(venda?.entrada?.dataPrimeiroPagamento){
               const dataEmMilliseconds =venda?.entrada?.dataPrimeiroPagamento.seconds * 1000 + Math.floor(venda?.entrada?.dataPrimeiroPagamento.nanoseconds / 1000000);
@@ -269,14 +274,13 @@ export class PagamentoCalculoComponent {
   async gerarParcelamento(){
     let item =  this.formControls.getRawValue();
     item.contratante = this.dataContratanteInfo;
+    item.idImovel = this.dataImovelInfo;
     if(item){
       try {
         if(this.dataContratanteInfo.id){
-     
-         await this.vendasPagamentosService.checkIfIdContratanteExists(this.dataContratanteInfo.id)
-          .then(contratanteExists => {
-            if (!contratanteExists) {
-
+         await this.vendasPagamentosService.checkIfImovelExists(this.dataImovelInfo)
+          .then(imovelExists => {
+            if (!imovelExists) {
               this.vendasPagamentosService.save(item);
 
               this.dataEvent.emit(this.formControls.getRawValue());
@@ -285,7 +289,7 @@ export class PagamentoCalculoComponent {
             } 
           }) 
           .catch(error => {
-              console.error("Erro ao verificar a existência do contratante:", error);
+              console.error("Erro ao verificar a existência do Imovel:", error);
               this.toolboxService.showTooltip('error', 'Ocorreu um erro ao verificar a existência do contratante!', 'Erro!');
           });
         }
@@ -298,12 +302,13 @@ export class PagamentoCalculoComponent {
   async atualizarParcelamento(){
     let item =  this.formControls.getRawValue();
     item.contratante = this.dataContratanteInfo;
+    item.idImovel = this.dataImovelInfo;
     if(item.id){
       try {
-        await this.vendasPagamentosService.checkIfIdContratanteExists(this.dataContratanteInfo.id)
+        await this.vendasPagamentosService.checkIfImovelExists(this.dataImovelInfo)
           .then(contratanteExists => {
             if (contratanteExists) {
-              this.vendasPagamentosService.updateItem(item.id, this.formControls.getRawValue());
+              this.vendasPagamentosService.updateItem(item.id, item);
               this.dataEvent.emit(this.formControls.getRawValue());
               this.toolboxService.showTooltip('success', 'Parcelamento atualizado com sucesso!', 'Sucesso!');
               this.existeParcelamento = true;

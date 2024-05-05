@@ -38,6 +38,22 @@ export class VendasPagamentosService {
     }
   }
 
+  async checkIfImovelExists(id: string): Promise<boolean> {
+    try {
+      const items = await firstValueFrom(this.itemsCollection.valueChanges({ idField: 'id' }));
+      if (items) {
+        const imovelExists = items.some(item => item.idImovel === id);
+        return imovelExists;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error("Erro ao verificar a existência do Imovel:", error);
+      throw error;
+    }
+  }
+  
+
   findByContratanteId(id: string): Observable<any[]> {
     return this.firestore.collection('vendas', 
       ref => ref.where('contratante.id', '==', id)).valueChanges({ idField: 'id' });

@@ -214,7 +214,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                   font: "Arial",
                   outlineLevel: 2,
                 },
-                { text:'CONTRATANTE. ', 
+                { text:'CONTRATADA. ', 
                 bold:true, 
                 size:25, 
                 font: "Arial"

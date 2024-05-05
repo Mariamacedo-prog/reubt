@@ -49,8 +49,8 @@ export class ImovelFormComponent {
     nucleoInformal: ['', Validators.required],
     cidadeUf: ['', Validators.required],
     cep: [''],
-    iptu:[{base64: '', type: ''}],
-    fotos: [[]]
+    iptu:[''],
+    fotos: {base64: '', type: ''}
   });
 
   enderecoProjeto = this.formBuilder.group({
@@ -135,16 +135,24 @@ export class ImovelFormComponent {
 
         this.showAnexos = true;
       });
+    }else{
+      this.showAnexos = true;
     }
+
+    
   }
 
   create() {
+    console.log(this.formControls.getRawValue())
     this.imoveisService.save(this.formControls.getRawValue());
       this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
       this.router.navigate(['/imovel/lista']);
+
+
   }
 
   update(){
+    console.log(this.formControls.getRawValue())
     if(this.formControls.get('contratante')?.get('cpf')?.getRawValue()){
       this.imoveisService.updateItem(this.imovelId, this.formControls.getRawValue())
     }
@@ -263,38 +271,8 @@ export class ImovelFormComponent {
   }
 
   saveFileBase64(event: any) {
-    this.formControls.get('enderecoPorta')?.get('fotos')?.setValue([]);
-    const selectedFiles = event.target.files;
-    this.convertToBase64(selectedFiles[0]);
-    console.log( this.formControls.get('enderecoPorta')?.get('fotos')?.value)
-  }
-
-  convertToBase64(file: File) {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      if (reader.result) {
-        const base64String = (reader.result as string).split(',')[1];
-        if (file.type.startsWith('image/')) {
-          let anexo ='data:image/jpeg;base64,' + base64String;
-
-          let allFotos = this.formControls.get('enderecoPorta')?.get('fotos')?.value;
-          allFotos.push(anexo);
-          this.formControls.get('enderecoPorta')?.get('fotos')?.setValue(allFotos);
-        } else if (file.type === 'application/pdf') {
-          let anexo =base64String
-          let allFotos = this.formControls.get('enderecoPorta')?.get('fotos')?.value;
-          allFotos.push(anexo);
-          this.formControls.get('enderecoPorta')?.get('fotos')?.setValue(allFotos);
-        } else {
-        }
-      } else {
-        console.error('Error: reader.result is null.');
-      }
-    };
-    reader.onerror = error => {
-      console.error('Error converting to Base64:', error);
-    };
+    this.formControls.get('enderecoPorta')?.get('fotos')?.setValue({});
+    this.formControls.get('enderecoPorta')?.get('fotos')?.setValue(event)
   }
   
   onFileSelected(event: any) {
