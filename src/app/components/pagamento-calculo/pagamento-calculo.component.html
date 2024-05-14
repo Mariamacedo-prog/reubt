@@ -36,7 +36,8 @@
                   </mat-select>
                 </mat-form-field>
        
-                <mat-slide-toggle 
+                <mat-slide-toggle
+                *ngIf="formControls.get('plano')?.value > 600"
                 color="primary"
                 formControlName="isAvista"
                 (change)="pagamentoAvista($event)"

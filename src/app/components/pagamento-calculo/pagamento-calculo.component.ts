@@ -44,6 +44,7 @@ export class PagamentoCalculoComponent {
     {value: 6000, quant: 1, viewValue: 'Valor: R$6.000,00 –  Associação recreativa Canto dos Pássaros'},
     {value: 10000, quant: 1 ,viewValue: 'Valor: R$10.000,00 - Comercio'},
     {value: 12000, quant: 1 ,viewValue: 'Valor: R$12.000,00 - Indústria'},
+    {value: 600, quant: 1, viewValue: 'Valor: R$600,00'},
   ];
   formControls!: FormGroup;
   optionsEntrada: TypeSelectValue[] = [];
@@ -158,6 +159,12 @@ export class PagamentoCalculoComponent {
   
       this.formControls?.get('valorAvista')?.setValue(valorAvista);
       this.listarValorEntrada();
+      if(value === 600){
+        this.formControls?.get('isAvista')?.setValue(true);
+      }else{
+        this.formControls?.get('isAvista')?.setValue(false);
+      }
+      this.clearValues();
     }
   }
 
@@ -366,7 +373,17 @@ export class PagamentoCalculoComponent {
       this.formControls?.get('isAvista')?.setValue(true);
       this.formControls?.get('valorAvista')?.setValue(this.formControls?.get('plano')?.value);
 
-      this.formControls?.get('parcelas')?.get('quantidade')?.setValue(0);
+      this.clearValues()
+      this.formControls?.get('entrada')?.get('valorTotal')?.setValue(this.formControls?.get('plano')?.value);
+    } else {
+      this.formControls?.get('isAvista')?.setValue(false);
+      this.clearValues()
+    }
+    this.formularioValido();
+  }
+
+  clearValues(){
+    this.formControls?.get('parcelas')?.get('quantidade')?.setValue(0);
       this.formControls?.get('parcelas')?.get('valor')?.setValue(0);
       this.formControls?.get('parcelas')?.get('dataPrimeiroPagamento')?.setValue(null);
       this.formControls?.get('parcelas')?.get('dataUltimoPagamento')?.setValue(null);
@@ -377,20 +394,5 @@ export class PagamentoCalculoComponent {
       this.formControls?.get('entrada')?.get('dataPrimeiroPagamento')?.setValue(null);
       this.formControls?.get('entrada')?.get('dataUltimoPagamento')?.setValue(null);
       this.formControls?.get('entrada')?.get('valorTotal')?.setValue(this.formControls?.get('plano')?.value);
-    } else {
-      this.formControls?.get('isAvista')?.setValue(false);
-      this.formControls?.get('parcelas')?.get('quantidade')?.setValue(0);
-      this.formControls?.get('parcelas')?.get('valor')?.setValue(0);
-      this.formControls?.get('parcelas')?.get('dataPrimeiroPagamento')?.setValue(null);
-      this.formControls?.get('parcelas')?.get('dataUltimoPagamento')?.setValue(null);
-      this.formControls?.get('parcelas')?.get('valorTotal')?.setValue(0);
-      
-      this.formControls?.get('entrada')?.get('quantidade')?.setValue(0);
-      this.formControls?.get('entrada')?.get('valor')?.setValue(0);
-      this.formControls?.get('entrada')?.get('dataPrimeiroPagamento')?.setValue(null);
-      this.formControls?.get('entrada')?.get('dataUltimoPagamento')?.setValue(null);
-      this.formControls?.get('entrada')?.get('valorTotal')?.setValue(0);
-    }
-    this.formularioValido();
   }
 }
