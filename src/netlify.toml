@@ -1,8 +1,4 @@
 [build]
-  command = "node --max-old-space-size=4096 $(which ng) build"
   publish = "dist/reurb/browser"
-  memory = 4096
-
-
-[build.environment]
-  NODE_OPTIONS = "--max_old_space_size=4096"
+  command = "npm install"
+  NODE_OPTIONS = "--max-old-space-size=4096"
