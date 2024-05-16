@@ -30,7 +30,7 @@
     "docx": "^8.5.0",
     "firebase": "^10.10.0",
     "ngx-doc-viewer": "^15.0.1",
-    "signature_pad": "^4.2.0",
+    "signature_pad": "^4.2.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.2.3",
