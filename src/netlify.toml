@@ -1,4 +1,2 @@
 [build]
-  publish = "dist/reurb/browser"
-  command = "npm install"
-  NODE_OPTIONS = "--max-old-space-size=4096"
+  NODE_OPTIONS = "--max_old_space_size=4096"
