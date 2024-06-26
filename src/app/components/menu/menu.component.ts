@@ -1,7 +1,6 @@
 import { AuthService } from './../../auth/auth.service';
 import {Component, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { MenuService } from '../../services/menu.service';
 interface MenuItem {
   icon: string;

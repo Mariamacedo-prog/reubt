@@ -37,6 +37,14 @@ const routes: Routes = [
   // Rotas de imovel
   { path: 'imovel', loadChildren: () => import('./pages/imoveis/imovel.module').then(m => m.ImovelModule) },
 
+  // Rotas de planos
+  { path: 'planos', loadChildren: () => import('./pages/planos/planos.module').then(m => m.PlanosModule) },
+
+  // Rotas de Status
+  { path: 'status', loadChildren: () => import('./pages/status/status.module').then(m => m.StatusModule) },
+
+  // Rotas de Nucleos
+  { path: 'nucleos', loadChildren: () => import('./pages/nucleos/nucleos.module').then(m => m.NucleosModule) },
 ];
 
 

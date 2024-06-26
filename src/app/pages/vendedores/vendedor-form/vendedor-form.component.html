@@ -14,10 +14,17 @@
                             (fileOutput)="saveFileBase64($event)" 
                             (fileSelected)="onFileSelected($event)">
             </app-file-input>
-         
-        
-       
         </div>
+        <mat-form-field>
+          <mat-label>Tipo</mat-label>
+          <mat-select  [formControl]="perfilFormControl">
+            <mat-option [value]="1">Vendedor</mat-option>
+            <mat-option [value]="2">Corretor</mat-option>
+          </mat-select>
+          <mat-error *ngIf="perfilFormControl.hasError('required')">
+            Este campo é <strong>obrigatório</strong>
+          </mat-error>
+        </mat-form-field>
         <mat-form-field>
           <mat-label>Nome</mat-label>
           <input [readonly]="visualizar"  matInput [formControl]="nomeFormControl" />
@@ -25,6 +32,7 @@
             Este campo é <strong>obrigatório</strong>
           </mat-error>
         </mat-form-field>
+      
           <div class="inputs-row-form">
             <mat-form-field>
               <mat-label>Email</mat-label>
@@ -51,9 +59,11 @@
     
           <div class="inputs-row-form">
             <mat-form-field>
-              <mat-label>CPF</mat-label>
+              <mat-label *ngIf="cpfFormControl.value && cpfFormControl.value.length <= 11">CPF</mat-label>
+              <mat-label *ngIf="cpfFormControl.value && cpfFormControl.value.length > 11">CNPJ</mat-label>
               <input [readonly]="visualizar"  matInput [formControl]="cpfFormControl" />
               <mat-error *ngIf="cpfFormControl.hasError('cpfInvalido')">CPF inválido</mat-error>
+              <mat-error *ngIf="cpfFormControl.hasError('cnpjInvalido')">CNPJ inválido</mat-error>
             </mat-form-field>
       
             <mat-form-field>
@@ -65,7 +75,50 @@
             </mat-form-field>
           </div>          
         </mat-tab>
+        <mat-tab  label="Dados Bancarios"> 
+          <mat-form-field>
+            <mat-label>Forma de Pagamento</mat-label>
+            <mat-select [formControl]="formaPagamentoFormControl" multiple>
+              @for (pag of pagList; track pag) {
+                <mat-option [value]="pag.id">{{pag.nome}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <div class="inputs-row-form">
+            <mat-form-field>
+              <mat-label>Banco</mat-label>
+              <input [readonly]="visualizar" matInput [(ngModel)]="teste.banco" placeholder="Nome do banco" />
+            </mat-form-field>
+          </div>
+          <div class="inputs-row-form">
+            <mat-form-field>
+              <mat-label>Agencia</mat-label>
+              <input [readonly]="visualizar" matInput [(ngModel)]="teste.agencia" placeholder="Agencia" />
+            </mat-form-field>
 
+            <mat-form-field>
+              <mat-label>Conta</mat-label>
+              <input [readonly]="visualizar" matInput [(ngModel)]="teste.conta" placeholder="Conta" />
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Dígito</mat-label>
+              <input [readonly]="visualizar" matInput [(ngModel)]="teste.digito" placeholder="Digito" />
+            </mat-form-field>
+          </div>
+          <div class="inputs-row-form">
+            <mat-form-field>
+              <mat-label>Tipo: </mat-label>
+              <mat-select [(ngModel)]="teste.tipo">
+                <mat-option [value]="1">Conta Corrente</mat-option>
+                <mat-option [value]="2">Conta Poupança</mat-option>
+              </mat-select>
+              <mat-error *ngIf="perfilFormControl.hasError('required')">
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </mat-tab>
         <mat-tab label="Endereço"> 
           <mat-form-field>
             <mat-label>CEP</mat-label>

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from './auth/auth.service';
 import 'firebase/firestore';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -17,7 +18,7 @@ export class AppComponent {
     this.isLoggedIn = this.authService.isLoggedIn;
   }
 
-  onMenuToggled(isMenuOpen: boolean) {
+  onMenuToggled(isMenuOpen: any) {
     this.isMenuOpen = isMenuOpen;
   }
 }
